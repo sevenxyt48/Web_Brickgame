@@ -66,6 +66,7 @@
             <p id="skipButton">Skip</p>
         </div>
 
+        <!-- 게임 설명화면 -->
         <div class="menu" id="story">
             <h2>How to play</h2>
             <p>당신은 호그워츠 학교에 신입생입니다.</p>
@@ -77,6 +78,7 @@
                 <button onclick="startGame()">Skip</button>
             </div>
         </div>
+        <!-- 게임 설치 화면 -->
         <div class="menu" id="settings">
             <img id="settingImg" src="img/settingBackground.png" />
             <h2>Settings</h2>
@@ -92,7 +94,7 @@
             </div>
             <button id="pauseBtn" onclick="pauseGame()">Stop</button>
         </div>
-
+        <!-- 게임 중지 버튼 -->
         <div id="pauseMenu">
             <h2>게임 중지</h2>
             <button onclick="resumeGame()">계속</button>
@@ -102,9 +104,10 @@
         <div class="menu" id="gameCanvas">
 
         </div>
-
+        <!-- 게임 종료화면 -->
         <div class="menu" id="end">
             <h2>클리어!</h2>
+            <p>Score:</p>
             <p>다음 학년으로 진학합니다.</p>
             <button onclick="nextGrade()">다음 학년</button>
         </div>
