@@ -6,15 +6,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="game.css">
     <script src="game.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>벽돌깨기 게임</title>
 </head>
 
 <body>
-    <div class="game_start">
-        demo
-    </div>
-    <div class="game_container">
+    <div id="container">
+        <!-- 뒤로가기 버튼 -->
+        <div class="backToMain" id="backButton">
+            <h1>Back</h1>
+        </div>
 
+        <!-- 시작화면 -->
+        <div class="game_start" id="mainStart">
+            <img id="logo" src="img/mark.jpg" />
+            <img id="background" src="img/startBackground.jpg" />
+            <div>
+                <p>호그워츠 오신 여러분을 환영합니다!</p>
+                <div class="botton">
+                    <h1>Start</h1>
+                    <img id="bottonImg" src="img/item_button.png" />
+                </div>
+                <div class="botton">
+                    <h1>Settings</h1>
+                    <img id="bottonImg" src="img/item_button.png" />
+                </div>
+                <div class="botton">
+                    <h1>Credit</h1>
+                    <img id="bottonImg" src="img/item_button.png" />
+                </div>
+                <p id="copyright">ⓒ 2025 WEB PROGRAMMING 12팀</p>
+                <p id="KU">KONKUK UNIV.</p>
+            </div>
+        </div>
+        <!-- 기숙사 선택(배경 바뀜) -->
+        <div class="manu" id="mainMenu">
+            <div>
+                <div class="house">
+                    <img id="house1" src="img/house1.png" />
+                    <h1>Gryffindor</h1>
+                </div>
+                <div class="house">
+                    <img id="house2" src="img/house2.png" />
+                    <h1>Slytherin</h1>
+                </div>
+                <div class="house">
+                    <img id="house3" src="img/house3.png" />
+                    <h1>Hufflepuff</h1>
+                </div>
+                <div class="house">
+                    <img id="house4" src="img/house4.png" />
+                    <h1>Ravencelaw</h1>
+                </div>
+                <div class="detail">
+                    <p>Please select your house</p>
+                </div>
+            </div>
+            <!-- skip -->
+            <p id="skipButton">Skip</p>
+        </div>
+
+        <div class="menu" id="story">
+            <h2>How to play</h2>
+            <p>당신은 호그워츠 학교에 신입생입니다.</p>
+            <p>학년을 올라가면 점점 더 강력한 마법과 난이도에 도전합니다.</p>
+            <p>공을 튕겨 마법책을 파괴하고, 숨겨진 마법을 해제해 졸업을 향해 나아가세요!</p>
+            <div class="button">
+                <button onclick="goToHouse()" id="back">Back</button>
+                <button onclick="startGame()" id="start">Start</button>
+                <button onclick="startGame()">Skip</button>
+            </div>
+        </div>
+        <div class="menu" id="settings">
+            <img id="settingImg" src="img/settingBackground.png" />
+            <h2>Settings</h2>
+            <div class="sound"></div>
+            <div class="music"></div>
+            <div class="Full Screen"></div>
+        </div>
+        <!-- 게임 화면 -->
+        <div class="menu" id="gameScreen">
+            <div id="gameInfo">
+                <span id="score">Score: 0</span>
+                <span id="lives">Lives: </span>
+            </div>
+            <button id="pauseBtn" onclick="pauseGame()">Stop</button>
+        </div>
+
+        <div id="pauseMenu">
+            <h2>게임 중지</h2>
+            <button onclick="resumeGame()">계속</button>
+            <button onclick="restartGame()">다시 시작</button>
+            <button onclick="openSettings()">설정</button>
+        </div>
+        <div class="menu" id="gameCanvas">
+
+        </div>
+
+        <div class="menu" id="end">
+            <h2>클리어!</h2>
+            <p>다음 학년으로 진학합니다.</p>
+            <button onclick="nextGrade()">다음 학년</button>
+        </div>
     </div>
 </body>
 
