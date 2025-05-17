@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="game.css">
     <script src="game.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -14,13 +15,14 @@
     <div id="container">
         <!-- 뒤로가기 버튼 -->
         <div class="backToMain" id="backButton">
-            <h1>Back</h1>
+            <span class="material-symbols-outlined">
+                arrow_circle_left</span>
         </div>
 
         <!-- 시작화면 -->
         <div class="game_start" id="mainStart">
             <img id="logo" src="img/mark.jpg" />
-            <img id="background" src="img/startBackground.jpg" />
+            <img id="background" src="img/background/startBackground.jpg" />
             <div>
                 <p>호그워츠 오신 여러분을 환영합니다!</p>
                 <div class="botton">
@@ -43,19 +45,19 @@
         <div class="manu" id="mainMenu">
             <div>
                 <div class="house">
-                    <img id="house1" src="img/house1.png" />
+                    <img id="house1" src="img/background/house1.png" />
                     <h1>Gryffindor</h1>
                 </div>
                 <div class="house">
-                    <img id="house2" src="img/house2.png" />
+                    <img id="house2" src="img/background/house2.png" />
                     <h1>Slytherin</h1>
                 </div>
                 <div class="house">
-                    <img id="house3" src="img/house3.png" />
+                    <img id="house3" src="img/background/house3.png" />
                     <h1>Hufflepuff</h1>
                 </div>
                 <div class="house">
-                    <img id="house4" src="img/house4.png" />
+                    <img id="house4" src="img/background/house4.png" />
                     <h1>Ravencelaw</h1>
                 </div>
                 <div class="detail">
@@ -73,14 +75,14 @@
             <p>학년을 올라가면 점점 더 강력한 마법과 난이도에 도전합니다.</p>
             <p>공을 튕겨 마법책을 파괴하고, 숨겨진 마법을 해제해 졸업을 향해 나아가세요!</p>
             <div class="button">
-                <button onclick="goToHouse()" id="back">Back</button>
+                <button onclick="goToHouse()" id="backButton"></button>
                 <button onclick="startGame()" id="start">Start</button>
                 <button onclick="startGame()">Skip</button>
             </div>
         </div>
         <!-- 게임 설치 화면 -->
         <div class="menu" id="settings">
-            <img id="settingImg" src="img/settingBackground.png" />
+            <img id="settingImg" src="img/background/settingBackground.png" />
             <h2>Settings</h2>
             <div class="sound"></div>
             <div class="music"></div>
@@ -100,16 +102,30 @@
             <button onclick="resumeGame()">계속</button>
             <button onclick="restartGame()">다시 시작</button>
             <button onclick="openSettings()">설정</button>
+            <button onclick="goToMenu()">메뉴</button>
         </div>
         <div class="menu" id="gameCanvas">
 
         </div>
         <!-- 게임 종료화면 -->
-        <div class="menu" id="end">
-            <h2>클리어!</h2>
-            <p>Score:</p>
-            <p>다음 학년으로 진학합니다.</p>
-            <button onclick="nextGrade()">다음 학년</button>
+        <div class="menu" id="win">
+            <h2>You Win!</h2>
+            <h1 class="score">Score:</h1>
+            <button onclick="nextGrade()">Next</button>
+            <button onclick="goToMenu()">Menu</button>
+        </div>
+        <div class="menu" id="fail">
+            <h2>You Fail!</h2>
+            <h1 class="score">Score:</h1>
+            <button onclick="reStart()">Retry</button>
+            <button onclick="goToMenu()">Menu</button>
+        </div>
+        <!-- 졸업 시험 통과 (전체게임 클리어)-->
+        <div class="menu" id="gameOver">
+            <h2>Graduation!</h2>
+            <h1 class="score">Score:</h1>
+            <button onclick="reStart()">Retry</button>
+            <button onclick="goToMenu()">Menu</button>
         </div>
     </div>
 </body>
