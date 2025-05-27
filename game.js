@@ -2,6 +2,7 @@
 var canvas;
 var context;
 var totalScore = 0; // 전체 스코어
+let darkR = canvas.width; // 시야 반지름
 
 // 벽돌 정보
 function Brick(x, y, width, height, type) {
@@ -187,12 +188,15 @@ function bombarda(brickR, brickC) {
         brick[brickR][brickC-1].alive = false;
     if(brick[brickR][brickC+1]!=null)
         brick[brickR][brickC+1].alive = false;
-    // bombarda함수 및 벽돌에 공 충돌 후에는 벽돌draw함수 재출력력
+    // bombarda함수 및 벽돌에 공 충돌 후에는 벽돌draw함수 재출력
 }
 
-//좋은 이벤트 - 빛 생성 마법
-function lumos() {
-
+//좋은 이벤트 - 빛 생성 마법 (level2 이상에서만 존재)
+function lumos(gameLevel) {
+    darkR = canvas.width;
+    setTimeout(()=>{
+        nox(gameLevel);
+    }, 5000); // 5초 후 다시 어두워질 수 있도록.
 }
 
 //나쁜 이벤트 - 공의 속도를 빠르게 하는 마법
@@ -229,4 +233,38 @@ function disillusionment() {
 //나쁜 이벤트 - 벽돌 위치 변경 마법
 function confundo() {
 
+}
+
+//레벨2부터 점점 어두워지는 화면 구현
+function nox(gameLevel){ // level을 시작할 때 각 level을 받아 2~4 사이 레벨일 때만 nox함수 호출.
+    let speed;
+    switch(gameLevel){
+        case 2: speed = 1; break;
+        case 3: speed = 2; break;
+        case 4: speed = 3; break;
+        default: speed = 0; break;
+    }
+
+    function reducedVisibility(){
+        darkR -= speed;
+        if(darkR>50){
+            requestAnimationFrame(reducedVisibility);
+        }
+    }
+    requestAnimationFrame(reducedVisibility);
+}
+
+function darkness(context){ // 매 프레임마다 호출하여 실시간으로 어두워질 수 있도록.
+    if(gameLevel<2) return;
+    
+    const centerX = paddleX + paddleWidth/2; // paddleX에 (canvas.width-paddleWidth)/2 들어있다 가정. 영웅이 push하면 그 변수 따라 바꿀게요
+    const centerY = paddleY + paddleHeight/2;
+
+    context.save();
+    context.fillStyle = 'rgba(0,0,0,0.8)'; // 반투명(80%)한 어둠
+    context.beginPath();
+    context.rect(0,0,canvas.width, canvas.height); //canvas 너비, 높이 변수명도 영웅이 하고 난 다음 수정보기
+    context.arc(centerX, centerY, darkR, 0, Math.PI*2,true);
+    context.closePath();
+    context.fill("evenodd");
 }
