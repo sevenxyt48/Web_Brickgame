@@ -27,11 +27,14 @@ img {
 .menu {
     position: absolute;
     background-image: url("img/background/startBackground.jpg");
+    background-size: cover;
+    background-position: center;
     width: 840px;
     height: 600px;
     z-index: 10;
     overflow: hidden;
     display: none;
+    align-items: center;
 }
 
 #logo {
@@ -40,6 +43,7 @@ img {
     left: 50%;
     transform: translateX(-50%);
     width: 270px;
+    height: auto;
 }
 
 #copyright {
@@ -55,17 +59,7 @@ img {
     font-size: 30px;
 }
 
-#backButton {
-    position: absolute;
-    display: none;
-    z-index: 20;
-    cursor: pointer;
-    color: white;
-    font-size: 60px;
-    top: 30px;
-    left: 1180px;
-}
-
+#backButton,
 #pauseMenu {
     position: absolute;
     display: none;
@@ -83,14 +77,14 @@ img {
     cursor: pointer;
 }
 
+/* 버튼 그룹 */
 #mainStart div {
     display: flex;
     margin-top: 120px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 100%;
+    gap: 15px;
 }
 
 .menu h2 {
@@ -99,8 +93,7 @@ img {
     color: white;
     text-shadow: -2px 0px green, 0px 2px green, 2px 0px green, 0px -2px green;
     text-align: center;
-    margin-top: 50px;
-    cursor: default;
+    margin-top: 200px;
 }
 
 .menu h1 {
@@ -110,6 +103,31 @@ img {
     cursor: pointer;
     color: darkorange;
     text-align: center;
+}
+
+/* 버튼 요소 */
+.botton {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 220px;
+    height: 60px;
+    padding: 10px 15px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.botton:hover {
+    transform: scale(1.05);
+}
+
+/* 빗자루 이미지 */
+.botton img {
+    width: 40px;
+    height: auto;
+    margin-right: 15px;
 }
 
 #startButton {
@@ -148,6 +166,7 @@ img {
 }
 
 #gameOver {
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
