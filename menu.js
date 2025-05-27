@@ -12,8 +12,8 @@ var chMusic = new Audio();
 
 var musicObj = {
     musicOO: "",
-
-    //배경음악
+    // 음악 추가 필요
+    //배경음악 
     playMusic: function () {
         this.musicOO = new Audio(bgm);
         if (mVol == 0) {
@@ -166,12 +166,12 @@ function setUpPage() {
 
 //도움말 페이지
 function helpPage() {
-    //0520
     musicObj.PlayChoose();
 
     hideAll();
     $("#help").show();
     $("#backButton").show();
+    $("skipButton").show();
 }
 
 function mainPage() {
@@ -190,7 +190,7 @@ function mainPage() {
 
 //난이도 선택 페이지
 function housePage() {
-    //0520
+
     musicObj.PlayChoose();
 
     hideAll();
@@ -230,12 +230,12 @@ function gameClearPage() {
 
 //페이지 모두 숨기기
 function hideAll() {
-    //0524 수정:클래스에 속하는 것들은 클래스 단위로 처리
+    //클래스에 속하는 것들은 클래스 단위로 처리
     $("#gameAllClear").hide();
     $(".menu").hide();
     $(".backToMain").hide();
     $("canvas").hide();
-    //0524 수정:목숨 표시, 시작 버튼 숨기기 추가
+    //목숨 표시, 시작 버튼 숨기기 추가
     $("#lives").hide();
     $("#startButton").hide();
     $("#skipButton").hide();
@@ -245,13 +245,13 @@ function vControl() {
     var soundButton = $(
         "#setUp .chooseDiv:nth-of-type(1) div.choose:nth-of-type(3)"
     );
-    //음소거 해제
+    //음소거 해제 이미지 경로 수정 필요
     if ($("#volume").attr("src") == "img/btn/mute.png") {
         $("#volume").attr("src", "img/btn/sound.png");
         soundButton.css("background-color", "white");
         musicObj.unmuteMusic();
     }
-    //음소거
+    //음소거 이미지 경로 수정 필요
     else if ($("#volume").attr("src") == "img/btn/sound.png") {
         $("#volume").attr("src", "img/btn/mute.png");
         soundButton.css("background-color", "white");

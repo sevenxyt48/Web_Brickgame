@@ -3,13 +3,13 @@ var context;
 var totalScore = 0; // 전체 스코어
 
 // 벽돌 정보
-function Brick(x, y, width, height, type){
-    this.x=x;
-    this.y=y;
-    this.width=width;
-    this.height=height;
-    this.type=type; // 벽돌 종류. 기본:0, 좋은벽돌:1, 나쁜벽돌:2
-    this.alive=true; // 벽돌의 깨짐 유무 표시. true:존재 false:깨짐
+function Brick(x, y, width, height, type) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.type = type; // 벽돌 종류. 기본:0, 좋은벽돌:1, 나쁜벽돌:2
+    this.alive = true; // 벽돌의 깨짐 유무 표시. true:존재 false:깨짐
 }
 var brick = [];
 var brickRow; // 벽돌 행 수
@@ -29,7 +29,7 @@ var paddleX = 0; // 초기 x 좌표
 var paddleY = 520; // 초기 y 좌표 (캔버스 바닥에서 약간 위)
 
 // 공
-function Ball(x, y, vX, vY){
+function Ball(x, y, vX, vY) {
     this.x = x;
     this.y = y;
     this.vX = vX;
@@ -135,19 +135,19 @@ function nextGrade() {
 }
 
 //좋은 이벤트 - 공의 속도를 느리게 하는 마법
-function impedimenta(){
-    if(balls.length==0) return;
+function impedimenta() {
+    if (balls.length == 0) return;
 
     const originalSpeed = [];
-    balls.forEach((ball, index)=>{
-        originalSpeed[index].push({vX:ball.vX, vY: ball.vY});
+    balls.forEach((ball, index) => {
+        originalSpeed[index].push({ vX: ball.vX, vY: ball.vY });
         ball.vX *= 0.7;
         ball.vY *= 0.7;
     })
     //1분 있으면 원래 속도로 복원
-    setTimeout(()=>{
-        balls.forEach((ball, index)=>{
-            if(originalSpeed[index]){
+    setTimeout(() => {
+        balls.forEach((ball, index) => {
+            if (originalSpeed[index]) {
                 ball.vX = originalSpeed[index].vX;
                 ball.vY = originalSpeed[index].vY;
             }
@@ -156,42 +156,42 @@ function impedimenta(){
 }
 
 //좋은 이벤트 - 공 복제 마법
-function geminio(brickX, brickY){
+function geminio(brickX, brickY) {
     balls[ballNum] = new Ball(brickX, brickY, 0, 3); // 아래로 떨어짐.
     //공이 패들에 닿았을 경우 속도 기본 값으로 변경. 패들에 닿는 위치마다 각도 다르게.
     //패들에 닿지 않고 화면 아래쪽으로 사라지면 삭제.
 }
 
 //좋은 이벤트 - 상하좌우 폭발 마법
-function bombarda(brickR, brickC){
+function bombarda(brickR, brickC) {
     //brick 2차원 배열로 저장되어진다고 가정했을 때, 부딪힌 벽돌의 row, col이 인자.
     brick[brickR][brickC].alive = false; // 벽돌 생성 함수 따로 만들어야함. 미구현
-    brick[brickR-1][brickC].alive = false;
-    brick[brickR+1][brickC].alive = false;
-    brick[brickR][brickC-1].alive = false;
-    brick[brickR][brickC+1].alive = false;
+    brick[brickR - 1][brickC].alive = false;
+    brick[brickR + 1][brickC].alive = false;
+    brick[brickR][brickC - 1].alive = false;
+    brick[brickR][brickC + 1].alive = false;
     // bombarda함수 및 벽돌에 공 충돌 후에는 벽돌draw함수 재출력력
 }
 
 //좋은 이벤트 - 빛 생성 마법
-function lumos(){
+function lumos() {
 
 }
 
 //나쁜 이벤트 - 공의 속도를 빠르게 하는 마법
-function ascendio(){ //조금 마법 이름이 기능이랑 조금 다른데 속도 빠르게가 없어서 그나마 비슷한걸루 일단 해놨습니다.
-    if(balls.length==0) return;
+function ascendio() { //조금 마법 이름이 기능이랑 조금 다른데 속도 빠르게가 없어서 그나마 비슷한걸루 일단 해놨습니다.
+    if (balls.length == 0) return;
 
     const originalSpeed = [];
-    balls.forEach((ball, index)=>{
-        originalSpeed[index].push({vX:ball.vX, vY: ball.vY});
+    balls.forEach((ball, index) => {
+        originalSpeed[index].push({ vX: ball.vX, vY: ball.vY });
         ball.vX *= 1.3;
         ball.vY *= 1.3;
     })
     //1분 있으면 원래 속도로 복원
-    setTimeout(()=>{
-        balls.forEach((ball, index)=>{
-            if(originalSpeed[index]){
+    setTimeout(() => {
+        balls.forEach((ball, index) => {
+            if (originalSpeed[index]) {
                 ball.vX = originalSpeed[index].vX;
                 ball.vY = originalSpeed[index].vY;
             }
@@ -200,16 +200,16 @@ function ascendio(){ //조금 마법 이름이 기능이랑 조금 다른데 속
 }
 
 //나쁜 이벤트 - 깨진 벽돌 중에 일부 회복(수리 마법)
-function reparo(){
+function reparo() {
 
 }
 
 //나쁜 이벤트 - 벽돌을 투명하게 하는 마법
-function disillusionment(){
-    
+function disillusionment() {
+
 }
 
 //나쁜 이벤트 - 벽돌 위치 변경 마법
-function confundo(){
+function confundo() {
 
 }
