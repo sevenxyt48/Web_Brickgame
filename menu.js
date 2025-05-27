@@ -8,7 +8,7 @@ var chMusic = new Audio();
 
 var music = "";
 var bgm = "";
-var chooseColor = "green";
+var chooseColor = "";
 var mVol = 0;
 var chMusic = new Audio();
 
@@ -92,7 +92,7 @@ var musicObj = {
 
     //학년1 난이도 배경음악
     playEasy: function () {
-        this.musicOO = new Audio("audio/easyMusic.mp3");
+        this.musicOO = new Audio("audio/.mp3");
         this.musicOO.volume = mVol;
         this.musicOO.loop = true;
         this.musicOO.play();
@@ -100,7 +100,7 @@ var musicObj = {
 
     //학년2 난이도 배경음악
     playNormal: function () {
-        this.musicOO = new Audio("audio/normalMusic.mp3");
+        this.musicOO = new Audio("audio/.mp3");
         this.musicOO.volume = mVol;
         this.musicOO.loop = true;
         this.musicOO.play();
@@ -108,7 +108,7 @@ var musicObj = {
 
     //학년3 난이도 배경음악
     playHard: function () {
-        this.musicOO = new Audio("audio/hardMusic.mp3");
+        this.musicOO = new Audio("audio/.mp3");
         this.musicOO.volume = mVol;
         this.musicOO.loop = true;
         this.musicOO.play();
@@ -116,7 +116,7 @@ var musicObj = {
 
     //엔딩(졸업) 배경 음악
     playEnding: function () {
-        this.musicOO = new Audio("audio/Ending.mp3");
+        this.musicOO = new Audio("audio/.mp3");
         this.musicOO.volume = mVol;
         // this.musicOO.loop = true;
         this.musicOO.play();
@@ -124,27 +124,27 @@ var musicObj = {
 
     //선택 시 효과음
     PlayChoose: function () {
-        chMusic = new Audio("audio/chooseMp3.mp3");
+        chMusic = new Audio("audio/.mp3");
         chMusic.volume = 0.8;
         if (mVol != 0) chMusic.play();
     },
 
     //게임 오버 음악
     playDeath: function () {
-        this.musicOO = new Audio("audio/GameOver.mp3");
+        this.musicOO = new Audio("audio/.mp3");
         this.musicOO.volume = mVol;
         this.musicOO.loop = true;
         this.musicOO.play();
     },
 
     hoverSound: function () {
-        var hoverMusic = new Audio("audio/difHover.mp3");
+        var hoverMusic = new Audio("audio/.mp3");
         if (mVol != 0) hoverMusic.play();
     },
 
     //목숨 하나 잃을 때
     LifeMinusMusic: function () {
-        var LifeMinusMusic = new Audio("audio/lifeMinus.mp3");
+        var LifeMinusMusic = new Audio("audio/.mp3");
         if (mVol != 0) LifeMinusMusic.play();
     },
 
@@ -156,7 +156,7 @@ var musicObj = {
 
     //클리어 음악
     playClear: function () {
-        this.musicOO = new Audio("audio/clear.mp3");
+        this.musicOO = new Audio("audio/.mp3");
         this.musicOO.volume = mVol;
         this.musicOO.play();
     },
@@ -194,7 +194,7 @@ function setUpPage() {
         if ($("#volume").attr("src") != "img/btn/mute.png") {
             music = "1";
             musicObj.stopMusic();
-            bgm = "audio/MainMusic.mp3";
+            bgm = "audio/.mp3";
             musicObj.playMusic();
             button1.css("background-color", "white");
             button2.css("background-color", "gray");

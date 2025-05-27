@@ -79,32 +79,32 @@ badImg1.src = "img/stone/stone_green.png";
 
 var isCountdownRunning = false; // 카운트다운 상태 변수 추가
 
-$("#startButton").click(goToHouseSelection);
-$("#skipButton").click(function () {
-    clearInterval(intervalId); // 타이핑 작업 중단
-    $("#skipButton").hide();
-    while (i < content.length) {
-        let txt = content[i++];
-        text.innerHTML += txt === "\n" ? "<br/>" : txt;
-    }
-    $("#startButton").show();
-});
+// $("#startButton").click(goToHouseSelection);
+// $("#skipButton").click(function () {
+//     clearInterval(intervalId); // 타이핑 작업 중단
+//     $("#skipButton").hide();
+//     while (i < content.length) {
+//         let txt = content[i++];
+//         text.innerHTML += txt === "\n" ? "<br/>" : txt;
+//     }
+//     $("#startButton").show();
+// });
 
-$("#mainMenu div h1").eq(1).on("click", settings);
-$("#mainMenu div h1").eq(2).on("click", credit);
-$(".backToMain").on("click", backToMainMenu);
-$("#stopButton").on("click", function () {
-    clearInterval(countdownInterval);//0526
-    stopGame();
-    resetAll();
-});
-$(".reTry").on("click", function () {
-    stage(gameLevel);
-});
-$(".nextStage").on("click", function () {
-    console.log(`Start next stage`);
-    stage(++gameLevel);
-});
+// $("#mainMenu div h1").eq(1).on("click", settings);
+// $("#mainMenu div h1").eq(2).on("click", credit);
+// $(".backToMain").on("click", backToMainMenu);
+// $("#stopButton").on("click", function () {
+//     clearInterval(countdownInterval);//0526
+//     stopGame();
+//     resetAll();
+// });
+// $(".reTry").on("click", function () {
+//     stage(gameLevel);
+// });
+// $(".nextStage").on("click", function () {
+//     console.log(`Start next stage`);
+//     stage(++gameLevel);
+// });
 
 function gameLoop() {
     updateGame();
