@@ -179,10 +179,14 @@ function geminio(brickX, brickY) {
 function bombarda(brickR, brickC) {
     //brick 2차원 배열로 저장되어진다고 가정했을 때, 부딪힌 벽돌의 row, col이 인자.
     brick[brickR][brickC].alive = false; // 벽돌 생성 함수 따로 만들어야함. 미구현
-    brick[brickR - 1][brickC].alive = false;
-    brick[brickR + 1][brickC].alive = false;
-    brick[brickR][brickC - 1].alive = false;
-    brick[brickR][brickC + 1].alive = false;
+    if(brick[brickR-1][brickC]!=null)
+        brick[brickR-1][brickC].alive = false;
+    if(brick[brickR+1][brickC]!=null)
+        brick[brickR+1][brickC].alive = false;
+    if(brick[brickR][brickC-1]!=null)
+        brick[brickR][brickC-1].alive = false;
+    if(brick[brickR][brickC+1]!=null)
+        brick[brickR][brickC+1].alive = false;
     // bombarda함수 및 벽돌에 공 충돌 후에는 벽돌draw함수 재출력력
 }
 
