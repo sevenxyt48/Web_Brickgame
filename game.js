@@ -4,7 +4,7 @@
 var canvas;
 var context;
 var totalScore = 0; // 전체 스코어
-
+//dfdf
 // 벽돌 정보
 function Brick(x, y, width, height, type) {
     this.x = x;
