@@ -1,5 +1,4 @@
 //게임 로직 js코드
-//push test
 var canvas;
 var context;
 var totalScore = 0; // 전체 스코어
