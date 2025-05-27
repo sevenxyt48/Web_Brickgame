@@ -1,3 +1,5 @@
+//게임 로직 js코드
+
 var canvas;
 var context;
 var totalScore = 0; // 전체 스코어
@@ -120,8 +122,13 @@ function startGame() {
 
 function pauseGame() {
     // 일시정지 기능 구현 (애니메이션 중지 등)
+    document.getElementById('pauseMenu').style.display = 'block';
 }
 
+//pause에서 continue 게임 함수
+function resumeGame() {
+    document.getElementById('pauseMenu').style.display = 'none';
+}
 function showVictoryScreen() {
     document.getElementById('gameScreen').style.display = 'none';
     document.getElementById('victoryScreen').style.display = 'block';
@@ -132,6 +139,13 @@ function nextGrade() {
     document.getElementById('victoryScreen').style.display = 'none';
     document.getElementById('gameScreen').style.display = 'block';
     startNextStage(); // 새 스테이지 초기화
+}
+
+function goToMenu() {
+    document.getElementById('pauseMenu').style.display = 'none';
+    document.getElementById('settingPause').style.display = 'none';
+    document.querySelectorAll('.menu, .menu').forEach(el => el.style.display = 'none');
+    document.getElementById('mainStart').style.display = 'block';
 }
 
 //좋은 이벤트 - 공의 속도를 느리게 하는 마법

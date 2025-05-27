@@ -1,3 +1,5 @@
+//화면 전환 js코드
+
 var sound = "";
 var music = "";
 var chooseColor = "red";
@@ -9,6 +11,66 @@ var bgm = "";
 var chooseColor = "green";
 var mVol = 0;
 var chMusic = new Audio();
+
+document.addEventListener('DOMContentLoaded', () => {
+    // 화면 요소들
+    const mainStart = document.getElementById('mainStart');
+    const story = document.getElementById('story');
+    const mainMenu = document.getElementById('mainMenu');
+    const settings = document.getElementById('settings');
+    const credit = document.getElementById('credit');
+
+    // 버튼 요소들
+    const startButton = mainStart.querySelectorAll('.botton')[0];
+    const settingsButton = mainStart.querySelectorAll('.botton')[1];
+    const creditButton = mainStart.querySelectorAll('.botton')[2];
+
+    const storyStartButton = document.getElementById('start');
+    const skipButtons = document.querySelectorAll('#skipButton');
+    const backButton = document.getElementById('backButton');
+
+    function showScreen(screen) {
+        const allScreens = document.querySelectorAll('.game_start, .menu, .manu');
+        allScreens.forEach(s => s.style.display = 'none');
+        screen.style.display = 'block';
+    }
+
+    // 시작화면 → 설명화면
+    startButton.addEventListener('click', () => {
+        showScreen(story);
+    });
+
+    // 시작화면 → 설정
+    settingsButton.addEventListener('click', () => {
+        showScreen(settings);
+    });
+
+    // 시작화면 → 크레딧
+    creditButton.addEventListener('click', () => {
+        showScreen(credit);
+    });
+
+    // 설명화면 → 기숙사 선택 화면
+    storyStartButton.addEventListener('click', () => {
+        showScreen(mainMenu);
+    });
+
+    // Skip 버튼들 → 기숙사 선택 화면
+    skipButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            showScreen(mainMenu);
+        });
+    });
+
+    // 뒤로가기 → 메인화면
+    backButton.addEventListener('click', () => {
+        showScreen(mainStart);
+    });
+
+    // 초기 화면 설정
+    showScreen(mainStart);
+});
+
 
 var musicObj = {
     musicOO: "",
