@@ -79,6 +79,94 @@ badImg1.src = "img/stone/stone_green.png";
 
 var isCountdownRunning = false; // 카운트다운 상태 변수 추가
 
+$(document).ready(function () {
+    text = document.querySelector("#story");
+    $("#lives").hide();
+
+    volume.onclick = vControl;
+    musicObj.playMusic();
+
+    canvas = document.getElementById("myCanvas");
+
+    updateLives();
+
+    // 클릭 이벤트
+    var volumeElement = document.getElementById("volume");
+    volumeElement.onclick = vControl;
+
+    $("#mainStart div h1").eq(0).on("click", story);
+    $("#startButton").click(housePage);
+    // $("#skipButton").click(function () {
+    //     clearInterval(intervalId); // 타이핑 작업 중단
+    //     $("#skipButton").hide();
+    //     while (i < content.length) {
+    //         let txt = content[i++];
+    //         text.innerHTML += txt === "\n" ? "<br/>" : txt;
+    //     }
+    //     $("#startButton").show();
+    // });
+
+    $("#mainMenu div h1").eq(1).on("click", settingPage);
+    $("#mainMenu div h1").eq(2).on("click", creditPage);
+    $(".backToMain").on("click", backToMainMenu);
+    $("#stopButton").on("click", function () {
+        clearInterval(countdownInterval);//0526
+        stopGame();
+        resetAll();
+    });
+
+    $(".replay").on("click", function () {
+        stage(gameLevel);
+    });
+    $(".nextStage").on("click", function () {
+        console.log(`Start next stage`);
+        stage(++gameLevel);
+    });
+
+    bossBrick.x = canvas.width / 2;
+
+    $(".dif h1:contains('EARTH'), .dif img#easy").click(function () {
+        stage(1);
+    });
+    $(".dif h1:contains('MOON'), .dif img#normal").click(function () {
+        stage(2);
+    });
+    $(".dif h1:contains('SUN'), .dif img#hard").click(function () {
+        stage(3);
+    });
+
+    $(document).mousemove(function (e) {
+        var rect = canvas.getBoundingClientRect();
+        var mouseX = e.clientX - rect.left;
+
+        // 패들이 화면 밖으로 나가지 않도록 제한
+        if (mouseX < paddleWidth / 2) {
+            mouseX = paddleWidth / 2;
+        } else if (mouseX > canvas.width - paddleWidth / 2) {
+            mouseX = canvas.width - paddleWidth / 2;
+        }
+
+        // 이전 패들 위치 지우기
+        context.clearRect(
+            paddleX - paddleWidth / 2 - 1, // 조금 더 크게 지워줌
+            paddleY,
+            paddleWidth + 2,
+            paddleHeight
+        );
+        if (isGameRunning) {
+            context.fillStyle = "black"
+            context.fillRect(
+                paddleX - paddleWidth / 2 - 1,
+                paddleY,
+                paddleWidth + 2,
+                paddleHeight
+            );
+        }
+        paddleX = mouseX; // 마우스 위치에 따라 패들 이동
+        // 새로운 패들 위치 그리기
+        drawPaddle();
+    });
+});
 function gameLoop() {
     updateGame();
     drawGame(context);

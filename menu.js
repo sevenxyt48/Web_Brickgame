@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         screen.style.display = 'block';
     }
 
-    // 시작화면 → 설명화면
+    // 시작화면 → 스토리 화면
     startButton.addEventListener('click', () => {
         showScreen(story);
     });
