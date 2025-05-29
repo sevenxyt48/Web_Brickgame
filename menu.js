@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const backButton = document.getElementById('backButton');
 
     function showScreen(screen) {
-        const allScreens = document.querySelectorAll('.game_start, .menu, .manu');
+        const allScreens = document.querySelectorAll('.game_start');
         allScreens.forEach(s => s.style.display = 'none');
         screen.style.display = 'block';
     }
