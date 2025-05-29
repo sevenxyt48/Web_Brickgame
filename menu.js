@@ -179,16 +179,16 @@ var musicObj = {
 };
 
 // 설정 메뉴
-function setUpPage() {
-    musicObj.PlayChoose();
+function settingPage() {
+    // musicObj.PlayChoose();
 
     hideAll();
-    $("#setUp").show();
+    $("#settings").show();
     $("#backButton").show();
 
-    var button1 = $("#setUp .chooseDiv:nth-of-type(1) div.choose:nth-of-type(1)");
-    var button2 = $("#setUp .chooseDiv:nth-of-type(1) div.choose:nth-of-type(2)");
-    var button3 = $("#setUp .chooseDiv:nth-of-type(1) div.choose:nth-of-type(3)");
+    var button1 = $("#settings .chooseDiv:nth-of-type(1) div.choose:nth-of-type(1)");
+    var button2 = $("#settings .chooseDiv:nth-of-type(1) div.choose:nth-of-type(2)");
+    var button3 = $("#settings .chooseDiv:nth-of-type(1) div.choose:nth-of-type(3)");
 
     button1.on("click", function () {
         if ($("#volume").attr("src") != "img/btn/mute.png") {
@@ -226,16 +226,6 @@ function setUpPage() {
 
 }
 
-//도움말 페이지
-function helpPage() {
-    musicObj.PlayChoose();
-
-    hideAll();
-    $("#help").show();
-    $("#backButton").show();
-    $("skipButton").show();
-}
-
 function mainPage() {
     musicObj.PlayChoose();
     musicObj.stopMusic();
@@ -246,7 +236,7 @@ function mainPage() {
     isCountdownRunning = false; // 카운트다운 상태 초기화 추가
 
     hideAll();
-    $("#mainMenu").show();
+    $("#mainStart").show();
 }
 
 
@@ -256,14 +246,14 @@ function housePage() {
     musicObj.PlayChoose();
 
     hideAll();
-    $("#difficulty").show();
+    $("#house").show();
     $("#backButton").show();
 }
 
 //인게임 화면
 function playPage() {
     hideAll();
-    $("#stopButton").show();
+    $("#pauseBtn").show();
     $("canvas").show();
 }
 
@@ -297,26 +287,12 @@ function hideAll() {
     $(".menu").hide();
     $(".backToMain").hide();
     $("canvas").hide();
-    //목숨 표시, 시작 버튼 숨기기 추가
+    //목숨 표시, 시작 버튼 숨기기
     $("#lives").hide();
-    $("#startButton").hide();
+    $("#start").hide();
     $("#skipButton").hide();
 }
 
 function vControl() {
-    var soundButton = $(
-        "#setUp .chooseDiv:nth-of-type(1) div.choose:nth-of-type(3)"
-    );
-    //음소거 해제 이미지 경로 수정 필요
-    if ($("#volume").attr("src") == "img/btn/mute.png") {
-        $("#volume").attr("src", "img/btn/sound.png");
-        soundButton.css("background-color", "white");
-        musicObj.unmuteMusic();
-    }
-    //음소거 이미지 경로 수정 필요
-    else if ($("#volume").attr("src") == "img/btn/sound.png") {
-        $("#volume").attr("src", "img/btn/mute.png");
-        soundButton.css("background-color", "white");
-        musicObj.muteMusic();
-    }
+    //설정 음성 컨트롤
 }

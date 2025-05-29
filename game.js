@@ -109,63 +109,51 @@ $(document).ready(function () {
     $("#mainMenu div h1").eq(1).on("click", settingPage);
     $("#mainMenu div h1").eq(2).on("click", creditPage);
     $(".backToMain").on("click", backToMainMenu);
-    $("#stopButton").on("click", function () {
-        clearInterval(countdownInterval);//0526
-        stopGame();
-        resetAll();
+    $("#pauseBtn").on("click", function () {
+        clearInterval(countdownInterval);
+        // stopGame();
+        // resetAll();
     });
 
-    $(".replay").on("click", function () {
+    $(".reTry").on("click", function () {
         stage(gameLevel);
     });
-    $(".nextStage").on("click", function () {
+    $(".nextGrade").on("click", function () {
         console.log(`Start next stage`);
         stage(++gameLevel);
     });
 
-    bossBrick.x = canvas.width / 2;
+    // $(document).mousemove(function (e) {
+    //     var rect = canvas.getBoundingClientRect();
+    //     var mouseX = e.clientX - rect.left;
 
-    $(".dif h1:contains('EARTH'), .dif img#easy").click(function () {
-        stage(1);
-    });
-    $(".dif h1:contains('MOON'), .dif img#normal").click(function () {
-        stage(2);
-    });
-    $(".dif h1:contains('SUN'), .dif img#hard").click(function () {
-        stage(3);
-    });
+    //     // 패들이 화면 밖으로 나가지 않도록 제한
+    //     if (mouseX < paddleWidth / 2) {
+    //         mouseX = paddleWidth / 2;
+    //     } else if (mouseX > canvas.width - paddleWidth / 2) {
+    //         mouseX = canvas.width - paddleWidth / 2;
+    //     }
 
-    $(document).mousemove(function (e) {
-        var rect = canvas.getBoundingClientRect();
-        var mouseX = e.clientX - rect.left;
-
-        // 패들이 화면 밖으로 나가지 않도록 제한
-        if (mouseX < paddleWidth / 2) {
-            mouseX = paddleWidth / 2;
-        } else if (mouseX > canvas.width - paddleWidth / 2) {
-            mouseX = canvas.width - paddleWidth / 2;
-        }
-
-        // 이전 패들 위치 지우기
-        context.clearRect(
-            paddleX - paddleWidth / 2 - 1, // 조금 더 크게 지워줌
-            paddleY,
-            paddleWidth + 2,
-            paddleHeight
-        );
-        if (isGameRunning) {
-            context.fillStyle = "black"
-            context.fillRect(
-                paddleX - paddleWidth / 2 - 1,
-                paddleY,
-                paddleWidth + 2,
-                paddleHeight
-            );
-        }
-        paddleX = mouseX; // 마우스 위치에 따라 패들 이동
-        // 새로운 패들 위치 그리기
-        drawPaddle();
-    });
+    //     // 이전 패들 위치 지우기
+    //     context.clearRect(
+    //         paddleX - paddleWidth / 2 - 1, // 조금 더 크게 지워줌
+    //         paddleY,
+    //         paddleWidth + 2,
+    //         paddleHeight
+    //     );
+    //     if (isGameRunning) {
+    //         context.fillStyle = "black"
+    //         context.fillRect(
+    //             paddleX - paddleWidth / 2 - 1,
+    //             paddleY,
+    //             paddleWidth + 2,
+    //             paddleHeight
+    //         );
+    //     }
+    //     paddleX = mouseX; // 마우스 위치에 따라 패들 이동
+    //     // 새로운 패들 위치 그리기
+    //     drawPaddle();
+    // });
 });
 function gameLoop() {
     updateGame();
@@ -175,24 +163,34 @@ function gameLoop() {
     }
 }
 
+//실제 게임 시작 함수
 function startGame() {
-    document.getElementById('storyScreen').style.display = 'none';
-    document.getElementById('gameScreen').style.display = 'block';
-    initGame(); // 실제 게임 시작 로직
+    isGameRunning = true;
+    $("#lives").show();
+
 }
 
 function pauseGame() {
     // 일시정지 기능 구현 (애니메이션 중지 등)
-    document.getElementById('pauseMenu').style.display = 'block';
+    isGameRunning = false;
+    clearInterval(drawInterval);
+    isBrickMoving = false;
+
 }
 
 //pause에서 continue 게임 함수
 function resumeGame() {
     document.getElementById('pauseMenu').style.display = 'none';
 }
-function showVictoryScreen() {
-    document.getElementById('gameScreen').style.display = 'none';
-    document.getElementById('victoryScreen').style.display = 'block';
+
+//전체 게임 종료
+function gameOver() {
+    pauseGame();
+    isGameAllClear = false;
+}
+function gameClear() {
+    pauseGame();
+    isGameAllClear = true;
 }
 
 function nextGrade() {
