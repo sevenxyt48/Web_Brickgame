@@ -25,7 +25,7 @@ img {
 }
 
 
-.menu {
+/* .menu {
     position: absolute;
     background-image: url("img/background/startBackground.jpg");
     background-size: cover;
@@ -36,7 +36,7 @@ img {
     overflow: hidden;
     display: none;
     align-items: center;
-}
+} */
 
 #logo {
     position: absolute;
