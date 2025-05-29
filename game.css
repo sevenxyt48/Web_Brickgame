@@ -24,6 +24,7 @@ img {
     justify-content: center;
 }
 
+
 .menu {
     position: absolute;
     background-image: url("img/background/startBackground.jpg");
@@ -71,6 +72,14 @@ img {
     left: 1180px;
 }
 
+#mainStart {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: url("img/background/startBackground.jpg");
+    background-size: 1280px 830px;
+}
+
 #mainStart h1 {
     font-size: 24px;
     /* margin: 5px 0; */
@@ -80,11 +89,15 @@ img {
 /* 버튼 그룹 */
 #mainStart div {
     display: flex;
-    margin-top: 120px;
+    /* margin-top: 120px; */
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 15px;
+}
+
+#mainMenu {
+    display: block;
 }
 
 .menu h2 {
