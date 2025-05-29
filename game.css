@@ -80,6 +80,16 @@ img {
     background-size: 1280px 830px;
 }
 
+#story,
+#chooseHouse,
+#credit {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: url("img/background/settingBackground.png");
+    background-size: 1280px 830px;
+}
+
 #mainStart h1 {
     font-size: 24px;
     /* margin: 5px 0; */
@@ -96,9 +106,7 @@ img {
     gap: 15px;
 }
 
-#mainMenu {
-    display: block;
-}
+
 
 .menu h2 {
     display: block;

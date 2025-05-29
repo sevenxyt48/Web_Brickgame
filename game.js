@@ -79,33 +79,6 @@ badImg1.src = "img/stone/stone_green.png";
 
 var isCountdownRunning = false; // 카운트다운 상태 변수 추가
 
-// $("#startButton").click(goToHouseSelection);
-// $("#skipButton").click(function () {
-//     clearInterval(intervalId); // 타이핑 작업 중단
-//     $("#skipButton").hide();
-//     while (i < content.length) {
-//         let txt = content[i++];
-//         text.innerHTML += txt === "\n" ? "<br/>" : txt;
-//     }
-//     $("#startButton").show();
-// });
-
-// $("#mainMenu div h1").eq(1).on("click", settings);
-// $("#mainMenu div h1").eq(2).on("click", credit);
-// $(".backToMain").on("click", backToMainMenu);
-// $("#stopButton").on("click", function () {
-//     clearInterval(countdownInterval);//0526
-//     stopGame();
-//     resetAll();
-// });
-// $(".reTry").on("click", function () {
-//     stage(gameLevel);
-// });
-// $(".nextStage").on("click", function () {
-//     console.log(`Start next stage`);
-//     stage(++gameLevel);
-// });
-
 function gameLoop() {
     updateGame();
     drawGame(context);
@@ -180,21 +153,21 @@ function geminio(brickX, brickY) {
 function bombarda(brickR, brickC) {
     //brick 2차원 배열로 저장되어진다고 가정했을 때, 부딪힌 벽돌의 row, col이 인자.
     brick[brickR][brickC].alive = false; // 벽돌 생성 함수 따로 만들어야함. 미구현
-    if(brick[brickR-1][brickC]!=null)
-        brick[brickR-1][brickC].alive = false;
-    if(brick[brickR+1][brickC]!=null)
-        brick[brickR+1][brickC].alive = false;
-    if(brick[brickR][brickC-1]!=null)
-        brick[brickR][brickC-1].alive = false;
-    if(brick[brickR][brickC+1]!=null)
-        brick[brickR][brickC+1].alive = false;
+    if (brick[brickR - 1][brickC] != null)
+        brick[brickR - 1][brickC].alive = false;
+    if (brick[brickR + 1][brickC] != null)
+        brick[brickR + 1][brickC].alive = false;
+    if (brick[brickR][brickC - 1] != null)
+        brick[brickR][brickC - 1].alive = false;
+    if (brick[brickR][brickC + 1] != null)
+        brick[brickR][brickC + 1].alive = false;
     // bombarda함수 및 벽돌에 공 충돌 후에는 벽돌draw함수 재출력
 }
 
 //좋은 이벤트 - 빛 생성 마법 (level2 이상에서만 존재)
 function lumos(gameLevel) {
     darkR = canvas.width;
-    setTimeout(()=>{
+    setTimeout(() => {
         nox(gameLevel);
     }, 5000); // 5초 후 다시 어두워질 수 있도록.
 }
@@ -236,35 +209,35 @@ function confundo() {
 }
 
 //레벨2부터 점점 어두워지는 화면 구현
-function nox(gameLevel){ // level을 시작할 때 각 level을 받아 2~4 사이 레벨일 때만 nox함수 호출.
+function nox(gameLevel) { // level을 시작할 때 각 level을 받아 2~4 사이 레벨일 때만 nox함수 호출.
     let speed;
-    switch(gameLevel){
+    switch (gameLevel) {
         case 2: speed = 1; break;
         case 3: speed = 2; break;
         case 4: speed = 3; break;
         default: speed = 0; break;
     }
 
-    function reducedVisibility(){
+    function reducedVisibility() {
         darkR -= speed;
-        if(darkR>50){
+        if (darkR > 50) {
             requestAnimationFrame(reducedVisibility);
         }
     }
     requestAnimationFrame(reducedVisibility);
 }
 
-function darkness(context){ // 매 프레임마다 호출하여 실시간으로 어두워질 수 있도록.
-    if(gameLevel<2) return;
-    
-    const centerX = paddleX + paddleWidth/2; // paddleX에 (canvas.width-paddleWidth)/2 들어있다 가정. 영웅이 push하면 그 변수 따라 바꿀게요
-    const centerY = paddleY + paddleHeight/2;
+function darkness(context) { // 매 프레임마다 호출하여 실시간으로 어두워질 수 있도록.
+    if (gameLevel < 2) return;
+
+    const centerX = paddleX + paddleWidth / 2; // paddleX에 (canvas.width-paddleWidth)/2 들어있다 가정. 영웅이 push하면 그 변수 따라 바꿀게요
+    const centerY = paddleY + paddleHeight / 2;
 
     context.save();
     context.fillStyle = 'rgba(0,0,0,0.8)'; // 반투명(80%)한 어둠
     context.beginPath();
-    context.rect(0,0,canvas.width, canvas.height); //canvas 너비, 높이 변수명도 영웅이 하고 난 다음 수정보기
-    context.arc(centerX, centerY, darkR, 0, Math.PI*2,true);
+    context.rect(0, 0, canvas.width, canvas.height); //canvas 너비, 높이 변수명도 영웅이 하고 난 다음 수정보기
+    context.arc(centerX, centerY, darkR, 0, Math.PI * 2, true);
     context.closePath();
     context.fill("evenodd");
 }
