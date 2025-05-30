@@ -37,13 +37,22 @@ img {
     display: none;
 }
 
-#logo {
+/* #logo {
     position: absolute;
     top: 0px;
     left: 50%;
     transform: translateX(-50%);
     width: 270px;
     height: auto;
+} */
+
+#logo {
+    width: 270px;
+    height: auto;
+    /* margin-top: 30px; */
+    /* 상단 여백 */
+    margin-bottom: 50px;
+    /* 버튼과의 간격 */
 }
 
 #copyright,
@@ -82,10 +91,11 @@ canvas {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     background-image: url("img/background/startBackground.jpg");
     background-size: 1280px 830px;
     height: 840px;
+    position: relative;
 }
 
 #story,
@@ -173,6 +183,16 @@ canvas {
     font-size: 40px;
     cursor: pointer;
 }
+
+/* Lives 표시 */
+/* #lives {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+} */
 
 /* #skipButton:hover {
     background-color: gray;
