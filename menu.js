@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameStartButton = document.getElementById('gameStartButton');
     if (gameStartButton) {
         gameStartButton.addEventListener('click', () => {
-            musicObj.PlayChoose();
             hideAll();
             $("canvas").show();
             $("#pauseBtn").show();
@@ -26,24 +25,52 @@ document.addEventListener('DOMContentLoaded', () => {
     // 화면 요소들
     const mainStart = document.getElementById('mainStart');
     const story = document.getElementById('story');
-    const houseSelect = document.getElementById("houseSelect");
-    const mainMenu = document.getElementById('mainMenu');
     const settings = document.getElementById('settings');
     const credit = document.getElementById('credit');
 
     // 버튼 요소들
-    const startButton = mainStart.querySelectorAll('.button')[0];
-    const settingsButton = mainStart.querySelectorAll('.button')[1];
-    const creditButton = mainStart.querySelectorAll('.button')[2];
+    const startButton = document.getElementById('startButton');
+    const settingsButton = document.getElementById('settingsButton');
+    const creditButton = document.getElementById('creditButton');
 
     const storyStartButton = document.getElementById('storyStart');
+    const houseSelect = document.getElementById("houseSelect");
     const skipButtons = document.querySelectorAll('#skipButton');
-    const backButton = document.getElementById('#backButton');
+    const backButton = document.querySelectorAll('#backButton');
+    // const backButton = document.getElementById('backButton');
 
     function showScreen(screen) {
         const allScreens = document.querySelectorAll('.game_start');
         allScreens.forEach(s => s.style.display = 'none');
-        screen.style.display = 'block';
+        screen.style.display = 'flex';
+
+        // backButton 표시 여부 및 위치 조정
+        if (screen.id === 'mainStart') {
+            backButton.style.display = 'none';
+        } else {
+            backButton.style.display = 'block';
+
+            // 화면별 위치 설정
+            switch (screen.id) {
+                case 'story':
+                case 'chooseHouse':
+                    backButton.style.top = '30px';
+                    backButton.style.left = '1060px';
+                    backButton.style.right = '';   // 혹시 이전 설정 초기화
+                    backButton.style.bottom = '';  // 초기화
+                    break;
+                case 'settings':
+                case 'credit':
+                    backButton.style.top = '';     // 초기화
+                    backButton.style.left = '50%';
+                    backButton.style.transform = 'translateX(-50%)'; // 가운데 정렬
+                    backButton.style.bottom = '250px';
+                    break;
+                default:
+                    backButton.style.display = 'none';
+                    break;
+            }
+        }
     }
 
     // 시작화면 → 스토리 화면
@@ -61,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showScreen(credit);
     });
 
-    // 설명화면 → 기숙사 선택 화면
+    // 스토리 화면 → 기숙사 선택 화면
     storyStartButton.addEventListener('click', () => {
         showScreen(chooseHouse);
     });
@@ -71,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         playPage();
     });
 
-    // Skip 버튼들 → 기숙사 선택 화면
+    // Skip 버튼 → 기숙사 선택 화면
     skipButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             showScreen(mainMenu);
