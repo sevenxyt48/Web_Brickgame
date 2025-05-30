@@ -2,7 +2,7 @@
 var canvas;
 var context;
 var totalScore = 0; // 전체 스코어
-let darkR = canvas.width; // 시야 반지름
+let darkR; // 시야 반지름
 
 // 벽돌 정보
 function Brick(x, y, width, height, type) {
@@ -30,14 +30,6 @@ var paddleHeight = 10; // 높이
 var paddleX = 0; // 초기 x 좌표
 var paddleY = 520; // 초기 y 좌표 (캔버스 바닥에서 약간 위)
 
-// 공
-function Ball(x, y, vX, vY) {
-    this.x = x;
-    this.y = y;
-    this.vX = vX;
-    this.vY = vY;
-    this.r = ballR // 추가 
-}
 var balls = []; // 공의 초기 위치와 속도
 var ballNum = 0; // 공 개수
 const ballR = 10;
@@ -48,6 +40,14 @@ var ballBottom;
 var ballLeft;
 var ballRight;
 
+// 공
+function Ball(x, y, vX, vY) {
+    this.x = x;
+    this.y = y;
+    this.vX = vX;
+    this.vY = vY;
+    this.r = ballR // 추가 
+}
 var drawInterval; // 게임 화면 갱신 인터벌
 var countdownInterval // 카운트 인터벌
 
@@ -99,7 +99,7 @@ $(document).ready(function () {
         hideAll();
         $("#myCanvas").show();
         $("#gameScreen").show();
-        initGame();
+        gameInit();
     });
 
     $("#backButton").click(function () {
@@ -126,7 +126,7 @@ $(document).ready(function () {
     });
     canvas = document.getElementById("myCanvas");
     context = canvas.getContext("2d");
-
+    darkR = canvas.width;
     updateLives();
 
     $(".backToMain").on("click", backToMainMenu);
@@ -170,19 +170,19 @@ function applyHouseTheme(houseId) {
 
     switch (houseId) {
         case 'house1': // Gryffindor - red
-            gameBgImg = 'img/background/house1.png';
+            gameBgImg = 'img/background/gameRed.png';
             gameOverBgImg = 'img/background/gameOverRed.png';
             break;
         case 'house2': // Slytherin - green
-            gameBgImg = 'img/background/house2.png';
+            gameBgImg = 'img/background/gameGreen.png';
             gameOverBgImg = 'img/background/gameOverGreen.png';
             break;
         case 'house3': // Hufflepuff - yellow
-            gameBgImg = 'img/background/house3.png';
+            gameBgImg = 'img/background/gameYellow.png';
             gameOverBgImg = 'img/background/gameOverYellow.png';
             break;
         case 'house4': // Ravenclaw - blue
-            gameBgImg = 'img/background/house4.png';
+            gameBgImg = 'img/background/gameBlue.png';
             gameOverBgImg = 'img/background/gameOverBlue.png';
             break;
     }
@@ -216,10 +216,14 @@ function applyHouseTheme(houseId) {
     });
 
 }
-
+// isGameOver 함수 추가
+function isGameOver() {
+    return lives <= 0;
+}
 function gameLoop() {
     updateGame();
     drawGame(context);
+
     if (!isGameOver()) {
         requestAnimationFrame(gameLoop);
     }
@@ -229,11 +233,10 @@ function gameInit() {
     score = 0;
     lives = 3;
     // 캔버스 초기화 (한 번만 생성되도록 조건 넣어도 됨)
-    canvas = document.createElementId('myCanvas');
-    context = canvas.getContext('2d');
+    canvas = document.getElementById('myCanvas');
     canvas.width = 1280;
     canvas.height = 840;
-
+    context = canvas.getContext('2d');
     // document.getElementById('gameScreen').appendChild(canvas);
 
     // 게임 객체 초기화
@@ -250,7 +253,7 @@ function startGame(house) {
     document.querySelectorAll('.menu').forEach(s => s.style.display = 'none');
     backButton.style.display = 'none';
     // canvas 보여주기
-    canvas = document.createElementId('myCanvas');
+    canvas = document.getElementById('myCanvas');
     canvas.style.display = 'block';
     isGameRunning = true;
     $("#lives").show();
@@ -284,7 +287,7 @@ function gameClear() {
 
 function nextGrade() {
     // 다음 학년 시작 로직
-    document.getElementById('victoryScreen').style.display = 'none';
+    document.getElementById('win').style.display = 'none';
     document.getElementById('gameScreen').style.display = 'block';
     startNextStage(); // 새 스테이지 초기화
 }
@@ -329,14 +332,14 @@ function updateGame() {
 
     for (let i = 0; i < brick.length; i++) {
         let b = brick[i];
-        if (!b.destroyed &&
+        if (!b.alive &&
             ball.x + ball.r >= b.x &&
             ball.x - ball.r <= b.x + brickWidth &&
             ball.y + ball.r >= b.y &&
             ball.y - ball.r <= b.y + brickHeight
         ) {
             ball.vY *= -1;
-            b.destroyed = true;
+            b.alive = false;
             totalScore += 10;
             break;
         }
@@ -403,7 +406,7 @@ function impedimenta() {
 
     const originalSpeed = [];
     balls.forEach((ball, index) => {
-        originalSpeed[index].push({ vX: ball.vX, vY: ball.vY });
+        originalSpeed[index] = { vX: ball.vX, vY: ball.vY };
         ball.vX *= 0.7;
         ball.vY *= 0.7;
     })
