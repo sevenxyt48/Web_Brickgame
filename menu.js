@@ -151,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-
     // 초기 화면 설정
     showScreen(mainStart);
 });

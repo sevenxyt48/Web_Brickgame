@@ -5,14 +5,6 @@ var totalScore = 0; // 전체 스코어
 let darkR; // 시야 반지름
 
 // 벽돌 정보
-function Brick(x, y, width, height, type) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-    this.type = type; // 벽돌 종류. 기본:0, 좋은벽돌:1, 나쁜벽돌:2
-    this.alive = true; // 벽돌의 깨짐 유무 표시. true:존재 false:깨짐
-}
 var brick = [];
 var brickRow; // 벽돌 행 수
 var brickColumn; // 벽돌 열 수
@@ -22,6 +14,15 @@ var brickGapX = 5; // 벽돌 사이의 가로 간격
 var brickGapY = 5; // 벽돌 사이의 세로 간격
 var isBrickMoving = false; // 벽돌 하강 여부
 var brickVy = 0.1; // 벽돌이 내려오는 속도
+
+function Brick(x, y, width, height, type) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.type = type; // 벽돌 종류. 기본:0, 좋은벽돌:1, 나쁜벽돌:2
+    this.alive = true; // 벽돌의 깨짐 유무 표시. true:존재 false:깨짐
+}
 
 // 패들
 const pw = 100;
@@ -33,12 +34,11 @@ var paddleY = 520; // 초기 y 좌표 (캔버스 바닥에서 약간 위)
 var balls = []; // 공의 초기 위치와 속도
 var ballNum = 0; // 공 개수
 const ballR = 10;
-var bullet = { x: 400, y: 0, r: 10, vX: 3, vY: 3 }; // 보스의 공격의 초기 위치와 속도
-var isBulletMoving = false;
 var ballTop;
 var ballBottom;
 var ballLeft;
 var ballRight;
+var ballMoving = false;
 
 // 공
 function Ball(x, y, vX, vY) {
@@ -243,6 +243,10 @@ function gameInit() {
     resetBall();
     initBricks();
 
+    canvas.addEventListener("click", () => {
+        ballMoving = true;
+    });
+    document.addEventListener("mousemove", mouseMoveHandler, false);
     // 게임 루프 시작
     requestAnimationFrame(gameLoop);
 }
@@ -297,26 +301,37 @@ var ball;
 
 // 공 위치 초기화
 function resetBall() {
-    ball = new Ball(canvas.width / 2, 500, 3, -3);
+    ball = new Ball(canvas.width / 2, canvas.height - 30, 3, -3);
 }
 
 // 게임 상태 갱신
 function updateGame() {
-    ball.x += ball.vX;
-    ball.y += ball.vY;
+    if (ballMoving) {
+        ball.x += ball.vX;
+        ball.y += ball.vY;
 
-    if (ball.x - ball.r <= 0 || ball.x + ball.r >= 1280) {
-        ball.vX *= -1;
-    }
-    if (ball.y - ball.r <= 0) {
-        ball.vY *= -1;
+
+        // 벽에 부딪히면 방향 전환
+        if (ball.x + ball.vX > canvas.width - ball.r || ball.x + ball.vx < ball.r) {
+            ball.vX = -ball.vX;
+        }
+        if (ball.y + ball.vY < ball.r) {
+            ball.vY = -ball.vY;
+        } else if (ball.y + ball.vY > canvas.height - ball.r) {
+            // 패들에 부딪히는지 확인
+            if (ball.x > paddleX && ball.x < paddleX + paddleWidth) {
+                ball.vY = -ball.vY;
+            } else {
+                // 공이 아래로 떨어지면 초기화
+                ballMoving = false;
+                lives--;
+                resetBall();
+            }
+        }
+
     }
 
-    if (ball.y + ball.r >= 830) {
-        lives--;
-        resetBall();
-    }
-
+    //패들 충돌
     if (
         ball.y + ball.r >= paddleY &&
         ball.x >= paddleX &&
@@ -330,6 +345,7 @@ function updateGame() {
         ball.vY = -Math.abs(speed * Math.cos(angle));
     }
 
+    //벽돌 충돌
     for (let i = 0; i < brick.length; i++) {
         let b = brick[i];
         if (!b.alive &&
@@ -367,18 +383,11 @@ function initBricks() {
 
 // 게임 그리기 함수
 function drawGame(ctx) {
-    ctx.clearRect(0, 0, 1280, 830);
+    ctx.clearRect(0, 0, 1280, 840);
+    drawBall(ctx);
+    drawPaddle(ctx);
 
-    // 공 그리기
-    ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
-    ctx.fillStyle = 'red';
-    ctx.fill();
-    ctx.closePath();
-
-    // 패들 그리기
-    ctx.fillStyle = 'blue';
-    ctx.fillRect(paddleX, paddleY, paddleWidth, paddleHeight);
+    requestAnimationFrame(drawGame);
 
     // 벽돌 그리기
     for (let i = 0; i < brick.length; i++) {
@@ -392,6 +401,29 @@ function drawGame(ctx) {
     document.getElementById("lives").innerText = "Lives: " + lives;
 }
 
+function drawBall(ctx) {
+
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+    ctx.fillStyle = "#0095DD";
+    ctx.fill();
+    ctx.closePath();
+}
+
+function drawPaddle(ctx) {
+    ctx.beginPath();
+    ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+    ctx.fillStyle = "#0095DD";
+    ctx.fill();
+    ctx.closePath();
+}
+
+function mouseMoveHandler(e) {
+    const relativeX = e.clientX - canvas.getBoundingClientRect().left;
+    if (relativeX > 0 && relativeX < canvas.width) {
+        paddleX = relativeX - paddleWidth / 2;
+    }
+}
 
 function goToMenu() {
     document.getElementById('pauseMenu').style.display = 'none';
