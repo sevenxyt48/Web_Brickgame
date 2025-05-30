@@ -24,15 +24,17 @@ img {
     justify-content: center;
 }
 
-
 .menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     position: absolute;
     width: 1280px;
     height: 900px;
     z-index: 10;
     overflow: hidden;
     display: none;
-    align-items: center;
 }
 
 #logo {
@@ -50,6 +52,7 @@ img {
     color: white;
     text-shadow: none;
     font-size: 20px;
+    margin-top: 20px;
 }
 
 #backButton,
@@ -76,12 +79,13 @@ canvas {
 }
 
 #mainStart {
-    display: block;
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     background-image: url("img/background/startBackground.jpg");
     background-size: 1280px 830px;
+    height: 840px;
 }
 
 #story,
@@ -99,22 +103,39 @@ canvas {
     cursor: pointer;
 }
 
-/* 버튼 그룹 */
-/* #mainStart div {
+#contents {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    gap: 20px;
+}
 
-} */
+.button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0px;
+    cursor: pointer;
+    margin: 10px 0;
+}
 
+.button h1 {
+    font-size: 40px;
+    color: black;
+    margin: 0;
+}
+
+.button img {
+    width: 200px;
+    height: auto;
+    margin-top: 0;
+}
 
 .menu h2 {
     display: block;
     font-size: 40px;
     color: white;
     text-align: center;
-    /* margin-top: 200px; */
 }
 
 .menu h1 {
@@ -126,26 +147,17 @@ canvas {
     text-align: center;
 }
 
-/* 빗자루 이미지 */
-.botton img {
-    width: 200px;
-    height: auto;
-    /* margin-right: 15px; */
-}
-
-#startButton {
+/* #startButton {
     position: absolute;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    /* width: 200px;
-    height: 60px; */
     color: black;
     font-size: 40px;
     text-align: center;
     line-height: 60px;
     cursor: pointer;
-}
+} */
 
 /* #startButton:hover {
     background-color: gray;

@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
     <link rel="stylesheet" type="text/css" href="game.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="game.js"></script>
     <script type="text/javascript" src="menu.js"></script>
@@ -26,17 +27,17 @@
             <!-- <img id="background" src="img/background/startBackground.jpg" /> -->
             <div id="contents">
                 <p>호그와트에 오신 여러분을 환영합니다!</p>
-                <div class="botton" id="startButton">
+                <div class="button" id="startButton">
                     <h1>Start</h1>
-                    <img id="bottonImg" src="img/item_button.png" />
+                    <img class="buttonImg" src="img/item_button.png" />
                 </div>
-                <div class="botton" id="settingsButton">
+                <div class="button" id="settingsButton">
                     <h1>Settings</h1>
-                    <img id="bottonImg" src="img/item_button.png" />
+                    <img class="buttonImg" src="img/item_button.png" />
                 </div>
-                <div class="botton" id="creditButton">
+                <div class="button" id="creditButton">
                     <h1>Credit</h1>
-                    <img id="bottonImg" src="img/item_button.png" />
+                    <img class="buttonImg" src="img/item_button.png" />
                 </div>
                 <p id="copyright">ⓒ 2025 WEB PROGRAMMING 12팀</p>
                 <p id="KU">KONKUK UNIV.</p>
@@ -113,7 +114,7 @@
         <div class="menu" id="gameScreen">
             <div id="gameInfo">
                 <span id="score">Score: 0</span>
-                <span id="lives">Lives: </span>
+                <span>Lives: </span>
             </div>
             <button id="pauseBtn" onclick="pauseGame()">Stop</button>
         </div>
