@@ -101,3 +101,123 @@ function nextGrade() {
     document.getElementById('gameScreen').style.display = 'block';
     startNextStage(); // 새 스테이지 초기화
 }
+
+function initGame() {
+    canvas = document.createElement('canvas'); //임의로 캔버스 생성 -> 수정정 가능
+    canvas.width = 1280;
+    canvas.height = 830;
+    context = canvas.getContext('2d');
+    document.getElementById('gameScreen').appendChild(canvas);
+
+    // 패들 위치 초기화
+    paddleX = (canvas.width - paddleWidth) / 2;
+
+    // 공 초기 위치
+    resetBall();
+
+    // 벽돌 초기화  예시
+    brickRow = 5;
+    brickColumn = 10;
+    brickWidth = 100;
+    brickHeight = 30;
+    brick = [];
+
+    for (let r = 0; r < brickRow; r++) {
+        for (let c = 0; c < brickColumn; c++) {
+            brick.push({
+                x: c * (brickWidth + brickGapX) + 60,
+                y: r * (brickHeight + brickGapY) + 50,
+                destroyed: false
+            });
+        }
+    }
+
+    gameLoop();
+}
+
+function resetBall() {
+    bullet.x = 640;
+    bullet.y = 500;
+    bullet.vX = 3;
+    bullet.vY = -3;
+}
+
+function updateGame() {
+    // 공 위치 갱신
+    bullet.x += bullet.vX;
+    bullet.y += bullet.vY;
+
+    // 벽과 충돌
+    if (bullet.x - bullet.r <= 0 || bullet.x + bullet.r >= 1280) {
+        bullet.vX *= -1;
+    }
+    if (bullet.y - bullet.r <= 0) {
+        bullet.vY *= -1;
+    }
+
+    // 바닥에 닿았을 경우 목숨 감소
+    if (bullet.y + bullet.r >= 830) {
+        lives--;
+        resetBall();
+    }
+
+    // 패들과 충돌
+    if (
+        bullet.y + bullet.r >= paddleY &&
+        bullet.x >= paddleX &&
+        bullet.x <= paddleX + paddleWidth &&
+        bullet.y <= paddleY + paddleHeight
+    ) {
+        // 반사 각도 조정
+        let hitPoint = (bullet.x - (paddleX + paddleWidth / 2)) / (paddleWidth / 2);
+        let angle = hitPoint * (Math.PI / 3); // 최대 ±60도
+        let speed = Math.sqrt(bullet.vX * bullet.vX + bullet.vY * bullet.vY);
+        bullet.vX = speed * Math.sin(angle);
+        bullet.vY = -Math.abs(speed * Math.cos(angle));
+    }
+
+    // 벽돌 충돌
+    for (let i = 0; i < brick.length; i++) {
+        let b = brick[i];
+        if (!b.destroyed &&
+            bullet.x + bullet.r >= b.x &&
+            bullet.x - bullet.r <= b.x + brickWidth &&
+            bullet.y + bullet.r >= b.y &&
+            bullet.y - bullet.r <= b.y + brickHeight
+        ) {
+            // 충돌 반사 (기본적으로 수직 반사)
+            bullet.vY *= -1;
+            b.destroyed = true;
+            totalScore += 10;
+            break;
+        }
+    }
+}
+
+function drawGame(ctx) {
+    ctx.clearRect(0, 0, 1280, 830);
+
+    // 공 그리기
+    ctx.beginPath();
+    ctx.arc(bullet.x, bullet.y, bullet.r, 0, Math.PI * 2);
+    ctx.fillStyle = 'red';
+    ctx.fill();
+    ctx.closePath();
+
+    // 패들 그리기
+    ctx.fillStyle = 'blue';
+    ctx.fillRect(paddleX, paddleY, paddleWidth, paddleHeight);
+
+    // 벽돌 그리기
+    for (let i = 0; i < brick.length; i++) {
+        if (!brick[i].destroyed) {
+            ctx.drawImage(brickImg[0], brick[i].x, brick[i].y, brickWidth, brickHeight);
+        }
+    }
+
+    // 점수 표시
+    document.getElementById("score").innerText = "Score: " + totalScore;
+    document.getElementById("lives").innerText = "Lives: " + lives;
+}
+
+
