@@ -25,9 +25,8 @@ function Brick(x, y, width, height, type) {
 }
 
 // 패들
-const pw = 100;
-var paddleWidth = pw; // 너비
-var paddleHeight = 10; // 높이
+var paddleWidth = 400; // 너비
+var paddleHeight = 50; // 높이
 var paddleX = 0; // 초기 x 좌표
 var paddleY = 520; // 초기 y 좌표 (캔버스 바닥에서 약간 위)
 
@@ -57,8 +56,8 @@ var gameLevel;
 var lives = 3; // 목숨 변수
 
 // 공 이미지
-var bulletImg = new Image();
-bulletImg.src = "img/attackBall.png";
+var ballImg = new Image();
+ballImg.src = "img/attackBall.png";
 
 // 벽돌 이미지 사이즈: 500x100
 var brickImg = [];
@@ -67,6 +66,8 @@ brickImg[1] = new Image();
 brickImg[0].src = "img/stone/stone_basic.png";
 brickImg[1].src = "img/stone/stone_basic.png";
 
+var paddleImg = new Image();
+paddleImg.src = 'img/paddle.png';
 //좋은 이벤트 벽돌
 var goodImg = new Image();
 var goodImg1 = new Image();
@@ -402,20 +403,11 @@ function drawGame(ctx) {
 }
 
 function drawBall(ctx) {
-
-    ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
-    ctx.fillStyle = "#0095DD";
-    ctx.fill();
-    ctx.closePath();
+    ctx.drawImage(ballImg, ball.x - 20, ball.y - 20, 40, 40)
 }
 
 function drawPaddle(ctx) {
-    ctx.beginPath();
-    ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "#0095DD";
-    ctx.fill();
-    ctx.closePath();
+    ctx.drawImage(paddleImg, paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
 }
 
 function mouseMoveHandler(e) {
