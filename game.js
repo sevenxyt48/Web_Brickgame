@@ -81,29 +81,29 @@ badImg1.src = "img/stone/stone_green.png";
 var isCountdownRunning = false; // 카운트다운 상태 변수 추가
 
 $(document).ready(function () {
-    // Start 버튼 클릭 시 story 화면으로 전환
-    $('#startButton').click(function () {
-        $('#mainStart').hide();
-        $('#story').show();
-    });
+    // // Start 버튼 클릭 시 story 화면으로 전환
+    // $('#startButton').click(function () {
+    //     $('#mainStart').hide();
+    //     $('#story').show();
+    // });
 
-    // Settings 버튼 클릭 시 settings 화면으로 전환
-    $('#settingsButton').click(function () {
-        $('#mainStart').hide();
-        $('#settings').show();
-    });
+    // // Settings 버튼 클릭 시 settings 화면으로 전환
+    // $('#settingsButton').click(function () {
+    //     $('#mainStart').hide();
+    //     $('#settings').show();
+    // });
 
-    // Credit 버튼 클릭 시 credit 화면으로 전환
-    $('#creditButton').click(function () {
-        $('#mainStart').hide();
-        $('#credit').show();
-    });
+    // // Credit 버튼 클릭 시 credit 화면으로 전환
+    // $('#creditButton').click(function () {
+    //     $('#mainStart').hide();
+    //     $('#credit').show();
+    // });
 
-    // story 페이지 -> 기숙사 선택
-    $('#storyStart').click(function () {
-        $('#story').hide();
-        $('#chooseHouse').show();
-    });
+    // // story 페이지 -> 기숙사 선택
+    // $('#storyStart').click(function () {
+    //     $('#story').hide();
+    //     $('#chooseHouse').show();
+    // });
 
     let selectedHouse = null;
     $('#houseSelection .house').click(function () {
@@ -244,6 +244,10 @@ function gameInit() {
 //실제 게임 시작 함수
 function startGame(house) {
     console.log("game start! Selected house:", selectedHouse);
+    document.querySelectorAll('.menu').forEach(s => s.style.display = 'none');
+    backButton.style.display = 'none';
+    // canvas 보여주기
+    canvas.style.display = 'block';
     isGameRunning = true;
     $("#lives").show();
 

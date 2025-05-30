@@ -176,11 +176,10 @@ canvas {
     cursor: pointer;
 }
 
-/* 
+
 #story {
-    flex-direction: column;
-    align-items: center;
-} */
+    display: none;
+}
 
 #story p {
     color: white;
