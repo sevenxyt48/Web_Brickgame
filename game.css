@@ -8,6 +8,7 @@ body {
     margin: 0;
     padding: 0;
     text-align: center;
+    height: 100%;
 }
 
 img {
@@ -17,43 +18,49 @@ img {
 #container {
     position: relative;
     width: 1280px;
-    height: 900px;
-    margin: 50px auto;
+    height: 840px;
+    margin: 0px auto;
     overflow: hidden;
     align-items: center;
     justify-content: center;
 }
 
 .menu {
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     position: absolute;
     width: 1280px;
-    height: 900px;
+    height: 840px;
     z-index: 10;
     overflow: hidden;
-    display: none;
 }
 
 #logo {
     width: 270px;
     height: auto;
     margin-bottom: 50px;
-    /* 버튼과의 간격 */
 }
 
 #copyright,
 #KU {
     z-index: 10;
-    color: white;
+    color: black;
     text-shadow: none;
     font-size: 20px;
     margin-top: 20px;
 }
 
-#backButton,
+#backButton {
+    position: absolute;
+    display: none;
+    z-index: 20;
+    cursor: pointer;
+    color: white;
+    font-size: 60px;
+}
+
 #pauseMenu {
     position: absolute;
     display: none;
@@ -73,29 +80,40 @@ canvas {
     left: 50%;
     transform: translate(-50%, -50%);
     border: 1px solid black;
-    /* 캔버스 경계 표시 */
 }
 
 #mainStart {
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     background-image: url("img/background/startBackground.jpg");
-    background-size: 1280px 830px;
+    /* background-size: 1280px 830px; */
     height: 840px;
+    width: 1280px;
     position: relative;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 
 #story,
 #chooseHouse,
 #settings,
 #credit {
+    margin: 0;
+    padding: 0;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     background-image: url("img/background/settingBackground.png");
-    background-size: 1280px 830px;
+    height: 840px;
+    width: 1280px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 
 #mainStart h1 {
@@ -111,6 +129,7 @@ canvas {
 }
 
 .button {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -155,6 +174,29 @@ canvas {
     text-shadow: 4px 4px black;
     font-size: 40px;
     cursor: pointer;
+}
+
+/* 
+#story {
+    flex-direction: column;
+    align-items: center;
+} */
+
+#story p {
+    color: white;
+    font-size: 36px;
+    line-height: 2em;
+}
+
+#storyStart {
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+#chooseHouse img {
+    width: 220px;
+    height: auto;
 }
 
 /* Lives 표시 */

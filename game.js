@@ -80,35 +80,33 @@ badImg1.src = "img/stone/stone_green.png";
 var isCountdownRunning = false; // 카운트다운 상태 변수 추가
 
 $(document).ready(function () {
-    text = document.querySelector("#story");
-    $("#lives").hide();
+    // Start 버튼 클릭 시 story 화면으로 전환
+    $('#startButton').click(function () {
+        $('#mainStart').hide();
+        $('#story').show();
+    });
 
-    volume.onclick = vControl;
-    musicObj.playMusic();
+    // Settings 버튼 클릭 시 settings 화면으로 전환
+    $('#settingsButton').click(function () {
+        $('#mainStart').hide();
+        $('#settings').show();
+    });
+
+    // Credit 버튼 클릭 시 credit 화면으로 전환
+    $('#creditButton').click(function () {
+        $('#mainStart').hide();
+        $('#credit').show();
+    });
+
+    // story 페이지에서 게임 시작
+    $('#storyStart').click(housePage);
 
     canvas = document.getElementById("myCanvas");
 
     updateLives();
 
-    // 클릭 이벤트
-    var volumeElement = document.getElementById("volume");
-    volumeElement.onclick = vControl;
-
-    $("#mainStart div h1").eq(0).on("click", story);
-    $("#startButton").click(housePage);
-    // $("#skipButton").click(function () {
-    //     clearInterval(intervalId); // 타이핑 작업 중단
-    //     $("#skipButton").hide();
-    //     while (i < content.length) {
-    //         let txt = content[i++];
-    //         text.innerHTML += txt === "\n" ? "<br/>" : txt;
-    //     }
-    //     $("#startButton").show();
-    // });
-
-    $("#mainMenu div h1").eq(1).on("click", settingPage);
-    $("#mainMenu div h1").eq(2).on("click", creditPage);
     $(".backToMain").on("click", backToMainMenu);
+
     $("#pauseBtn").on("click", function () {
         clearInterval(countdownInterval);
         // stopGame();
@@ -119,7 +117,6 @@ $(document).ready(function () {
         stage(gameLevel);
     });
     $(".nextGrade").on("click", function () {
-        console.log(`Start next stage`);
         stage(++gameLevel);
     });
 
