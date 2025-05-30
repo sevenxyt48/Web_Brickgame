@@ -184,11 +184,28 @@ function gameLoop() {
     }
 }
 
+function gameInit() {
+    // 캔버스 초기화 (한 번만 생성되도록 조건 넣어도 됨)
+    canvas = document.createElement('canvas');
+    canvas.width = 1280;
+    canvas.height = 830;
+    context = canvas.getContext('2d');
+    document.getElementById('gameScreen').appendChild(canvas);
+
+    // 게임 객체 초기화
+    resetBall();
+    initBricks();
+
+    // 게임 루프 시작
+    requestAnimationFrame(gameLoop);
+}
+
 //실제 게임 시작 함수
 function startGame() {
     isGameRunning = true;
     $("#lives").show();
 
+    gameInit();
 }
 
 function pauseGame() {
