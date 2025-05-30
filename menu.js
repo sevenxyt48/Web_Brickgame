@@ -35,6 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const storyStartButton = document.getElementById('storyStart');
     const houseSelect = document.getElementById("houseSelect");
+
+    const houses = document.querySelectorAll('#houseSelection .house');
+
     const skipButtons = document.querySelectorAll('#skipButton');
     const backButton = document.querySelectorAll('#backButton');
     // const backButton = document.getElementById('backButton');
@@ -95,7 +98,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     houseSelect.addEventListener('click', () => {
         //게임 페이지.
-        playPage();
+        startGame();
+    });
+
+    // house 클릭 이벤트 추가
+    houses.forEach(house => {
+        house.addEventListener('click', () => {
+            // 모든 house 선택 해제
+            houses.forEach(h => h.classList.remove('selected'));
+            // 클릭한 house 선택
+            house.classList.add('selected');
+            selectedHouse = house.querySelector('h1').innerText;
+            console.log('선택된 기숙사:', selectedHouse);
+        });
+    });
+
+    // SELECT 버튼 클릭 이벤트
+    const selectButton = document.getElementById('houseSelect');
+    selectButton.addEventListener('click', () => {
+        if (selectedHouse) {
+            console.log('게임 시작! 선택된 기숙사:', selectedHouse);
+            // 여기서 게임 플레이 화면으로 전환하는 함수 호출
+            startGame();
+        } else {
+            alert('기숙사를 선택해 주세요!');
+        }
     });
 
     // Skip 버튼 → 기숙사 선택 화면
@@ -113,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 초기 화면 설정
     showScreen(mainStart);
 });
+
 
 
 var musicObj = {
@@ -285,12 +313,11 @@ function mainPage() {
 
 //난이도 선택 페이지
 function housePage() {
-
-    musicObj.PlayChoose();
-
-    hideAll();
-    $("#house").show();
-    $("#backButton").show();
+    $('#story').hide();
+    $('#chooseHouse').show();
+    // hideAll();
+    // $("#house").show();
+    // $("#backButton").show();
 }
 
 //인게임 화면
@@ -322,7 +349,16 @@ function gameClearPage() {
     $("#stopButton").hide();
 }
 
-
+function backToMainMenu() {
+    $('#story').hide();
+    $('#settings').hide();
+    $('#credit').hide();
+    $('#chooseHouse').hide();
+    $('#gameScreen').hide();
+    $('#victoryScreen').hide();
+    $('#gameOverScreen').hide();
+    $('#mainStart').show();
+}
 //페이지 모두 숨기기
 function hideAll() {
     //클래스에 속하는 것들은 클래스 단위로 처리

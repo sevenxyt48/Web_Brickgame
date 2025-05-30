@@ -37,7 +37,7 @@ function Ball(x, y, vX, vY) {
     this.vX = vX;
     this.vY = vY;
     this.r = ballR // 추가 
-} 
+}
 var balls = []; // 공의 초기 위치와 속도
 var ballNum = 0; // 공 개수
 const ballR = 10;
@@ -99,10 +99,30 @@ $(document).ready(function () {
         $('#credit').show();
     });
 
-    // story 페이지에서 게임 시작
+    // story 페이지에서 기숙사 선택화면으로 전환 
     $('#storyStart').click(housePage);
 
+    let selectedHouse = null;
+    $('#houseSelection .house').click(function () {
+        selectedHouse = $(this).find('img').attr('id');
+        $('.detail p').text($(this).find('h1').text() + ' 선택됨');
+    })
+
+    // SELECT 버튼 클릭 시
+    $('#houseSelect').click(function () {
+        if (!selectedHouse) {
+            alert("기숙사를 선택하세요!");
+            return;
+        }
+
+        applyHouseTheme(selectedHouse);
+        $('#chooseHouse').hide();
+        $('#gameScreen').show();
+
+        startGame(selectedHouse);
+    });
     canvas = document.getElementById("myCanvas");
+    context = canvas.getContext("2d");
 
     updateLives();
 
@@ -121,38 +141,7 @@ $(document).ready(function () {
         stage(++gameLevel);
     });
 
-    // $(document).mousemove(function (e) {
-    //     var rect = canvas.getBoundingClientRect();
-    //     var mouseX = e.clientX - rect.left;
-
-    //     // 패들이 화면 밖으로 나가지 않도록 제한
-    //     if (mouseX < paddleWidth / 2) {
-    //         mouseX = paddleWidth / 2;
-    //     } else if (mouseX > canvas.width - paddleWidth / 2) {
-    //         mouseX = canvas.width - paddleWidth / 2;
-    //     }
-
-    //     // 이전 패들 위치 지우기
-    //     context.clearRect(
-    //         paddleX - paddleWidth / 2 - 1, // 조금 더 크게 지워줌
-    //         paddleY,
-    //         paddleWidth + 2,
-    //         paddleHeight
-    //     );
-    //     if (isGameRunning) {
-    //         context.fillStyle = "black"
-    //         context.fillRect(
-    //             paddleX - paddleWidth / 2 - 1,
-    //             paddleY,
-    //             paddleWidth + 2,
-    //             paddleHeight
-    //         );
-    //     }
-    //     paddleX = mouseX; // 마우스 위치에 따라 패들 이동
-    //     // 새로운 패들 위치 그리기
-    //     drawPaddle();
-    // });  
-//패들 이동 코드
+    //패들 이동 코드
     $(document).mousemove(function (e) {
         var rect = canvas.getBoundingClientRect();
         var mX = e.clientX - rect.left;
@@ -175,6 +164,59 @@ $(document).ready(function () {
     });
 });
 
+
+function applyHouseTheme(houseId) {
+    let gameBgImg = '';
+    let gameOverBgImg = '';
+
+    switch (houseId) {
+        case 'house1': // Gryffindor - red
+            gameBgImg = 'img/background/house1.png';
+            gameOverBgImg = 'img/background/gameOverRed.png';
+            break;
+        case 'house2': // Slytherin - green
+            gameBgImg = 'img/background/house2.png';
+            gameOverBgImg = 'img/background/gameOverGreen.png';
+            break;
+        case 'house3': // Hufflepuff - yellow
+            gameBgImg = 'img/background/house3.png';
+            gameOverBgImg = 'img/background/gameOverYellow.png';
+            break;
+        case 'house4': // Ravenclaw - blue
+            gameBgImg = 'img/background/house4.png';
+            gameOverBgImg = 'img/background/gameOverBlue.png';
+            break;
+    }
+
+    // 게임 화면 배경
+    $('#myCanvas').css({
+        'background-image': `url(${gameBgImg})`,
+        'background-size': 'cover',
+        'background-position': 'center'
+    });
+
+    // 게임 오버 화면 배경
+    $('#gameOver').css({
+        'background-image': `url(${gameOverBgImg})`,
+        'background-size': 'cover',
+        'background-position': 'center'
+    });
+
+    // 승리 화면 배경 (gradeClear 화면)
+    $('#win').css({
+        'background-image': `url(${gameOverBgImg})`,
+        'background-size': 'cover',
+        'background-position': 'center'
+    });
+
+    // 실패 화면 배경 (gradeClear 화면)
+    $('#fail').css({
+        'background-image': `url(${gameOverBgImg})`,
+        'background-size': 'cover',
+        'background-position': 'center'
+    });
+
+}
 
 function gameLoop() {
     updateGame();
@@ -201,10 +243,11 @@ function gameInit() {
 }
 
 //실제 게임 시작 함수
-function startGame() {
+function startGame(house) {
     isGameRunning = true;
     $("#lives").show();
 
+    applyHouseTheme(house);
     gameInit();
 }
 
@@ -245,7 +288,7 @@ var ball;
 
 // 공 위치 초기화
 function resetBall() {
-    ball = new Ball(canvas.width / 2 , 500, 3, -3);
+    ball = new Ball(canvas.width / 2, 500, 3, -3);
 }
 
 // 게임 상태 갱신
@@ -468,4 +511,4 @@ function darkness(context) { // 매 프레임마다 호출하여 실시간으로
     context.closePath();
     context.fill("evenodd");
 }
->>>>>>> aa2ad6f25d95f952b93e80805fa309210554d7f6
+

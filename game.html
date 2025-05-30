@@ -58,7 +58,7 @@
 
         <!-- 기숙사 선택(배경 바뀜) -->
         <div class="menu" id="chooseHouse">
-            <div>
+            <div id="houseSelection">
                 <div class="house">
                     <img id="house1" src="img/background/house1.png" />
                     <h1>Gryffindor</h1>
@@ -75,11 +75,11 @@
                     <img id="house4" src="img/background/house4.png" />
                     <h1>Ravencelaw</h1>
                 </div>
-                <div class="detail">
-                    <p>Please select your house</p>
-                </div>
-                <button id="houseSelect">SELECT</button>
             </div>
+            <div class="detail">
+                <p>Please select your house</p>
+            </div>
+            <button id="houseSelect">SELECT</button>
             <!-- skip -->
             <p id="skipButton">Skip</p>
         </div>
@@ -143,7 +143,7 @@
             </div>
         </div>
         <div class="menu" id="fail">
-            <h2>You Fail!</h2>
+            <h2 class="gradeClear">You Fail!</h2>
             <div class="clearButton">
                 <h1 class="score">Score:</h1>
                 <h1 class="reTry">Retry</h1>
