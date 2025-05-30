@@ -293,6 +293,25 @@ function updateGame() {
         }
     }
 }
+// 초기 벽돌설정정
+function initBricks() {
+    brick = []; // 기존 벽돌 배열 초기화
+
+    brickRow = 5; // 행 수 -> 임의로 설정
+    brickColumn = 10; // 열 수
+    brickWidth = (canvas.width - (brickColumn - 1) * brickGapX) / brickColumn;
+    brickHeight = 30;
+
+    for (let row = 0; row < brickRow; row++) {
+        for (let col = 0; col < brickColumn; col++) {
+            let x = col * (brickWidth + brickGapX);
+            let y = row * (brickHeight + brickGapY);
+            let type = 0; // 이벤트 처리시 사용할듯?
+
+            brick.push(new Brick(x, y, brickWidth, brickHeight, type));
+        }
+    }
+}
 
 // 게임 그리기 함수
 function drawGame(ctx) {
