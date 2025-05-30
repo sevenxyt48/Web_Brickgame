@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 화면 요소들
     const mainStart = document.getElementById('mainStart');
     const story = document.getElementById('story');
+    const chooseHouse = document.getElementById('chooseHouse');
     const settings = document.getElementById('settings');
     const credit = document.getElementById('credit');
 
@@ -34,13 +35,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const creditButton = document.getElementById('creditButton');
 
     const storyStartButton = document.getElementById('storyStart');
-    const houseSelect = document.getElementById("houseSelect");
+    const selectButton = document.getElementById("houseSelect");
 
     const houses = document.querySelectorAll('#houseSelection .house');
 
     const skipButtons = document.querySelectorAll('#skipButton');
-    const backButton = document.querySelectorAll('#backButton');
-    // const backButton = document.getElementById('backButton');
+    // const backButton = document.querySelectorAll('#backButton');
+    const backButton = document.getElementById('backButton');
 
     function showScreen(screen) {
         const allScreens = document.querySelectorAll('.game_start');
@@ -48,30 +49,23 @@ document.addEventListener('DOMContentLoaded', () => {
         screen.style.display = 'flex';
 
         // backButton 표시 여부 및 위치 조정
-        if (screen.id === 'mainStart') {
+        if (screen.id === 'mainStart' || screen.id === 'game') {
             backButton.style.display = 'none';
         } else {
             backButton.style.display = 'block';
 
             // 화면별 위치 설정
-            switch (screen.id) {
-                case 'story':
-                case 'chooseHouse':
-                    backButton.style.top = '30px';
-                    backButton.style.left = '1060px';
-                    backButton.style.right = '';   // 혹시 이전 설정 초기화
-                    backButton.style.bottom = '';  // 초기화
-                    break;
-                case 'settings':
-                case 'credit':
-                    backButton.style.top = '';     // 초기화
-                    backButton.style.left = '50%';
-                    backButton.style.transform = 'translateX(-50%)'; // 가운데 정렬
-                    backButton.style.bottom = '250px';
-                    break;
-                default:
-                    backButton.style.display = 'none';
-                    break;
+            if (screen.id === 'story' || screen.id === 'chooseHouse') {
+                backButton.style.top = '30px';
+                backButton.style.left = '1060px';
+                backButton.style.right = '';
+                backButton.style.bottom = '';
+                backButton.style.transform = '';
+            } else if (screen.id === 'settings' || screen.id === 'credit') {
+                backButton.style.top = '';
+                backButton.style.left = '50%';
+                backButton.style.bottom = '250px';
+                backButton.style.transform = 'translateX(-50%)';
             }
         }
     }
@@ -96,11 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
         showScreen(chooseHouse);
     });
 
-    houseSelect.addEventListener('click', () => {
-        //게임 페이지.
-        startGame();
-    });
-
     // house 클릭 이벤트 추가
     houses.forEach(house => {
         house.addEventListener('click', () => {
@@ -114,12 +103,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // SELECT 버튼 클릭 이벤트
-    const selectButton = document.getElementById('houseSelect');
     selectButton.addEventListener('click', () => {
         if (selectedHouse) {
             console.log('게임 시작! 선택된 기숙사:', selectedHouse);
-            // 여기서 게임 플레이 화면으로 전환하는 함수 호출
-            startGame();
+
+            startGame(selectedHouse);
         } else {
             alert('기숙사를 선택해 주세요!');
         }
@@ -128,13 +116,29 @@ document.addEventListener('DOMContentLoaded', () => {
     // Skip 버튼 → 기숙사 선택 화면
     skipButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            showScreen(mainMenu);
+            const currentScreen = document.querySelector('.game_start[style*="flex"]');
+            if (currentScreen.id === 'story') {
+                showScreen(chooseHouse);
+            } else if (currentScreen.id === 'chooseHouse') {
+                if (!selectedHouse) {
+                    selectedHouse = 'House1';  // 기본 배경 설정
+                    console.log('선택된 기숙사가 없어서 기본으로 House1이 설정됨');
+                }
+                startGame(selectedHouse);
+            }
         });
     });
 
     // 뒤로가기 → 메인화면
     backButton.addEventListener('click', () => {
-        showScreen(mainStart);
+        const currentScreen = document.querySelector('.game_start[style*="flex"]');
+        if (currentScreen.id === 'story') {
+            showScreen(mainStart);
+        } else if (currentScreen.id === 'chooseHouse') {
+            showScreen(story);
+        } else {
+            showScreen(mainStart);
+        }
     });
 
     // 초기 화면 설정

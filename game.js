@@ -99,8 +99,11 @@ $(document).ready(function () {
         $('#credit').show();
     });
 
-    // story 페이지에서 기숙사 선택화면으로 전환 
-    $('#storyStart').click(housePage);
+    // story 페이지 -> 기숙사 선택
+    $('#storyStart').click(function () {
+        $('#story').hide();
+        $('#chooseHouse').show();
+    });
 
     let selectedHouse = null;
     $('#houseSelection .house').click(function () {
@@ -128,11 +131,7 @@ $(document).ready(function () {
 
     $(".backToMain").on("click", backToMainMenu);
 
-    $("#pauseBtn").on("click", function () {
-        clearInterval(countdownInterval);
-        // stopGame();
-        // resetAll();
-    });
+    $("#pauseBtn").click(pauseGame);
 
     $(".reTry").on("click", function () {
         stage(gameLevel);
@@ -244,6 +243,7 @@ function gameInit() {
 
 //실제 게임 시작 함수
 function startGame(house) {
+    console.log("game start! Selected house:", selectedHouse);
     isGameRunning = true;
     $("#lives").show();
 
@@ -280,8 +280,6 @@ function nextGrade() {
     document.getElementById('gameScreen').style.display = 'block';
     startNextStage(); // 새 스테이지 초기화
 }
-
-
 
 // 단일 공 객체
 var ball;
