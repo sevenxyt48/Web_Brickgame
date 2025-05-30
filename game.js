@@ -81,29 +81,31 @@ badImg1.src = "img/stone/stone_green.png";
 var isCountdownRunning = false; // 카운트다운 상태 변수 추가
 
 $(document).ready(function () {
-    // // Start 버튼 클릭 시 story 화면으로 전환
-    // $('#startButton').click(function () {
-    //     $('#mainStart').hide();
-    //     $('#story').show();
-    // });
 
-    // // Settings 버튼 클릭 시 settings 화면으로 전환
-    // $('#settingsButton').click(function () {
-    //     $('#mainStart').hide();
-    //     $('#settings').show();
-    // });
+    hideAll();
+    $("#mainStart").show();
 
-    // // Credit 버튼 클릭 시 credit 화면으로 전환
-    // $('#creditButton').click(function () {
-    //     $('#mainStart').hide();
-    //     $('#credit').show();
-    // });
+    $("#startButton").click(function () {
+        hideAll();
+        $("#story").show();
+    });
 
-    // // story 페이지 -> 기숙사 선택
-    // $('#storyStart').click(function () {
-    //     $('#story').hide();
-    //     $('#chooseHouse').show();
-    // });
+    $("#storyStart").click(function () {
+        hideAll();
+        $("#chooseHouse").show();
+    });
+
+    $("#houseSelect").click(function () {
+        hideAll();
+        $("#myCanvas").show();
+        $("#gameScreen").show();
+        initGame();
+    });
+
+    $("#backButton").click(function () {
+        hideAll();
+        $("#mainStart").show();
+    });
 
     let selectedHouse = null;
     $('#houseSelection .house').click(function () {
@@ -113,15 +115,13 @@ $(document).ready(function () {
 
     // SELECT 버튼 클릭 시
     $('#houseSelect').click(function () {
-        if (!selectedHouse) {
-            alert("기숙사를 선택하세요!");
-            return;
-        }
+        hideAll();
+        $("#myCanvas").show();  // 캔버스 표시
 
         applyHouseTheme(selectedHouse);
         $('#chooseHouse').hide();
         $('#gameScreen').show();
-
+        gameInit();
         startGame(selectedHouse);
     });
     canvas = document.getElementById("myCanvas");
@@ -226,12 +226,15 @@ function gameLoop() {
 }
 
 function gameInit() {
+    score = 0;
+    lives = 3;
     // 캔버스 초기화 (한 번만 생성되도록 조건 넣어도 됨)
-    canvas = document.createElement('canvas');
-    canvas.width = 1280;
-    canvas.height = 830;
+    canvas = document.createElementId('myCanvas');
     context = canvas.getContext('2d');
-    document.getElementById('gameScreen').appendChild(canvas);
+    canvas.width = 1280;
+    canvas.height = 840;
+
+    // document.getElementById('gameScreen').appendChild(canvas);
 
     // 게임 객체 초기화
     resetBall();
@@ -243,10 +246,11 @@ function gameInit() {
 
 //실제 게임 시작 함수
 function startGame(house) {
-    console.log("game start! Selected house:", selectedHouse);
+    console.log("game start! Selected house:", house);
     document.querySelectorAll('.menu').forEach(s => s.style.display = 'none');
     backButton.style.display = 'none';
     // canvas 보여주기
+    canvas = document.createElementId('myCanvas');
     canvas.style.display = 'block';
     isGameRunning = true;
     $("#lives").show();

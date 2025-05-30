@@ -11,6 +11,10 @@ body {
     height: 100%;
 }
 
+li {
+    list-style: none;
+}
+
 img {
     border: 0;
 }
@@ -43,6 +47,10 @@ img {
     margin-bottom: 50px;
 }
 
+#footInfo {
+    margin-top: 60px;
+}
+
 #copyright,
 #KU {
     z-index: 10;
@@ -59,6 +67,7 @@ img {
     cursor: pointer;
     color: white;
     font-size: 60px;
+    /* font-size작동 않음 */
 }
 
 #pauseMenu {
@@ -90,7 +99,6 @@ canvas {
     align-items: center;
     justify-content: flex-start;
     background-image: url("img/background/startBackground.jpg");
-    /* background-size: 1280px 830px; */
     height: 840px;
     width: 1280px;
     position: relative;
@@ -119,6 +127,9 @@ canvas {
 #mainStart h1 {
     font-size: 24px;
     cursor: pointer;
+    color: black;
+    align-items: center;
+    text-align: center;
 }
 
 #contents {
@@ -128,7 +139,11 @@ canvas {
     gap: 20px;
 }
 
-.button {
+#contents p {
+    font-size: 32px;
+}
+
+#mainStart.button {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -138,7 +153,7 @@ canvas {
     margin: 10px 0;
 }
 
-.button h1 {
+#mainStart.button h1 {
     font-size: 40px;
     color: black;
     margin: 0;
@@ -150,7 +165,7 @@ canvas {
     margin-top: 0;
 }
 
-.menu h2 {
+/* .menu h2 {
     display: block;
     font-size: 40px;
     color: white;
@@ -164,7 +179,7 @@ canvas {
     cursor: pointer;
     color: white;
     text-align: center;
-}
+} */
 
 #skipButton {
     position: absolute;
@@ -181,9 +196,14 @@ canvas {
     display: none;
 }
 
+#story h2 {
+    font-size: 36px;
+    color: white;
+}
+
 #story p {
     color: white;
-    font-size: 36px;
+    font-size: 28px;
     line-height: 2em;
 }
 
@@ -251,6 +271,11 @@ canvas {
     font-size: 24px;
     margin: 20px 0;
     text-shadow: 2px 2px 4px black;
+}
+
+#settings,
+#credit {
+    color: white;
 }
 
 /* Lives 표시 */
