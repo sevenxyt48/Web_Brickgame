@@ -97,8 +97,6 @@ img {
     cursor: pointer;
     color: white;
     font-size: 60px;
-    top: 30px;
-    left: 1180px;
 }
 
 canvas {
@@ -371,12 +369,17 @@ canvas {
 
 /* Lives 표시 */
 #lives {
-    display: flex;
-    justify-content: center;
     position: absolute;
     top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 10px;
+    z-index: 20;
+    /* transform: translateX(-50%); */
+}
+
+.life {
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
 }
 
 #pauseBtn {
