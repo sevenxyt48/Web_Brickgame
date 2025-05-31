@@ -31,206 +31,14 @@ const musicObj = {
         effect.play();
     },
 };
-document.addEventListener('DOMContentLoaded', () => {
 
-    // 화면 요소들
-    const mainStart = document.getElementById('mainStart');
-    const story = document.getElementById('story');
-    const chooseHouse = document.getElementById('chooseHouse');
-    const settings = document.getElementById('settings');
-    const credit = document.getElementById('credit');
-    const canvas = document.querySelector('#myCanvas');
-    // 버튼 요소들
-    const startButton = document.getElementById('startButton');
-    const creditButton = document.getElementById('creditButton');
-    const settingsButton = document.getElementById('settingsButton');
-    const storyStartButton = document.getElementById('storyStart');
-    const selectButton = document.getElementById("houseSelect");
-
-    const houses = document.querySelectorAll('#houseSelection .house');
-
-    const skipButtons = document.querySelectorAll('.skipButton');
-    const backButtons = document.querySelectorAll('.backButton');
-    // const backButton = document.getElementById('backButton');
-
-    // 스위치 요소 가져오기
-    const soundSwitch = document.getElementById('soundSwitch');
-    const musicSwitch = document.getElementById('musicSwitch');
-    const fullScreenSwitch = document.getElementById('fullScreenSwitch');
-    const changeThemeButton = document.getElementById('changeThemeButton');
-
-    function showScreen(screen) {
-        hideAll();
-        screen.style.display = 'flex';
-        // Skip 버튼 표시/숨김 스토리화면과 기숙사 선택 화면에 버튼 안 보임.
-        skipButtons.forEach(btn => {
-            console.log('Skip button:', btn, 'Current screen:', screen.id);
-            if (screen.id === 'story' || screen.id === 'chooseHouse') {
-                // btn.style.display = 'block';
-                btn.style.setProperty('display', 'inline-block', 'important');
-            } else {
-                btn.style.display = 'none';
-            }
-        });
-
-        // Back 버튼 표시/숨김 스토리화면과 기숙사 선택 화면에 버튼 안 보임.
-        backButtons.forEach(btn => {
-            console.log('back button:', btn, 'Current screen:', screen.id);
-            if (screen.id === 'mainStart') {
-                btn.style.display = 'none';
-            } else if (screen.id === 'story' || screen.id === 'chooseHouse') {
-                // btn.style.display = 'inline-block';
-                btn.style.setProperty('display', 'inline-block', 'important');
-                // 위치 설정
-                btn.style.top = '10px';
-                btn.style.left = '';
-                btn.style.right = '35px';
-                btn.style.bottom = '';
-                btn.style.transform = '';
-            } else if (screen.id === 'settings' || screen.id === 'credit') {
-                // btn.style.display = 'inline-block';
-                btn.style.setProperty('display', 'inline-block', 'important');
-                btn.style.top = '';
-                btn.style.left = '50%';
-                btn.style.bottom = '250px';
-                btn.style.transform = 'translateX(-50%)';
-            } else {
-                btn.style.display = 'none';
-            }
-        });
-
-    }
-
-    // 시작화면 → 스토리 화면
-    startButton.addEventListener('click', () => {
-        showScreen(story);
-        // storyPage();
-    });
-
-    // 시작화면 → 설정
-    settingsButton.addEventListener('click', () => {
-        showScreen(settings);
-        settingPage();
-    });
-
-
-    // 시작화면 → 크레딧
-    creditButton.addEventListener('click', () => {
-        showScreen(credit);
-    });
-
-    // 스토리 화면 → 기숙사 선택 화면
-    storyStartButton.addEventListener('click', () => {
-        showScreen(chooseHouse);
-        housePage();
-    });
-
-    gameState.selectedHouse = houses[0].querySelector('h1').innerText;
-    // house 클릭 이벤트 추가
-    houses.forEach(house => {
-        house.addEventListener('click', () => {
-            // 모든 house 선택 해제
-            houses.forEach(h => h.classList.remove('selected'));
-            // 클릭한 house 선택
-            house.classList.add('selected');
-            gameState.selectedHouse = house.querySelector('h1').innerText;;
-            console.log('선택된 기숙사:', selectedHouse);
-        });
-    });
-
-    // Skip 버튼 → 기숙사 선택 화면
-    skipButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const currentScreen = Array.from(document.querySelectorAll('.menu'))
-                .find(screen => window.getComputedStyle(screen).display !== 'none');
-            if (!currentScreen) {
-                console.warn('현재 화면을 찾을 수 없습니다.');
-                return;
-            }
-
-            if (currentScreen.id === 'story') {
-                showScreen(chooseHouse);
-            } else if (currentScreen.id === 'chooseHouse') {
-                if (!gameState.selectedHouse) {
-                    gameState.selectedHouse = 'House1';  // 기본 배경 설정
-                    console.log('선택된 기숙사가 없어서 기본으로 House1이 설정됨');
-                }
-                startGame(gameState.selectedHouse);
-            }
-        });
-    });
-
-
-    // 뒤로가기
-    backButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const currentScreen = Array.from(document.querySelectorAll('.menu'))
-                .find(screen => window.getComputedStyle(screen).display !== 'none');
-            if (!currentScreen) {
-                console.warn('현재 화면을 찾을 수 없습니다.');
-                return;
-            }
-
-            if (currentScreen.id === 'story') {
-                showScreen(mainStart);
-            } else if (currentScreen.id === 'chooseHouse') {
-                showScreen(story);
-            } else {
-                showScreen(mainStart);
-            }
-        });
-    });
-
-    // 사운드 스위치
-    soundSwitch.addEventListener('change', function () {
-        if (this.checked) {
-            console.log("Sound ON");
-            // 예시: soundObj.enableSound();
-        } else {
-            console.log("Sound OFF");
-            // 예시: soundObj.disableSound();
-        }
-    });
-
-    // 음악 스위치
-    musicSwitch.addEventListener('change', function () {
-        if (this.checked) {
-            console.log("Music ON");
-            musicObj.playMusic();
-        } else {
-            console.log("Music OFF");
-            musicObj.stopMusic();
-        }
-    });
-
-    // 풀스크린 스위치
-    fullScreenSwitch.addEventListener('change', function () {
-        if (this.checked) {
-            console.log("Full Screen ON");
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
-            }
-        } else {
-            console.log("Full Screen OFF");
-            if (document.fullscreenElement) {
-                document.exitFullscreen();
-            }
-        }
-    });
-
-    // 테마 변경 버튼
-    changeThemeButton.addEventListener('click', function () {
-        handleChangeTheme();
-    });
-
-    document.getElementById('pause-button').addEventListener('click', () => {
-        // 게임 일시정지 로직
-    });
-
-    // 초기 화면 설정
-    showScreen(mainStart);
-    $("#backButton").hide();
-});
+//난이도 선택 페이지
+function difficultyPage() {
+    hideAll();
+    $("#difficulty").show();
+    $("#backButton").show();
+    $("#skipButton").show();
+}
 
 function handleSoundToggle() {
     if (this.checked) {
@@ -277,15 +85,6 @@ function handleChangeTheme() {
         console.log("#themeDropdown 제거됨");
         // $("#themeDropdown").remove();
     } else {
-
-        // console.log("#themeDropdown 생성됨");
-        // let dropdown = $("<select id='themeDropdown'></select>");
-        // dropdown.append("<option value='house1'>Gryffindor</option>");
-        // dropdown.append("<option value='house2'>Slytherin</option>");
-        // dropdown.append("<option value='house3'>Hufflepuff</option>");
-        // dropdown.append("<option value='house4'>Ravenclaw</option>");
-        // // $(this).after(dropdown);
-        // $(themeDropdownContainer).append(dropdown);
         const dropdown = document.createElement('select');
         dropdown.id = 'themeDropdown';
 
@@ -328,9 +127,6 @@ function settingPage() {
 }
 
 function mainPage() {
-    musicObj.PlayChoose();
-    musicObj.stopMusic();
-    musicObj.playMusic();
 
     resetAll();
     totalScore = 0; // 점수 초기화 추가
@@ -338,6 +134,12 @@ function mainPage() {
 
     hideAll();
     $("#mainStart").show();
+}
+
+function creditPage() {
+    hideAll();
+    $("#credit").show();
+    $("#backButton").show();
 }
 function storyPage() {
     $('#story').show();
@@ -400,6 +202,7 @@ function hideAll() {
     $("#mainStart").hide();
     $("#story").hide();
     $("#chooseHouse").hide();
+    $("#difficulty").hide();
     $("#settings").hide();
     $("#credit").hide();
     $("#gameScreen").hide();

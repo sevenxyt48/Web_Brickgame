@@ -24,11 +24,14 @@ function Brick(x, y, width, height, type) {
     this.alive = true; // 벽돌의 깨짐 유무 표시. true:존재 false:깨짐
 }
 
+var startX = 0; // 벽돌 시작 X 위치 조정 가능
+var startY = 50; // 벽돌 시작 Y 위치 (캔버스 위쪽에서 떨어진 거리)
+
 // 패들
 var paddleWidth = 400; // 너비
 var paddleHeight = 50; // 높이
 var paddleX = 0; // 초기 x 좌표
-var paddleY = 520; // 초기 y 좌표 (캔버스 바닥에서 약간 위)
+var paddleY = 790; // 초기 y 좌표 (캔버스 바닥에서 약간 위)
 
 var balls = []; // 공의 초기 위치와 속도
 var ballNum = 0; // 공 개수
@@ -89,31 +92,62 @@ $(document).ready(function () {
     $("#startButton").click(function () {
         hideAll();
         $("#story").show();
+        $("#backButton").show();
+        $("#skipButton").show();
     });
 
     $("#storyStart").click(function () {
         hideAll();
         $("#chooseHouse").show();
+        $("#backButton").show();
+        $("#skipButton").show();
     });
-
+    $("#settingsButton").click(settingPage);
+    $("#creditButton").click(creditPage);
     $("#backButton").click(function () {
         $("#mainStart").show();
     });
+    $("#skipButton").click(function () {
+        if ($('#story').is(':visible')) {
+            // 스토리 화면일 때 -> 기숙사 선택 화면으로 전환
+            $('#story').hide();
+            $('#chooseHouse').show();
+        }
+        else if ($('#chooseHouse').is(':visible')) {
+            // 기숙사 선택 화면일 때 -> 난이도 선택 화면으로 전환
+            $('#chooseHouse').hide();
+            $('#difficulty').show();
+            if (!selectedHouse) {
+                selectedHouse = 'house1';
+            }
+        } else if ($('#difficulty').is(':visible')) {
+            hideAll();
+            $("#myCanvas").show();
 
+            applyHouseTheme(selectedHouse);
+            $('#chooseHouse').hide();
+            $('#gameScreen').show();
+            gameInit();
+            startGame(selectedHouse);
+        }
+    });
+    $("#houseSelect").click(difficultyPage);
+
+    // 기숙사 -> 난이도 
     let selectedHouse = null;
     $('#houseSelection .house').click(function () {
         selectedHouse = $(this).find('img').attr('id');
         $('.detail p').text($(this).find('h1').text() + ' 선택됨');
     })
 
-    // SELECT 버튼 클릭 시
-    $('#houseSelect').click(function () {
+    // 학년 선택 버튼 클릭 시 -> 게임 화면
+    $('#gradeSelect').click(function () {
         if (!selectedHouse) {
             selectedHouse = 'house1';
         }
 
         hideAll();
-        $("#myCanvas").show();  // 캔버스 표시
+        $("#myCanvas").show();
 
         applyHouseTheme(selectedHouse);
         $('#chooseHouse').hide();
@@ -121,24 +155,63 @@ $(document).ready(function () {
         gameInit();
         startGame(selectedHouse);
     });
+
+    $('#resumeBtn').click(function () {
+        $('#pauseMenu').hide();
+        resumeGame();
+    });
+
+    $('#restartBtn').click(function () {
+        $('#pauseMenu').hide();
+        reset();
+        startGame(selectedHouse);
+    });
+    $('#settingsBtn').click(function () {
+        $('#pauseMenu').hide();
+        reset();
+        //게임화면에 있는 설정창 
+    });
+    $('#menuBtn').click(function () {
+        $('#pauseMenu').hide();
+        reset();
+        goToMenu();
+    });
+
     canvas = document.getElementById("myCanvas");
     context = canvas.getContext("2d");
     darkR = canvas.width;
     // updateLives();
 
-    $(".backToMain").on("click", backToMainMenu);
-
-    $("#pauseBtn").click(pauseGame);
+    $("#pauseBtn").click("click", function () {
+        pauseGame();
+        resetAll();
+        document.getElementById('pauseMenu').style.display = 'block';
+    });
 
     $(".reTry").on("click", function () {
         stage(gameLevel);
     });
     $(".nextGrade").on("click", function () {
+        console.log(`Start next stage`);
         stage(++gameLevel);
+    });
+
+    $(".dif h1:contains('1')").click(function () {
+        stage(1);
+    });
+    $(".dif h1:contains('2')").click(function () {
+        stage(2);
+    });
+    $(".dif h1:contains('3')").click(function () {
+        stage(3);
+    });
+    $(".dif h1:contains('4')").click(function () {
+        stage(4);
     });
 
     //패들 이동 코드
     $(document).mousemove(function (e) {
+        if (!isGameRunning) return;  // 게임 중지 시 패들 이동 막기
         var rect = canvas.getBoundingClientRect();
         var mX = e.clientX - rect.left;
 
@@ -147,29 +220,83 @@ $(document).ready(function () {
         } else if (mX > canvas.width - paddleWidth / 2) {
             mX = canvas.width - paddleWidth / 2;
         }
-
-        // 1. 이전 패들 위치 지우기
-        // context.clearRect(paddleX, paddleY, paddleWidth, paddleHeight);
-
-        // 2. 새로운 위치로 패들 이동
-        paddleX = mX;
-
-        // 3. 새 패들 그리기
-        context.fillStyle = 'blue';
-        context.fillRect(paddleX, paddleY, paddleWidth, paddleHeight);
+        // 이전 패들 위치 지우기
+        context.clearRect(
+            paddleX - paddleWidth / 2 - 1, // 조금 더 크게 지워줌
+            paddleY,
+            paddleWidth + 2,
+            paddleHeight
+        );
+        if (isGameRunning) {
+            context.fillStyle = "black"
+            context.fillRect(
+                paddleX - paddleWidth / 2 - 1,
+                paddleY,
+                paddleWidth + 2,
+                paddleHeight
+            );
+        }
+        paddleX = mX; // 마우스 위치에 따라 패들 이동
+        // 새로운 패들 위치 그리기
+        drawPaddle();
+    });
+    canvas.addEventListener("click", function () {
+        if (!ballMoving && isGameRunning) {
+            ballMoving = true;
+            console.log("Ball started moving");
+        }
     });
 });
+
+//난이도별 함수
+function stage(n) {
+    console.log(`Current stage:${n}`);
+    gameLevel = n;
+    setDifficulty(n); // 단계 설정
+    reset();
+    switch (n) {
+        case 1:
+            musicObj.stopMusic();
+            musicObj.playEasy();
+            break;
+        case 2:
+            musicObj.stopMusic();
+            musicObj.playNormal();
+            break;
+        case 3:
+            musicObj.stopMusic();
+            musicObj.playHard();
+            break;
+        case 4:
+            musicObj.stopMusic();
+            musicObj.playHard();
+            break;
+        default:
+    }
+    playPage();
+}
+
+//난이도 별 벽돌 수
+//공 속도(추가 필요)
+function setDifficulty(level) {
+    brickRow = level + 2;
+    brickColumn = 5;
+}
+
 function updateScore(score) {
     document.getElementById('score').textContent = 'Score: ' + score;
 }
 function updateLives(lives) {
     const livesContainer = document.getElementById('lives');
-    livesContainer.empty();
+    livesContainer.innerHTML = '';
     for (let i = 0; i < lives; i++) {
-        livesContainer.append('<img src="img/life.png" class="life" alt="Life">');
+        const img = document.createElement('img');
+        img.src = 'img/life.png';
+        img.className = 'life';
+        img.alt = 'Life';
+        livesContainer.appendChild(img);
     }
 }
-
 
 function applyHouseTheme(houseId) {
     let gameBgImg = '';
@@ -223,6 +350,38 @@ function applyHouseTheme(houseId) {
     });
 
 }
+function reset() {
+    // 게임 상태 초기화
+    totalScore = 0;
+    lives = 3;
+    ballMoving = false;
+    isGameRunning = false;
+    // 공 초기화
+    resetBall();
+    // 벽돌 초기화
+    initBricks();
+    // 점수 및 목숨 표시 업데이트
+    updateScore(totalScore);
+    updateLives(lives);
+    // 캔버스 초기화
+    context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function resetAll() {
+    clearInterval(drawInterval);
+    // document.getElementById('pauseMenu').style.display = 'none';
+    totalScore = 0;
+
+    lives = 3;
+    balls = [];
+    brick = [];
+    isBrickMoving = false;
+    isGameRunning = false;
+    isGameAllClear = false;
+    $("#lives").hide();
+    context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 // isGameOver 함수 추가
 function isGameOver() {
     return lives <= 0;
@@ -233,67 +392,68 @@ function gameLoop() {
 
     if (!isGameOver()) {
         requestAnimationFrame(gameLoop);
+    } else {
+        gameOver();
     }
 }
 
 function gameInit() {
-    score = 0;
+    totalScore = 0;
     lives = 3;
     // 캔버스 초기화 (한 번만 생성되도록 조건 넣어도 됨)
     canvas = document.getElementById('myCanvas');
     canvas.width = 1280;
     canvas.height = 840;
     context = canvas.getContext('2d');
-    // document.getElementById('gameScreen').appendChild(canvas);
 
     // 게임 객체 초기화
     resetBall();
     initBricks();
 
-    canvas.addEventListener("click", () => {
-        ballMoving = true;
-    });
-    document.addEventListener("mousemove", mouseMoveHandler, false);
     // 게임 루프 시작
     requestAnimationFrame(gameLoop);
 }
 
 //실제 게임 시작 함수
 function startGame(house) {
-    console.log("game start! Selected house:", house);
-    document.querySelectorAll('.menu').forEach(s => s.style.display = 'none');
-    backButton.style.display = 'none';
-    // canvas 보여주기
-    canvas = document.getElementById('myCanvas');
-    canvas.style.display = 'block';
     isGameRunning = true;
-    $("#lives").show();
+    isBrickMoving = true;
+    console.log("game start! Selected house:", house);
+    context.clearRect(0, 0, canvas.width, canvas.height);
 
     applyHouseTheme(house);
     gameInit();
+
 }
 
 function pauseGame() {
     // 일시정지 기능 구현 (애니메이션 중지 등)
     isGameRunning = false;
-    clearInterval(drawInterval);
     isBrickMoving = false;
-
+    ballMoving = false;
+    clearInterval(drawInterval);
+    context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 //pause에서 continue 게임 함수
 function resumeGame() {
     document.getElementById('pauseMenu').style.display = 'none';
+    isGameRunning = true;
+    isBrickMoving = true;
+    ballMoving = true;
+    requestAnimationFrame(gameLoop);
 }
 
 //전체 게임 종료
 function gameOver() {
     pauseGame();
     isGameAllClear = false;
+    $('#gameOver').show();
 }
 function gameClear() {
     pauseGame();
     isGameAllClear = true;
+    $('#win').show();
 }
 
 function nextGrade() {
@@ -308,7 +468,7 @@ var ball;
 
 // 공 위치 초기화
 function resetBall() {
-    ball = new Ball(canvas.width / 2, canvas.height - 30, 3, -3);
+    ball = new Ball(canvas.width / 2, canvas.height - 50, 3, -3);
 }
 
 // 게임 상태 갱신
@@ -316,7 +476,6 @@ function updateGame() {
     if (ballMoving) {
         ball.x += ball.vX;
         ball.y += ball.vY;
-
 
         // 벽에 부딪히면 방향 전환
         if (ball.x + ball.vX > canvas.width - ball.r || ball.x + ball.vX < ball.r) {
@@ -333,6 +492,7 @@ function updateGame() {
                 ballMoving = false;
                 lives--;
                 resetBall();
+                updateLives(lives);
             }
         }
 
@@ -372,7 +532,7 @@ function updateGame() {
     updateScore(totalScore);
     updateLives(lives);
 }
-// 초기 벽돌설정정
+// 초기 벽돌설정
 function initBricks() {
     brick = []; // 기존 벽돌 배열 초기화
 
@@ -383,8 +543,8 @@ function initBricks() {
 
     for (let row = 0; row < brickRow; row++) {
         for (let col = 0; col < brickColumn; col++) {
-            let x = col * (brickWidth + brickGapX);
-            let y = row * (brickHeight + brickGapY);
+            let x = startX + col * (brickWidth + brickGapX);
+            let y = startY + row * (brickHeight + brickGapY);
             let type = 0; // 이벤트 처리시 사용할듯?
 
             brick.push(new Brick(x, y, brickWidth, brickHeight, type));
@@ -394,32 +554,48 @@ function initBricks() {
 
 // 게임 그리기 함수
 function drawGame(ctx) {
+    if (!isGameRunning) {
+        console(`그리기 거부`)
+        return; // 게임이 중지되면 그리지 않음
+    }
     ctx.clearRect(0, 0, 1280, 840);
     drawBall(ctx);
     drawPaddle(ctx);
-
-    // requestAnimationFrame(drawGame);
-
-    // 벽돌 그리기
-    for (let i = 0; i < brick.length; i++) {
-        if (!brick[i].destroyed) {
-            ctx.drawImage(brickImg[0], brick[i].x, brick[i].y, brickWidth, brickHeight);
-        }
-    }
-
-    // 점수 표시
-    document.getElementById("score").innerText = "Score: " + totalScore;
-    document.getElementById("lives").innerText = "Lives: " + lives;
+    drawBricks(ctx);
+    // drawLives();
+    // drawScore();
 }
 
 function drawBall(ctx) {
-    ctx.drawImage(ballImg, ball.x - 20, ball.y - 20, 40, 40)
+    ctx.drawImage(ballImg, ball.x - 20, ball.y - 20, 40, 40);
 }
 
 function drawPaddle(ctx) {
-    ctx.drawImage(paddleImg, paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+    // ctx.drawImage(paddleImg, paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+    ctx.drawImage(paddleImg, paddleX - paddleWidth / 2, paddleY, paddleWidth, paddleHeight);
 }
 
+function drawBricks(ctx) {
+    for (let i = 0; i < brick.length; i++) {
+        if (brick[i].alive) {
+            // 기본 벽돌 이미지만 사용
+            ctx.drawImage(brickImg[0], brick[i].x, brick[i].y, brickWidth, brickHeight);
+        }
+    }
+}
+// 점수 위치
+function drawScore() {
+    context.font = "28px";
+    context.fillStyle = "white";
+    context.fillText("Score: " + Score, 30, 40); // X=30, Y=40
+}
+
+// 라이프 위치
+function drawLives() {
+    context.font = "38px";
+    context.fillStyle = "white";
+    context.fillText("Lives: " + lives, 30, 40);
+}
 function mouseMoveHandler(e) {
     const relativeX = e.clientX - canvas.getBoundingClientRect().left;
     if (relativeX > 0 && relativeX < canvas.width) {
@@ -429,9 +605,14 @@ function mouseMoveHandler(e) {
 
 function goToMenu() {
     document.getElementById('pauseMenu').style.display = 'none';
-    document.getElementById('settingPause').style.display = 'none';
-    document.querySelectorAll('.menu, .menu').forEach(el => el.style.display = 'none');
-    document.getElementById('mainStart').style.display = 'block';
+    isGameRunning = false;
+    ballMoving = false;
+    // 메인 메뉴 보여주기
+    hideAll();
+    $("#mainStart").show();
+    // document.getElementById('settingPause').style.display = 'none';
+    // document.querySelectorAll('.menu, .menu').forEach(el => el.style.display = 'none');
+    // document.getElementById('mainStart').style.display = 'block';
 }
 
 //좋은 이벤트 - 공의 속도를 느리게 하는 마법

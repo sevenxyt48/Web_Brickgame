@@ -30,7 +30,7 @@ img {
 }
 
 .menu {
-    display: none;
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -91,12 +91,34 @@ img {
 }
 
 #pauseMenu {
-    position: absolute;
-    display: none;
-    z-index: 20;
+    position: fixed;
+    display: flex;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    flex-direction: column;
+    gap: 15px;
     cursor: pointer;
     color: white;
+    background-color: brown;
     font-size: 60px;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.pause-btn {
+    padding: 10px 20px;
+    font-size: 38px;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+.pause-btn:hover {
+    color: yellow;
 }
 
 canvas {
@@ -127,6 +149,7 @@ canvas {
 
 #story,
 #chooseHouse,
+#difficulty,
 #settings,
 #credit {
     margin: 0;
@@ -184,12 +207,16 @@ canvas {
 }
 
 #story {
-    display: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 #story h2 {
     font-size: 36px;
     color: white;
+    /* margin-top: 25%; */
 }
 
 #story p {
@@ -215,7 +242,8 @@ canvas {
     color: black;
 }
 
-#houseSelection {
+#houseSelection,
+#gradeSelection {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -224,7 +252,8 @@ canvas {
     margin-bottom: 20px;
 }
 
-.house {
+.house,
+.dif {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -237,7 +266,8 @@ canvas {
     height: auto;
 }
 
-#houseSelection .house h1 {
+#houseSelection .house h1,
+#gradeSelection .dif h1 {
     font-size: 24px;
     color: white;
     text-align: center;
@@ -245,13 +275,15 @@ canvas {
     pointer-events: none;
 }
 
-.house:hover {
+.house:hover,
+.dif:hover {
     transform: scale(1.05);
     transition: transform 0.2s;
 }
 
 /* Select 버튼 스타일 */
-#houseSelect {
+#houseSelect,
+#gradeSelect {
     margin-top: 10px;
     font-size: 24px;
     padding: 10px 20px;
@@ -269,13 +301,15 @@ canvas {
 }
 
 /* detail 텍스트 */
-.detail p {
+.detail p,
+.explain p {
     color: white;
     font-size: 24px;
     margin: 20px 0;
     text-shadow: 2px 2px 4px black;
 }
 
+#difficulty,
 #settings,
 #credit {
     color: white;
@@ -370,17 +404,17 @@ canvas {
 /* Lives 표시 */
 #lives {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 20px;
+    left: 20px;
     z-index: 20;
-    /* transform: translateX(-50%); */
+    font-size: 28px;
 }
 
-.life {
+/* .life {
     width: 30px;
     height: 30px;
     margin-right: 5px;
-}
+} */
 
 #pauseBtn {
     background: url('img/pause.png') no-repeat center center;
@@ -391,7 +425,7 @@ canvas {
     cursor: pointer;
     position: absolute;
     top: 10px;
-    right: 10px;
+    right: 20px;
 }
 
 #gameScreen {

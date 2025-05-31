@@ -110,7 +110,7 @@
         <!-- 난이도 선택 -->
         <div class="menu" id="difficulty">
             <h2>Difficulty</h2>
-            <div>
+            <div id="gradeSelection">
                 <div class="dif">
                     <h1>1단계</h1>
                 </div>
@@ -125,11 +125,11 @@
                 <div class="dif">
                     <h1>4단계</h1>
                 </div>
-                <div class="explain">
-                    <p>PLEASE SELECT DIFFICULTY</p>
-                    <p>YOU WANT</p>
-                </div>
             </div>
+            <div class="explain">
+                <p>PLEASE SELECT DIFFICULTY</p>
+            </div>
+            <button id="gradeSelect">SELECT</button>
         </div>
         <!-- Credit 화면 -->
         <div class="menu" id="credit">
@@ -160,10 +160,10 @@
         <!-- 게임 중지 버튼 -->
         <div id="pauseMenu">
             <h2>게임 중지</h2>
-            <button onclick="resumeGame()">Continue</button>
-            <button onclick="restartGame()">Restart</button>
-            <button onclick="openSettings()">Settings</button>
-            <button onclick="goToMenu()">Menu</button>
+            <button class="pause-btn" id="resumeBtn">Continue</button>
+            <button class="pause-btn" id="restartBtn">Restart</button>
+            <button class="pause-btn" id="settingsBtn">Settings</button>
+            <button class="pause-btn" id="menuBtn">Menu</button>
         </div>
         <!-- 게임 중지 -> 설정 버튼 -->
         <div id="settingPause">
