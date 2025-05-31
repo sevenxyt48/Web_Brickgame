@@ -109,9 +109,8 @@ $(document).ready(function () {
 
     // SELECT 버튼 클릭 시
     $('#houseSelect').click(function () {
-        if (!selectedHouse)
-        {
-            return;
+        if (!selectedHouse) {
+            selectedHouse = 'house1';
         }
 
         hideAll();
