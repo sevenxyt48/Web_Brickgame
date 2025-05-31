@@ -52,18 +52,23 @@ document.addEventListener('DOMContentLoaded', () => {
             backButton.style.display = 'block';
 
             // 화면별 위치 설정
-            if (screen.id === 'story' || screen.id === 'chooseHouse') {
-                backButton.style.top = '';
-                backButton.style.left = '';
-                backButton.style.right = '35px';
-                backButton.style.bottom = '';
-                backButton.style.transform = '';
-            } else if (screen.id === 'settings' || screen.id === 'credit') {
-                backButton.style.top = '';
-                backButton.style.left = '50%';
-                backButton.style.bottom = '250px';
-                backButton.style.transform = 'translateX(-50%)';
-            }
+            backButton.style.top = '';
+            backButton.style.left = '';
+            backButton.style.right = '35px';
+            backButton.style.bottom = '';
+            backButton.style.transform = '';
+            // if (screen.id === 'story' || screen.id === 'chooseHouse') {
+            //     backButton.style.top = '';
+            //     backButton.style.left = '';
+            //     backButton.style.right = '35px';
+            //     backButton.style.bottom = '';
+            //     backButton.style.transform = '';
+            // } else if (screen.id === 'settings' || screen.id === 'credit') {
+            //     backButton.style.top = '';
+            //     backButton.style.left = '50%';
+            //     backButton.style.bottom = '250px';
+            //     backButton.style.transform = 'translateX(-50%)';
+            // }
         }
     }
 
@@ -144,6 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 초기 화면 설정
     showScreen(mainStart);
+    $("#backButton").hide();
 });
 
 
@@ -320,9 +326,9 @@ function mainPage() {
 function housePage() {
     $('#story').hide();
     $('#chooseHouse').show();
+    // $("#backButton").show();
     // hideAll();
     // $("#house").show();
-    // $("#backButton").show();
 }
 
 //인게임 화면
@@ -363,6 +369,7 @@ function backToMainMenu() {
     $('#victoryScreen').hide();
     $('#gameOverScreen').hide();
     $('#mainStart').show();
+    $("#backButton").hide();
 }
 //페이지 모두 숨기기
 function hideAll() {
@@ -388,7 +395,7 @@ function hideAll() {
     $("#gameOver").hide();
     $("#pauseMenu").hide();
     $("#settingPause").hide();
-    $("#backButton").hide();
+    // $("#backButton").hide();
     $("#lives").hide();
     $("#start").hide();
     $("#skipButton").hide();
