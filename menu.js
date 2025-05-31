@@ -1,36 +1,17 @@
 //화면 전환 js코드
 
-// 게임 상태 관리 객체
-const gameState = {
-    selectedHouse: "house1",
-    mVol: 0.5,
-    isSoundOn: true,
-    isMusicOn: true,
-    isFullScreen: false,
-};
+var sound = "";
+var music = "";
+var chooseColor = "red";
+var mVol = 0;
+var chMusic = new Audio();
 
-// 음악 관리 객체
-const musicObj = {
-    musicOO: null,
-    playMusic(bgm) {
-        this.stopMusic();
-        this.musicOO = new Audio(bgm);
-        this.musicOO.volume = gameState.mVol;
-        this.musicOO.loop = true;
-        this.musicOO.play();
-    },
-    stopMusic() {
-        if (this.musicOO) {
-            this.musicOO.pause();
-            this.musicOO.currentTime = 0;
-        }
-    },
-    playEffect(src, volume = 0.8) {
-        const effect = new Audio(src);
-        effect.volume = volume;
-        effect.play();
-    },
-};
+var music = "";
+var bgm = "";
+var chooseColor = "";
+var mVol = 0;
+var chMusic = new Audio();
+
 document.addEventListener('DOMContentLoaded', () => {
     // 페이지가 모두 로드된 후 실행되는 코드
     console.log("DOM fully loaded and parsed");
@@ -41,78 +22,65 @@ document.addEventListener('DOMContentLoaded', () => {
     const chooseHouse = document.getElementById('chooseHouse');
     const settings = document.getElementById('settings');
     const credit = document.getElementById('credit');
-    const canvas = document.querySelector('#myCanvas');
+    const canvas = document.querySelector('canvas');
     // 버튼 요소들
     const startButton = document.getElementById('startButton');
-    const creditButton = document.getElementById('creditButton');
     const settingsButton = document.getElementById('settingsButton');
+    const creditButton = document.getElementById('creditButton');
+
     const storyStartButton = document.getElementById('storyStart');
     const selectButton = document.getElementById("houseSelect");
 
     const houses = document.querySelectorAll('#houseSelection .house');
 
-    const skipButtons = document.querySelectorAll('.skipButton');
-    const backButtons = document.querySelectorAll('.backButton');
-    // const backButton = document.getElementById('backButton');
-
-    // 스위치 요소 가져오기
-    const soundSwitch = document.getElementById('soundSwitch');
-    const musicSwitch = document.getElementById('musicSwitch');
-    const fullScreenSwitch = document.getElementById('fullScreenSwitch');
-    const changeThemeButton = document.getElementById('changeTheme');
+    const skipButtons = document.querySelectorAll('#skipButton');
+    // const backButton = document.querySelectorAll('#backButton');
+    const backButton = document.getElementById('backButton');
 
     function showScreen(screen) {
         hideAll();
+        // document.querySelectorAll('.menu').forEach(s => s.style.display = 'none');
         screen.style.display = 'flex';
 
-        // Skip 버튼 표시/숨김 스토리화면과 기숙사 선택 화면에 버튼 안 보임.
-        skipButtons.forEach(btn => {
-            console.log('Skip button:', btn, 'Current screen:', screen.id);
-            if (screen.id === 'story' || screen.id === 'chooseHouse') {
-                // btn.style.display = 'block';
-                btn.style.setProperty('display', 'inline-block', 'important');
-            } else {
-                btn.style.display = 'none';
-            }
-        });
+        // backButton 표시 여부 및 위치 조정
+        if (screen.id === 'mainStart') {
+            backButton.style.display = 'none';
+            document.querySelector("#startButton").style.display = "block";
+            document.querySelector("#settingsButton").style.display = "block";
+            document.querySelector("#creditButton").style.display = "block";
+        } else {
+            backButton.style.display = 'block';
 
-        // Back 버튼 표시/숨김 스토리화면과 기숙사 선택 화면에 버튼 안 보임.
-        backButtons.forEach(btn => {
-            if (screen.id === 'mainStart') {
-                btn.style.display = 'none';
-            } else if (screen.id === 'story' || screen.id === 'chooseHouse') {
-                btn.style.display = 'inline-block';
-                // 위치 설정
-                btn.style.top = '10px';
-                btn.style.left = '';
-                btn.style.right = '35px';
-                btn.style.bottom = '';
-                btn.style.transform = '';
-            } else if (screen.id === 'settings' || screen.id === 'credit') {
-                btn.style.display = 'inline-block';
-                btn.style.top = '';
-                btn.style.left = '50%';
-                btn.style.bottom = '250px';
-                btn.style.transform = 'translateX(-50%)';
-            } else {
-                btn.style.display = 'none';
-            }
-        });
-
+            // 화면별 위치 설정
+            backButton.style.top = '';
+            backButton.style.left = '';
+            backButton.style.right = '35px';
+            backButton.style.bottom = '';
+            backButton.style.transform = '';
+            // if (screen.id === 'story' || screen.id === 'chooseHouse') {
+            //     backButton.style.top = '';
+            //     backButton.style.left = '';
+            //     backButton.style.right = '35px';
+            //     backButton.style.bottom = '';
+            //     backButton.style.transform = '';
+            // } else if (screen.id === 'settings' || screen.id === 'credit') {
+            //     backButton.style.top = '';
+            //     backButton.style.left = '50%';
+            //     backButton.style.bottom = '250px';
+            //     backButton.style.transform = 'translateX(-50%)';
+            // }
+        }
     }
 
     // 시작화면 → 스토리 화면
     startButton.addEventListener('click', () => {
         showScreen(story);
-        // storyPage();
     });
 
     // 시작화면 → 설정
     settingsButton.addEventListener('click', () => {
         showScreen(settings);
-        settingPage();
     });
-
 
     // 시작화면 → 크레딧
     creditButton.addEventListener('click', () => {
@@ -122,10 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 스토리 화면 → 기숙사 선택 화면
     storyStartButton.addEventListener('click', () => {
         showScreen(chooseHouse);
-        housePage();
     });
 
-    gameState.selectedHouse = houses.querySelector('h1').innerText;
     // house 클릭 이벤트 추가
     houses.forEach(house => {
         house.addEventListener('click', () => {
@@ -133,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
             houses.forEach(h => h.classList.remove('selected'));
             // 클릭한 house 선택
             house.classList.add('selected');
-            gameState.selectedHouse = house.querySelector('h1').innerText;;
+            selectedHouse = house.querySelector('h1').innerText;
             console.log('선택된 기숙사:', selectedHouse);
         });
     });
@@ -142,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     skipButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             const currentScreen = Array.from(document.querySelectorAll('.menu'))
+                // .find(screen => screen.style.display !== 'none');
                 .find(screen => window.getComputedStyle(screen).display !== 'none');
             if (!currentScreen) {
                 console.warn('현재 화면을 찾을 수 없습니다.');
@@ -161,25 +128,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // 뒤로가기
-    backButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const currentScreen = Array.from(document.querySelectorAll('.menu'))
-                .find(screen => window.getComputedStyle(screen).display !== 'none');
-            if (!currentScreen) {
-                console.warn('현재 화면을 찾을 수 없습니다.');
-                return;
-            }
+    // 뒤로가기 → 메인화면
+    backButton.addEventListener('click', () => {
+        const currentScreen = Array.from(document.querySelectorAll('.menu'))
+            // .find(screen => screen.style.display !== 'none');
+            .find(screen => window.getComputedStyle(screen).display !== 'none');
+        if (!currentScreen) {
+            console.warn('현재 화면을 찾을 수 없습니다.');
+            return;
+        }
 
-            if (currentScreen.id === 'story') {
-                showScreen(mainStart);
-            } else if (currentScreen.id === 'chooseHouse') {
-                showScreen(story);
-            } else {
-                showScreen(mainStart);
-            }
-        });
+        if (currentScreen.id === 'story') {
+            showScreen(mainStart);
+        } else if (currentScreen.id === 'chooseHouse') {
+            showScreen(story);
+        } else {
+            showScreen(mainStart);
+        }
     });
+
+    // 초기 화면 설정
+    showScreen(mainStart);
+    $("#backButton").hide();
+});
+
+
 
     // 사운드 스위치
     soundSwitch.addEventListener('change', function () {
@@ -228,7 +201,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // 초기 화면 설정
     showScreen(mainStart);
     $("#backButton").hide();
-});
 
 
 
@@ -396,17 +368,50 @@ function handleChangeTheme() {
 
 // 설정 메뉴
 function settingPage() {
+    // musicObj.PlayChoose();
+
     hideAll();
     $("#settings").show();
     $("#backButton").show();
 
-    // 상태 초기화
-    soundSwitch.checked = true;
-    musicSwitch.checked = true;
-    fullScreenSwitch.checked = !!document.fullscreenElement;
+    var button1 = $("#settings .chooseDiv:nth-of-type(1) div.choose:nth-of-type(1)");
+    var button2 = $("#settings .chooseDiv:nth-of-type(1) div.choose:nth-of-type(2)");
+    var button3 = $("#settings .chooseDiv:nth-of-type(1) div.choose:nth-of-type(3)");
 
-    // 드롭다운이 열려있으면 닫기
-    $("#themeDropdown").remove();
+    button1.on("click", function () {
+        if ($("#volume").attr("src") != "img/btn/mute.png") {
+            music = "1";
+            musicObj.stopMusic();
+            bgm = "audio/.mp3";
+            musicObj.playMusic();
+            button1.css("background-color", "white");
+            button2.css("background-color", "gray");
+        }
+    });
+
+    button2.on("click", function () {
+        if ($("#volume").attr("src") != "img/btn/mute.png") {
+            music = "2";
+            musicObj.stopMusic();
+            bgm = "audio/MainMusic2.mp3";
+            musicObj.playMusic();
+            button2.css("background-color", "white");
+            button1.css("background-color", "gray");
+        }
+    });
+
+    button3.on("click", function () {
+        musicObj.stopMusic();
+        musicObj.playMusic();
+    });
+
+    button4.on("click", function () {
+        chooseColor = "green";
+        musicObj.PlayChoose();
+        button4.css("background-color", "white");
+        button5.css("background-color", "gray");
+    });
+
 }
 
 function mainPage() {
@@ -421,18 +426,15 @@ function mainPage() {
     hideAll();
     $("#mainStart").show();
 }
-function storyPage() {
-    $('#story').show();
-    $("#backButton").show();
-    $(".skipButton").show();
-}
+
 
 //난이도 선택 페이지
 function housePage() {
     $('#story').hide();
     $('#chooseHouse').show();
-    $("#backButton").show();
-    // $(".skipButton").show();
+    // $("#backButton").show();
+    // hideAll();
+    // $("#house").show();
 }
 
 //인게임 화면
@@ -478,6 +480,15 @@ function backToMainMenu() {
 //페이지 모두 숨기기
 function hideAll() {
     //클래스에 속하는 것들은 클래스 단위로 처리
+    // $("#gameAllClear").hide();
+    // $(".menu").hide();
+    // $(".backToMain").hide();
+    // $("canvas").hide();
+    // //목숨 표시, 시작 버튼 숨기기
+    // $("#lives").hide();
+    // $("#start").hide();
+    // $("#skipButton").hide();
+
     $("#gameAllClear").hide();
     $("#mainStart").hide();
     $("#story").hide();
@@ -490,12 +501,11 @@ function hideAll() {
     $("#gameOver").hide();
     $("#pauseMenu").hide();
     $("#settingPause").hide();
+    // $("#backButton").hide();
     $("#lives").hide();
     $("#start").hide();
+    $("#skipButton").hide();
     $("canvas").hide();
-    // $(".skipButton").hide();
-    $("#backButton").hide();
-
 }
 
 function vControl() {
