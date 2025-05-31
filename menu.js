@@ -32,8 +32,6 @@ const musicObj = {
     },
 };
 document.addEventListener('DOMContentLoaded', () => {
-    // 페이지가 모두 로드된 후 실행되는 코드
-    console.log("DOM fully loaded and parsed");
 
     // 화면 요소들
     const mainStart = document.getElementById('mainStart');
@@ -225,6 +223,10 @@ document.addEventListener('DOMContentLoaded', () => {
         handleChangeTheme();
     });
 
+    document.getElementById('pause-button').addEventListener('click', () => {
+        // 게임 일시정지 로직
+    });
+
     // 초기 화면 설정
     showScreen(mainStart);
     $("#backButton").hide();
@@ -354,6 +356,8 @@ function playPage() {
     hideAll();
     $("#pauseBtn").show();
     $("canvas").show();
+    $("#lives").show();
+    $("#score").show();
 }
 
 //게임 오버 화면

@@ -97,7 +97,6 @@ $(document).ready(function () {
     });
 
     $("#backButton").click(function () {
-        hideAll();
         $("#mainStart").show();
     });
 
@@ -160,6 +159,16 @@ $(document).ready(function () {
         context.fillRect(paddleX, paddleY, paddleWidth, paddleHeight);
     });
 });
+function updateScore(score) {
+    document.getElementById('score').textContent = 'Score: ' + score;
+}
+function updateLives(lives) {
+    const livesContainer = document.getElementById('lives');
+    livesContainer.empty();
+    for (let i = 0; i < lives; i++) {
+        livesContainer.append('<img src="img/life.png" class="life" alt="Life">');
+    }
+}
 
 
 function applyHouseTheme(houseId) {
@@ -346,7 +355,8 @@ function updateGame() {
     //벽돌 충돌
     for (let i = 0; i < brick.length; i++) {
         let b = brick[i];
-        if (!b.alive &&
+        if (
+            b.alive &&
             ball.x + ball.r >= b.x &&
             ball.x - ball.r <= b.x + brickWidth &&
             ball.y + ball.r >= b.y &&
@@ -358,6 +368,9 @@ function updateGame() {
             break;
         }
     }
+
+    updateScore(totalScore);
+    updateLives(lives);
 }
 // 초기 벽돌설정정
 function initBricks() {

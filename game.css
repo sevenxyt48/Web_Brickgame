@@ -390,3 +390,20 @@ canvas {
     top: 10px;
     right: 10px;
 }
+
+#gameScreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    color: white;
+    z-index: 1000;
+}
+
+#gameInfo {
+    font-size: 20px;
+}
