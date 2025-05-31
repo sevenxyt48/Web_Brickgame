@@ -16,10 +16,14 @@
 <body>
     <div id="container">
         <!-- 뒤로가기 버튼 -->
-        <div class="backToMain" id="backButton">
+        <div class="backButton" id="backButton">
             <span class="material-symbols-outlined">
                 arrow_circle_left
             </span>
+        </div>
+        <!-- 스킵버튼 -->
+        <div class="skipButton" id="skipButton">
+            <p>Skip</p>
         </div>
 
         <!-- 시작화면 -->
@@ -46,7 +50,7 @@
             </div>
         </div>
 
-        <!-- 설명 화면 -->
+        <!-- 스토리 화면 -->
         <div class="menu" id="story">
             <h2>How to play</h2>
             <p>당신은 호그와트 입학생입니다.</p>
@@ -54,8 +58,6 @@
             <p>공을 튕겨 마법책을 파괴하고, 숨겨진 마법을 해제하여 졸업을 향해 나아가세요!</p>
 
             <button id="storyStart">Start</button>
-            <p id="skipButton">Skip</p>
-
         </div>
 
         <!-- 기숙사 선택(배경 바뀜) -->
@@ -82,17 +84,25 @@
                 <p>Please select your house</p>
             </div>
             <button id="houseSelect">SELECT</button>
-            <!-- skip -->
-            <p id="skipButton">Skip</p>
         </div>
 
         <!-- Settings 화면 -->
         <div class="menu" id="settings">
             <h2>Settings</h2>
-            <div class="choose" id="sound">Sound</div>
-            <div class="choose" id="music">Music</div>
-            <div class="choose" id="fullScreen">Full Screen</div>
+            <div class="choose" id="sound">
+                <label for="soundSwitch">Sound</label>
+                <input type="checkbox" id="soundSwitch">
+            </div>
+            <div class="choose" id="music">
+                <label for="musicSwitch"> Music</label>
+                <input type="checkbox" id="musicSwitch">
+            </div>
+            <div class="choose" id="fullScreen">
+                <label for="fullScreenSwitch">Full Screen</label>
+                <input type="checkbox" id="fullScreenSwitch">
+            </div>
             <div class="choose" id="changeTheme">Change Theme</div>
+
         </div>
         <!-- Credit 화면 -->
         <div class="menu" id="credit">
@@ -131,7 +141,6 @@
         <!-- 게임 중지 -> 설정 버튼 -->
         <div id="settingPause">
             <h2>Settings</h2>
-
         </div>
 
         <!-- 게임 종료화면 -->
