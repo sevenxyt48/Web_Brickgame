@@ -4,8 +4,11 @@
 //중지 메뉴 설정 화면 추가 필요
 //게임 화면에서 마우스 클릭시 공이 안 움직임.
 //중지 메뉴 버튼 resume함수와 continue함수 수정 필요.
-//게임 화면 점수 및 라이프 정보 위치 바꿀 필요. 
+//게임 화면 점수 및 라이프 정보 위치 바꿀 필요.
 //초시 벽돌 수량 조절 필요.
+//credit화면, setting화면 footer추가 필요
+//setting 화면 드럼다운 버튼 활성화 필요
+//게임 클리어, 게임 오버 화면 수정 필요, 버튼 활성화 필요.
 
 //게임 로직 js코드
 var canvas;
@@ -545,8 +548,8 @@ function updateGame() {
 function initBricks() {
     brick = []; // 기존 벽돌 배열 초기화
 
-    brickRow = 5; // 행 수 -> 임의로 설정
-    brickColumn = 10; // 열 수
+    brickRow = 3; // 행 수 -> 임의로 설정
+    brickColumn = 5; // 열 수
     brickWidth = (canvas.width - (brickColumn - 1) * brickGapX) / brickColumn;
     brickHeight = 30;
 
@@ -564,7 +567,7 @@ function initBricks() {
 // 게임 그리기 함수
 function drawGame(ctx) {
     if (!isGameRunning) {
-        console(`그리기 거부`)
+        console.log(`그리기 거부`)
         return; // 게임이 중지되면 그리지 않음
     }
     ctx.clearRect(0, 0, 1280, 840);
@@ -619,9 +622,6 @@ function goToMenu() {
     // 메인 메뉴 보여주기
     hideAll();
     $("#mainStart").show();
-    // document.getElementById('settingPause').style.display = 'none';
-    // document.querySelectorAll('.menu, .menu').forEach(el => el.style.display = 'none');
-    // document.getElementById('mainStart').style.display = 'block';
 }
 
 //좋은 이벤트 - 공의 속도를 느리게 하는 마법
