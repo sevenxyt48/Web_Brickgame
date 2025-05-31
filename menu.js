@@ -227,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 초기 화면 설정
     showScreen(mainStart);
+    $("#backButton").hide();
 });
 
 
@@ -473,7 +474,6 @@ function backToMainMenu() {
     $('#gameOverScreen').hide();
     $('#mainStart').show();
     $("#backButton").hide();
-
 }
 //페이지 모두 숨기기
 function hideAll() {
