@@ -310,7 +310,7 @@ function updateGame() {
 
 
         // 벽에 부딪히면 방향 전환
-        if (ball.x + ball.vX > canvas.width - ball.r || ball.x + ball.vx < ball.r) {
+        if (ball.x + ball.vX > canvas.width - ball.r || ball.x + ball.vX < ball.r) {
             ball.vX = -ball.vX;
         }
         if (ball.y + ball.vY < ball.r) {
