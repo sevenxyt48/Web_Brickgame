@@ -99,15 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // SELECT 버튼 클릭 이벤트
-    selectButton.addEventListener('click', () => {
-        if (selectedHouse) {
-            startGame(selectedHouse);
-        } else {
-            alert('기숙사를 선택해 주세요!');
-        }
-    });
-
     // Skip 버튼 → 기숙사 선택 화면
     skipButtons.forEach(btn => {
         btn.addEventListener('click', () => {

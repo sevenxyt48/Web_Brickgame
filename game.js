@@ -96,13 +96,6 @@ $(document).ready(function () {
         $("#chooseHouse").show();
     });
 
-    $("#houseSelect").click(function () {
-        hideAll();
-        $("#myCanvas").show();
-        $("#gameScreen").show();
-        gameInit();
-    });
-
     $("#backButton").click(function () {
         hideAll();
         $("#mainStart").show();
@@ -116,6 +109,11 @@ $(document).ready(function () {
 
     // SELECT 버튼 클릭 시
     $('#houseSelect').click(function () {
+        if (!selectedHouse)
+        {
+            return;
+        }
+
         hideAll();
         $("#myCanvas").show();  // 캔버스 표시
 
@@ -128,7 +126,7 @@ $(document).ready(function () {
     canvas = document.getElementById("myCanvas");
     context = canvas.getContext("2d");
     darkR = canvas.width;
-    updateLives();
+    // updateLives();
 
     $(".backToMain").on("click", backToMainMenu);
 
@@ -153,7 +151,7 @@ $(document).ready(function () {
         }
 
         // 1. 이전 패들 위치 지우기
-        context.clearRect(paddleX, paddleY, paddleWidth, paddleHeight);
+        // context.clearRect(paddleX, paddleY, paddleWidth, paddleHeight);
 
         // 2. 새로운 위치로 패들 이동
         paddleX = mX;
@@ -388,7 +386,7 @@ function drawGame(ctx) {
     drawBall(ctx);
     drawPaddle(ctx);
 
-    requestAnimationFrame(drawGame);
+    // requestAnimationFrame(drawGame);
 
     // 벽돌 그리기
     for (let i = 0; i < brick.length; i++) {
