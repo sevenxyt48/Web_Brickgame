@@ -60,11 +60,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const musicSwitch = document.getElementById('musicSwitch');
     const fullScreenSwitch = document.getElementById('fullScreenSwitch');
     const changeThemeButton = document.getElementById('changeTheme');
+    const themeDropdownContainer = document.getElementById('themeDropdownContainer');
 
     function showScreen(screen) {
         hideAll();
         screen.style.display = 'flex';
-
         // Skip 버튼 표시/숨김 스토리화면과 기숙사 선택 화면에 버튼 안 보임.
         skipButtons.forEach(btn => {
             console.log('Skip button:', btn, 'Current screen:', screen.id);
@@ -78,10 +78,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Back 버튼 표시/숨김 스토리화면과 기숙사 선택 화면에 버튼 안 보임.
         backButtons.forEach(btn => {
+            console.log('back button:', btn, 'Current screen:', screen.id);
             if (screen.id === 'mainStart') {
                 btn.style.display = 'none';
             } else if (screen.id === 'story' || screen.id === 'chooseHouse') {
-                btn.style.display = 'inline-block';
+                // btn.style.display = 'inline-block';
+                btn.style.setProperty('display', 'inline-block', 'important');
                 // 위치 설정
                 btn.style.top = '10px';
                 btn.style.left = '';
@@ -89,7 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.style.bottom = '';
                 btn.style.transform = '';
             } else if (screen.id === 'settings' || screen.id === 'credit') {
-                btn.style.display = 'inline-block';
+                // btn.style.display = 'inline-block';
+                btn.style.setProperty('display', 'inline-block', 'important');
                 btn.style.top = '';
                 btn.style.left = '50%';
                 btn.style.bottom = '250px';
@@ -220,8 +223,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 테마 변경 버튼
     changeThemeButton.addEventListener('click', function () {
-        musicObj.PlayChoose();
-        // 예시: 테마 선택 UI 보여주기
         handleChangeTheme();
     });
 
@@ -232,111 +233,111 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// var musicObj = {
-//     musicOO: "",
-//     // 음악 추가 필요
-//     //배경음악 
-//     playMusic: function () {
-//         this.musicOO = new Audio(bgm);
-//         if (mVol == 0) {
-//             this.musicOO.volume = mVol;
-//         } else {
-//             this.musicOO.loop = true;
-//             if (bgm == "audio/MainMusic.mp3" || bgm == "audio/MainMusic2.mp3") {
-//                 setTimeout(() => {
-//                     this.musicOO.play();
-//                 }, 10); // 3000 milliseconds = 3 seconds
-//             }
-//         }
-//     },
+musicObj = {
+    musicOO: "",
+    // 음악 추가 필요
+    //배경음악 
+    playMusic: function () {
+        this.musicOO = new Audio(bgm);
+        if (mVol == 0) {
+            this.musicOO.volume = mVol;
+        } else {
+            this.musicOO.loop = true;
+            if (bgm == "audio/MainMusic.mp3" || bgm == "audio/MainMusic2.mp3") {
+                setTimeout(() => {
+                    this.musicOO.play();
+                }, 10); // 3000 milliseconds = 3 seconds
+            }
+        }
+    },
 
-//     //학년1 난이도 배경음악
-//     playEasy: function () {
-//         this.musicOO = new Audio("audio/.mp3");
-//         this.musicOO.volume = mVol;
-//         this.musicOO.loop = true;
-//         this.musicOO.play();
-//     },
+    //학년1 난이도 배경음악
+    playEasy: function () {
+        this.musicOO = new Audio("audio/.mp3");
+        this.musicOO.volume = mVol;
+        this.musicOO.loop = true;
+        this.musicOO.play();
+    },
 
-//     //학년2 난이도 배경음악
-//     playNormal: function () {
-//         this.musicOO = new Audio("audio/.mp3");
-//         this.musicOO.volume = mVol;
-//         this.musicOO.loop = true;
-//         this.musicOO.play();
-//     },
+    //학년2 난이도 배경음악
+    playNormal: function () {
+        this.musicOO = new Audio("audio/.mp3");
+        this.musicOO.volume = mVol;
+        this.musicOO.loop = true;
+        this.musicOO.play();
+    },
 
-//     //학년3 난이도 배경음악
-//     playHard: function () {
-//         this.musicOO = new Audio("audio/.mp3");
-//         this.musicOO.volume = mVol;
-//         this.musicOO.loop = true;
-//         this.musicOO.play();
-//     },
+    //학년3 난이도 배경음악
+    playHard: function () {
+        this.musicOO = new Audio("audio/.mp3");
+        this.musicOO.volume = mVol;
+        this.musicOO.loop = true;
+        this.musicOO.play();
+    },
 
-//     //엔딩(졸업) 배경 음악
-//     playEnding: function () {
-//         this.musicOO = new Audio("audio/.mp3");
-//         this.musicOO.volume = mVol;
-//         // this.musicOO.loop = true;
-//         this.musicOO.play();
-//     },
+    //엔딩(졸업) 배경 음악
+    playEnding: function () {
+        this.musicOO = new Audio("audio/.mp3");
+        this.musicOO.volume = mVol;
+        // this.musicOO.loop = true;
+        this.musicOO.play();
+    },
 
-//     //선택 시 효과음
-//     PlayChoose: function () {
-//         chMusic = new Audio("audio/.mp3");
-//         chMusic.volume = 0.8;
-//         if (mVol != 0) chMusic.play();
-//     },
+    //선택 시 효과음
+    PlayChoose: function () {
+        chMusic = new Audio("audio/.mp3");
+        chMusic.volume = 0.8;
+        if (mVol != 0) chMusic.play();
+    },
 
-//     //게임 오버 음악
-//     playDeath: function () {
-//         this.musicOO = new Audio("audio/.mp3");
-//         this.musicOO.volume = mVol;
-//         this.musicOO.loop = true;
-//         this.musicOO.play();
-//     },
+    //게임 오버 음악
+    playDeath: function () {
+        this.musicOO = new Audio("audio/.mp3");
+        this.musicOO.volume = mVol;
+        this.musicOO.loop = true;
+        this.musicOO.play();
+    },
 
-//     hoverSound: function () {
-//         var hoverMusic = new Audio("audio/.mp3");
-//         if (mVol != 0) hoverMusic.play();
-//     },
+    hoverSound: function () {
+        var hoverMusic = new Audio("audio/.mp3");
+        if (mVol != 0) hoverMusic.play();
+    },
 
-//     //목숨 하나 잃을 때
-//     LifeMinusMusic: function () {
-//         var LifeMinusMusic = new Audio("audio/.mp3");
-//         if (mVol != 0) LifeMinusMusic.play();
-//     },
+    //목숨 하나 잃을 때
+    LifeMinusMusic: function () {
+        var LifeMinusMusic = new Audio("audio/.mp3");
+        if (mVol != 0) LifeMinusMusic.play();
+    },
 
-//     //벽돌 효과음
-//     playBrick: function (e) {
-//         switch (e) {
-//         }
-//     },
+    //벽돌 효과음
+    playBrick: function (e) {
+        switch (e) {
+        }
+    },
 
-//     //클리어 음악
-//     playClear: function () {
-//         this.musicOO = new Audio("audio/.mp3");
-//         this.musicOO.volume = mVol;
-//         this.musicOO.play();
-//     },
+    //클리어 음악
+    playClear: function () {
+        this.musicOO = new Audio("audio/.mp3");
+        this.musicOO.volume = mVol;
+        this.musicOO.play();
+    },
 
-//     //배경음악 정지
-//     stopMusic: function () {
-//         this.musicOO.pause();
-//         this.musicOO.currentTime = 0;
-//     },
-//     //배경음악 음소거
-//     muteMusic: function () {
-//         mVol = 0;
-//         this.musicOO.volume = mVol;
-//     },
-//     //배경음악 음소거 해제
-//     unmuteMusic: function () {
-//         mVol = 0.5;
-//         this.musicOO.volume = mVol;
-//     },
-// };
+    //배경음악 정지
+    stopMusic: function () {
+        this.musicOO.pause();
+        this.musicOO.currentTime = 0;
+    },
+    //배경음악 음소거
+    muteMusic: function () {
+        mVol = 0;
+        this.musicOO.volume = mVol;
+    },
+    //배경음악 음소거 해제
+    unmuteMusic: function () {
+        mVol = 0.5;
+        this.musicOO.volume = mVol;
+    },
+};
 
 function handleSoundToggle() {
     if (this.checked) {
@@ -375,20 +376,25 @@ function handleFullScreenToggle() {
 
 function handleChangeTheme() {
     // 드롭다운을 토글하는 코드
+    console.log("handleChangeTheme 함수 호출됨");
+
     if ($("#themeDropdown").length) {
+        console.log("#themeDropdown 제거됨");
         $("#themeDropdown").remove();
     } else {
+        console.log("#themeDropdown 생성됨");
         let dropdown = $("<select id='themeDropdown'></select>");
         dropdown.append("<option value='house1'>Gryffindor</option>");
         dropdown.append("<option value='house2'>Slytherin</option>");
         dropdown.append("<option value='house3'>Hufflepuff</option>");
         dropdown.append("<option value='house4'>Ravenclaw</option>");
-        $(this).after(dropdown);
+        // $(this).after(dropdown);
+        $(themeDropdownContainer).append(dropdown);
 
         dropdown.on("change", function () {
             let selectedTheme = $(this).val();
             console.log("선택된 테마:", selectedTheme);
-            $("#gameScreen").css("background-image", `url('img/themes/${selectedTheme}.png')`);
+            $("#gameScreen").css("background-image", `url('img/background/${selectedTheme}.png')`);
             selectedHouse = selectedTheme;
         });
     }
@@ -424,7 +430,6 @@ function mainPage() {
 function storyPage() {
     $('#story').show();
     $("#backButton").show();
-    $(".skipButton").show();
 }
 
 //난이도 선택 페이지
@@ -432,7 +437,6 @@ function housePage() {
     $('#story').hide();
     $('#chooseHouse').show();
     $("#backButton").show();
-    // $(".skipButton").show();
 }
 
 //인게임 화면
