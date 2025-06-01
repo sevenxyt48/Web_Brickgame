@@ -653,18 +653,19 @@ function geminio(brickX, brickY) {
 }
 
 //좋은 이벤트 - 상하좌우 폭발 마법
-function bombarda(brickR, brickC) {
-    //brick 2차원 배열로 저장되어진다고 가정했을 때, 부딪힌 벽돌의 row, col이 인자.
-    brick[brickR][brickC].alive = false; // 벽돌 생성 함수 따로 만들어야함. 미구현
-    if (brick[brickR - 1][brickC] != null)
-        brick[brickR - 1][brickC].alive = false;
-    if (brick[brickR + 1][brickC] != null)
-        brick[brickR + 1][brickC].alive = false;
-    if (brick[brickR][brickC - 1] != null)
-        brick[brickR][brickC - 1].alive = false;
-    if (brick[brickR][brickC + 1] != null)
-        brick[brickR][brickC + 1].alive = false;
-    // bombarda함수 및 벽돌에 공 충돌 후에는 벽돌draw함수 재출력
+function bombarda(brickX, brickY) {
+    const index = brick.findIndex(brick => brick.x==brickX && brick.y==brickY);
+    brick[index].alive = false;
+    if(brick[index-brickColumn] != null)
+        brick[index-brickColumn].alive = false;
+    if(brick[index+brickColumn] != null)
+        brick[index+brickColumn].alive = false;
+    if(brick[index+1] != null)
+        brick[index+1].alive = false;
+    if(brick[index-1] != null)
+        brick[index-1].alive = false;
+    drawBricks();
+        
 }
 
 //좋은 이벤트 - 빛 생성 마법 (level2 이상에서만 존재)
