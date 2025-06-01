@@ -665,7 +665,7 @@ function bombarda(brickX, brickY) {
     if(brick[index-1] != null)
         brick[index-1].alive = false;
     drawBricks();
-        
+    
 }
 
 //좋은 이벤트 - 빛 생성 마법 (level2 이상에서만 존재)
@@ -740,7 +740,7 @@ function darkness(context) { // 매 프레임마다 호출하여 실시간으로
     context.save();
     context.fillStyle = 'rgba(0,0,0,0.8)'; // 반투명(80%)한 어둠
     context.beginPath();
-    context.rect(0, 0, canvas.width, canvas.height); //canvas 너비, 높이 변수명도 영웅이 하고 난 다음 수정보기
+    context.rect(0, 0, canvas.width, canvas.height); 
     context.arc(centerX, centerY, darkR, 0, Math.PI * 2, true);
     context.closePath();
     context.fill("evenodd");

@@ -1,5 +1,25 @@
 //화면 전환 js코드
 
+$(document).ready(function(){
+    const bgmList = [
+    "bgm/bgm1.mp3",
+    "bgm/bgm2.mp3",
+    "bgm/bgm3.mp3",
+    "bgm/bgm4.mp3",
+    ];
+
+    const audio = $("#bgm-selection");
+
+    // audio[0].play();
+    $("#changeBGM-select").on("change",function(){  // select가 바뀌면 오디오 변경경
+        const index = parseInt($(this).val());
+        audio.attr("src",bgmList[index]);
+        audio[0].load();
+        audio[0].play();
+    });
+});
+
+
 // 게임 상태 관리 객체
 const gameState = {
     selectedHouse: "house1",
