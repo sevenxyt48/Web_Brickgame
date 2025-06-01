@@ -17,6 +17,10 @@ $(document).ready(function(){
         audio[0].load();
         audio[0].play();
     });
+
+    $('#changeThemeButton').on('click', function() {
+        handleChangeTheme();
+    });
 });
 
 
@@ -167,11 +171,11 @@ function storyPage() {
 }
 
 //난이도 선택 페이지
-function housePage() {
-    $('#story').hide();
-    $('#chooseHouse').show();
-    $("#backButton").show();
-}
+// function housePage() {
+//     $('#story').hide();
+//     $('#chooseHouse').show();
+//     $("#backButton").show();
+// }
 
 //인게임 화면
 function playPage() {
@@ -241,4 +245,11 @@ function hideAll() {
 
 function vControl() {
     //설정 음성 컨트롤
+}
+
+// 기숙사 설정
+function handleChangeTheme()
+{
+    hideAll();
+    $("#chooseHouse").show();
 }

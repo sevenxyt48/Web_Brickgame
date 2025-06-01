@@ -374,7 +374,7 @@ canvas {
 #changeTheme {
     cursor: pointer;
     user-select: none;
-    background-color: #444;
+    /* background-color: #444; */
     color: white;
     width: 400px;
     height: auto;
@@ -385,6 +385,25 @@ canvas {
     align-items: center;
     text-align: left;
     justify-content: space-between;
+    font-weight: bold;
+}
+
+#changeThemeButton{
+    color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px #474747;
+}
+
+#changeThemeButton:hover {
+    background-color: #ccc;
+    color: #000;
+    box-shadow: 0 0 13px #474747;
+    transform: scale(1.05);
 }
 
 #themeDropdownContainer {

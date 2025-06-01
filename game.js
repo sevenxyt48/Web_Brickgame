@@ -34,6 +34,7 @@ function Brick(x, y, width, height, type) {
     this.height = height;
     this.type = type; // 벽돌 종류. 기본:0, 좋은벽돌:1, 나쁜벽돌:2
     this.alive = true; // 벽돌의 깨짐 유무 표시. true:존재 false:깨짐
+    this.opacity = 1.0 // 벽돌 투명해지기 마법을 위한 요소. 처음엔 전부 불투명명
 }
 
 var startX = 0; // 벽돌 시작 X 위치 조정 가능
@@ -110,29 +111,37 @@ $(document).ready(function () {
 
     $("#storyStart").click(function () {
         hideAll();
-        $("#chooseHouse").show();
+        // $("#chooseHouse").show();
+        $('#difficulty').show();
         $("#backButton").show();
         $("#skipButton").show();
     });
+
     $("#settingsButton").click(settingPage);
     $("#creditButton").click(creditPage);
     $("#backButton").click(function () {
         $("#mainStart").show();
+        $("#backButton").hide();
     });
+
     $("#skipButton").click(function () {
         if ($('#story').is(':visible')) {
-            // 스토리 화면일 때 -> 기숙사 선택 화면으로 전환
+            // 스토리 화면일 때 -> 난이도 화면으로 전환
             $('#story').hide();
-            $('#chooseHouse').show();
-        }
-        else if ($('#chooseHouse').is(':visible')) {
-            // 기숙사 선택 화면일 때 -> 난이도 선택 화면으로 전환
-            $('#chooseHouse').hide();
             $('#difficulty').show();
             if (!selectedHouse) {
-                selectedHouse = 'house1';
+                selectedHouse = 'house1'; // 기본 기숙사 선택
             }
-        } else if ($('#difficulty').is(':visible')) {
+        }
+        // else if ($('#chooseHouse').is(':visible')) {
+        //     // 기숙사 선택 화면일 때 -> 난이도 선택 화면으로 전환
+        //     $('#chooseHouse').hide();
+        //     $('#difficulty').show();
+        //     if (!selectedHouse) {
+        //         selectedHouse = 'house1';
+        //     }
+        // }
+         else if ($('#difficulty').is(':visible')) {
             hideAll();
             $("#myCanvas").show();
 
@@ -143,7 +152,13 @@ $(document).ready(function () {
             startGame(selectedHouse);
         }
     });
-    $("#houseSelect").click(difficultyPage);
+    // $("#houseSelect").click(difficultyPage);
+    $("#houseSelect").click(function () {
+        hideAll();
+        $('#settings').show();
+        $("#backButton").show();
+
+    });
 
     // 기숙사 -> 난이도 
     let selectedHouse = null;
@@ -593,11 +608,15 @@ function drawPaddle(ctx) {
 function drawBricks(ctx) {
     for (let i = 0; i < brick.length; i++) {
         if (brick[i].alive) {
+            ctx.save();
+            ctx.globalAlpha = brick[i].opacity ?? 1.0;
             // 기본 벽돌 이미지만 사용
             ctx.drawImage(brickImg[0], brick[i].x, brick[i].y, brickWidth, brickHeight);
+            ctx.restore();
+        }
         }
     }
-}
+
 // 점수 위치
 function drawScore() {
     context.font = "28px";
@@ -707,7 +726,15 @@ function reparo() {
 
 //나쁜 이벤트 - 벽돌을 투명하게 하는 마법
 function disillusionment() {
+    for (let i = 0; i < brick.length; i++){
+        brick[i].opacity = 0.1;
+    }
 
+    for(let i=0;i<brick.length;i++){
+        setTimeout(()=>{
+            brick[i].opacity = 1.0;
+        }, 30000)
+    }
 }
 
 //나쁜 이벤트 - 벽돌 위치 변경 마법
