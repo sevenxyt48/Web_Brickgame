@@ -613,9 +613,10 @@ function drawBricks(ctx) {
             // 기본 벽돌 이미지만 사용
             ctx.drawImage(brickImg[0], brick[i].x, brick[i].y, brickWidth, brickHeight);
             ctx.restore();
-        }
-        }
     }
+}
+}
+
 
 // 점수 위치
 function drawScore() {
