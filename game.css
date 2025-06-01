@@ -56,19 +56,18 @@ img {
     z-index: 10;
     color: black;
     text-shadow: none;
-    font-size: 20px;
+    font-size: 18px;
     margin-top: 20px;
 }
 
-#backButton {
+.backButton {
     position: absolute;
-    display: none;
     z-index: 100;
     cursor: pointer;
     color: white;
 }
 
-#backButton span {
+.backButton span {
     font-size: 60px;
 }
 
@@ -84,6 +83,7 @@ img {
     text-shadow: 4px 4px black;
     font-size: 40px;
     cursor: pointer;
+    z-index: 50;
 }
 
 #pauseMenu {
@@ -202,10 +202,12 @@ canvas {
     padding: 10px 20px;
     cursor: pointer;
     color: white;
+    background-color: transparent;
     border: 2px solid white;
     border-radius: 10px;
     transition: background-color 0.2s;
 }
+
 #storyStart:hover {
     background-color: white;
     color: black;
@@ -253,6 +255,7 @@ canvas {
     padding: 10px 20px;
     cursor: pointer;
     color: white;
+    background-color: transparent;
     border: 2px solid white;
     border-radius: 10px;
     transition: background-color 0.2s;
@@ -288,12 +291,12 @@ canvas {
     width: 400px;
     text-align: left;
     display: flex;
-
+    font-size: 28px;
     justify-content: space-between;
 }
 
 /* 스위치 버튼 스타일 */
-.choose input[type="checkbox"] {
+.choose input {
     position: relative;
     width: 50px;
     height: 24px;
@@ -305,7 +308,7 @@ canvas {
     cursor: pointer;
 }
 
-.choose input[type="checkbox"]::before {
+.choose input::before {
     content: '';
     position: absolute;
     width: 20px;
@@ -338,6 +341,15 @@ canvas {
     align-items: center;
     text-align: left;
     justify-content: space-between;
+}
+
+#themeDropdownContainer select {
+    margin-left: 10px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    font-size: 14px;
 }
 
 /* Lives 표시 */

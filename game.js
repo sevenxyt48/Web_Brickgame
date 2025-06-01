@@ -541,4 +541,3 @@ function darkness(context) { // 매 프레임마다 호출하여 실시간으로
     context.closePath();
     context.fill("evenodd");
 }
-
