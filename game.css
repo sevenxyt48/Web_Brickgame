@@ -29,6 +29,43 @@ img {
     justify-content: center;
 }
 
+body:fullscreen #container {
+    width: 100%;
+    height: 100%;
+}
+
+body:fullscreen {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+body:fullscreen #myCanvas {
+    width: 100%;
+    height: 100%;
+}
+
+body:fullscreen #container .menu {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+body:fullscreen #container #gameScreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    padding: 10px;
+    color: white;
+    z-index: 1000;
+    height: auto;
+}
+
 .menu {
     display: flex;
     flex-direction: column;
@@ -91,7 +128,8 @@ img {
 }
 
 #pauseMenu {
-    position: fixed;
+    position: absolute;
+    /* position: fixed; */
     display: flex;
     top: 50%;
     left: 50%;
@@ -300,6 +338,25 @@ canvas {
     color: black;
 }
 
+/* changeBGM 버튼 스타일 */
+#changeBGM-select{
+    margin-top: 10px;
+    font-size: 14px;
+    padding: 6px 10px;
+    cursor: pointer;
+    color: white;
+    background-color: transparent;
+    border: 2px solid white;
+    border-radius: 10px;
+    transition: background-color 0.2s;
+}
+
+/* obtion 스타일 */
+option {
+    color: black;
+    background-color: white;
+}
+
 /* detail 텍스트 */
 .detail p,
 
@@ -374,7 +431,6 @@ canvas {
 #changeTheme {
     cursor: pointer;
     user-select: none;
-    /* background-color: #444; */
     color: white;
     width: 400px;
     height: auto;

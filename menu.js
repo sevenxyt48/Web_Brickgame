@@ -8,14 +8,32 @@ $(document).ready(function(){
     "bgm/bgm4.mp3",
     ];
 
-    const audio = $("#bgm-selection");
+    // 페이지 열리자마자는 재생이 안돼서 클릭 한 번 해야 재생되도록 해놓음
+    $(document).one('click', function() {
+        musicObj.playMusic(bgmList[0]);
+    });
 
-    // audio[0].play();
-    $("#changeBGM-select").on("change",function(){  // select가 바뀌면 오디오 변경경
+    $("#changeBGM-select").on("change",function(){  // select가 바뀌면 오디오 변경
         const index = parseInt($(this).val());
-        audio.attr("src",bgmList[index]);
-        audio[0].load();
-        audio[0].play();
+        if (gameState.isMusicOn) {
+            musicObj.playMusic(bgmList[index]);
+        } else {
+            musicObj.stopMusic();
+        }
+        // audio.attr("src",bgmList[index]);
+        // audio[0].load();
+        // audio[0].play();
+    });
+
+
+    // music 버튼 활성화
+    $('#musicSwitch').on('change', function(){ 
+        handleMusicToggle(this, bgmList);
+    });
+
+    // fullscreen 버튼 활성화
+    $('#fullScreenSwitch').on('change', function() {
+        handleFullScreenToggle(this);
     });
 
     $('#changeThemeButton').on('click', function() {
@@ -64,71 +82,64 @@ function difficultyPage() {
     $("#skipButton").show();
 }
 
-function handleSoundToggle() {
-    if (this.checked) {
-        console.log("Sound ON");
-        // musicObj.unmute();
-    } else {
-        console.log("Sound OFF");
-        // musicObj.mute();
-    }
-}
-
-function handleMusicToggle() {
-    if (this.checked) {
-        console.log("Music ON");
-        musicObj.playMusic();
-    } else {
-        console.log("Music OFF");
-        musicObj.stopMusic();
-    }
-}
-
-
-function handleFullScreenToggle() {
-    if (this.checked) {
-        console.log("Full Screen ON");
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen();
+// music 버튼 토글 핸들러
+function handleMusicToggle(checkbox, bgmList) {
+    if (checkbox.checked)
+        {
+            musicObj.playMusic(bgmList[0]);
         }
-    } else {
-        console.log("Full Screen OFF");
-        if (document.fullscreenElement) {
-            document.exitFullscreen();
+    else if (!checkbox.checked)
+        {
+            musicObj.stopMusic();
         }
+}
+
+// 전체화면 토글 핸들러
+function handleFullScreenToggle(checkbox) {
+    var gameScreen = document.body;
+    if (checkbox.checked)
+    {
+        gameScreen.requestFullscreen();
+        
+        // gameScreen.style.width = "100%";
+        // gameScreen.style.height = "100%";
+    }
+    else{
+        document.exitFullscreen();
     }
 }
 
-function handleChangeTheme() {
-    // 드롭다운을 토글하는 코드
-    console.log("handleChangeTheme 함수 호출됨");
-    const dropdownContainer = document.getElementById('themeDropdownContainer');
-    const existingDropdown = document.getElementById('themeDropdown');
-    if (existingDropdown) {
-        dropdownContainer.removeChild(existingDropdown);
-        console.log("#themeDropdown 제거됨");
-        // $("#themeDropdown").remove();
-    } else {
-        const dropdown = document.createElement('select');
-        dropdown.id = 'themeDropdown';
 
-        dropdown.innerHTML = `
-            <option value='house1'>Gryffindor</option>
-            <option value='house2'>Slytherin</option>
-            <option value='house3'>Hufflepuff</option>
-            <option value='house4'>Ravenclaw</option>
-        `;
-        dropdown.addEventListener('change', function () {
-            const selectedTheme = this.value;
-            console.log("선택된 테마:", selectedTheme);
-            document.getElementById('gameScreen').style.backgroundImage =
-                `url('img/background/${selectedTheme}.png')`;
-            gameState.selectedHouse = selectedTheme;
-        });
-        dropdownContainer.appendChild(dropdown);
-        console.log("#themeDropdown 생성됨");
-    }
-}
+// function handleChangeTheme() {
+//     // 드롭다운을 토글하는 코드
+//     console.log("handleChangeTheme 함수 호출됨");
+//     const dropdownContainer = document.getElementById('themeDropdownContainer');
+//     const existingDropdown = document.getElementById('themeDropdown');
+//     if (existingDropdown) {
+//         dropdownContainer.removeChild(existingDropdown);
+//         console.log("#themeDropdown 제거됨");
+//         // $("#themeDropdown").remove();
+//     } else {
+//         const dropdown = document.createElement('select');
+//         dropdown.id = 'themeDropdown';
+
+//         dropdown.innerHTML = `
+//             <option value='house1'>Gryffindor</option>
+//             <option value='house2'>Slytherin</option>
+//             <option value='house3'>Hufflepuff</option>
+//             <option value='house4'>Ravenclaw</option>
+//         `;
+//         dropdown.addEventListener('change', function () {
+//             const selectedTheme = this.value;
+//             console.log("선택된 테마:", selectedTheme);
+//             document.getElementById('gameScreen').style.backgroundImage =
+//                 `url('img/background/${selectedTheme}.png')`;
+//             gameState.selectedHouse = selectedTheme;
+//         });
+//         dropdownContainer.appendChild(dropdown);
+//         console.log("#themeDropdown 생성됨");
+//     }
+// }
 
 // 설정 메뉴
 function settingPage() {
