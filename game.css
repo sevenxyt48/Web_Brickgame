@@ -465,3 +465,8 @@ canvas {
 #gameInfo {
     font-size: 20px;
 }
+
+#gradeSelection .dif.selected h1 {
+    color: yellow;       /* 선택됐을 때 표시할 색상 */
+    /* 필요하다면 font-weight, text-shadow 등 추가 가능 */
+}

@@ -128,7 +128,7 @@ $(document).ready(function () {
     $("#skipButton").click(function () {
         if ($('#story').is(':visible')) {
             // 스토리 화면일 때 -> 난이도 화면으로 전환
-            $('#story').hide();
+            $('#story').hide();''
             $('#difficulty').show();
             if (!selectedHouse) {
                 selectedHouse = 'house1'; // 기본 기숙사 선택
@@ -222,6 +222,11 @@ $(document).ready(function () {
     $(".nextGrade").on("click", function () {
         console.log(`Start next stage`);
         stage(++gameLevel);
+    });
+
+        $('#gradeSelection .dif').click(function() {
+        $('#gradeSelection .dif').removeClass('selected');
+        $(this).addClass('selected');
     });
 
     $(".dif h1:contains('1')").click(function () {
@@ -610,7 +615,6 @@ function initBricks() {
             let x = startX + col * (brickWidth + brickGapX);
             let y = startY + row * (brickHeight + brickGapY);
             let type = 0; // 이벤트 처리시 사용할듯?
-
             brick.push(new Brick(x, y, brickWidth, brickHeight, type));
         }
     }
