@@ -54,7 +54,7 @@ var ballBottom;
 var ballLeft;
 var ballRight;
 var ballMoving = false;
-
+var currentSpeed = 5.5;
 // 공
 function Ball(x, y, vX, vY) {
     this.x = x;
@@ -496,52 +496,85 @@ var ball;
 
 // 공 위치 초기화
 function resetBall() {
+    balls = [];
     ball = new Ball(canvas.width / 2, canvas.height - 50, 3, -3);
+    balls.push(ball);
 }
 
 // 게임 상태 갱신
 function updateGame() {
-    if (ballMoving) {
+    balls.forEach(ball => {
+        if (!ballMoving) return;  // ballMoving이 false면 공 이동X
+
+        // 공을 이동
         ball.x += ball.vX;
         ball.y += ball.vY;
 
-        // 벽에 부딪히면 방향 전환
-        if (ball.x + ball.vX > canvas.width - ball.r || ball.x + ball.vX < ball.r) {
+        // 좌/우 벽 충돌
+        if (ball.x - ball.r < 0) {
+            ball.x = ball.r;
+            ball.vX = -ball.vX;
+        } else if (ball.x + ball.r > canvas.width) {
+            ball.x = canvas.width - ball.r;
             ball.vX = -ball.vX;
         }
-        if (ball.y + ball.vY < ball.r) {
+
+        // 위쪽 벽 충돌
+        if (ball.y - ball.r < 0) {
+            ball.y = ball.r;
             ball.vY = -ball.vY;
-        } else if (ball.y + ball.vY > canvas.height - ball.r) {
-            // 패들에 부딪히는지 확인
-            if (ball.x > paddleX && ball.x < paddleX + paddleWidth) {
-                ball.vY = -ball.vY;
-            } else {
-                // 공이 아래로 떨어지면 초기화
-                ballMoving = false;
-                lives--;
-                resetBall();
-                updateLives(lives);
-            }
         }
 
-    }
+        // 아래쪽(바닥 혹은 패들 영역) 충돌 처리
+        if (ball.y + ball.r >= paddleY) {
+            // -- 패들 영역 x 범위인 경우 →
+            if (ball.x + ball.r >= paddleX && ball.x - ball.r <= paddleX + paddleWidth) {
+                // 패들에 닿음 → 반사 각도 계산
+                const relativeIntersectX = ball.x - (paddleX + paddleWidth / 2);
+                const normalized = relativeIntersectX / (paddleWidth / 2);
+                const maxBounceAngle = Math.PI / 3; // 60도
+                const bounceAngle = normalized * maxBounceAngle;
+
+                // 공이 패들 위에 붙어서 뚫고 가지 않도록 y 위치 보정
+                ball.y = paddleY - ball.r - 1;
+
+                // 고정 속도(currentSpeed)로 방향만 재설정
+                ball.vX = currentSpeed * Math.sin(bounceAngle);
+                ball.vY = -Math.abs(currentSpeed * Math.cos(bounceAngle));
+            }
+            else if (ball.y + ball.r > canvas.height) {
+                // 패들 범위도 아니고 바닥으로 떨어진 경우 → 목숨 차감 & 재생성
+                lives--;
+                resetBall();   // balls 배열을 재생성하거나, 공을 리셋하는 함수로 이동
+                updateLives(lives);
+                ballMoving = false; // 공 멈추고, 다음 클릭 때 재발사
+            }
+        }
+    });
 
     //패들 충돌
-    if (
-        ball.y + ball.r >= paddleY &&
-        ball.x >= paddleX &&
-        ball.x <= paddleX + paddleWidth 
-    ) {
-     const relativeIntersectX = ball.x - (paddleX + paddleWidth / 2);
-    const normalized = relativeIntersectX / (paddleWidth / 2);  // -1 ~ +1
+balls.forEach(ball => {
 
-    const maxBounceAngle = Math.PI / 3; // 최대 반사각 60도
-    const bounceAngle = normalized * maxBounceAngle;
+    if (ball.y + ball.r >= paddleY) {
+        const paddleLeft  = paddleX - paddleWidth / 2;
+        const paddleRight = paddleX + paddleWidth / 2;
 
-    const speed = Math.sqrt(ball.vX * ball.vX + ball.vY * ball.vY);
-    ball.vX = speed * Math.sin(bounceAngle);
-    ball.vY = -Math.abs(speed * Math.cos(bounceAngle));
-    }
+        // 공이 패들 가로 범위 안에 들어왔는지 확인
+        if (ball.x + ball.r >= paddleLeft && ball.x - ball.r <= paddleRight) {
+            // 패들에 닿았다면 반사
+            const relativeIntersectX = ball.x - paddleX;
+            const normalized = relativeIntersectX / (paddleWidth / 2);
+            const maxBounceAngle = Math.PI / 3;
+            const bounceAngle = normalized * maxBounceAngle;
+
+            // 공이 패들 안쪽으로 약간 파고들지 않도록 Y 위치 보정
+            ball.y = paddleY - ball.r - 1;
+
+            ball.vX = currentSpeed * Math.sin(bounceAngle);
+            ball.vY = -Math.abs(currentSpeed * Math.cos(bounceAngle));
+        }
+}});
+
 
     //벽돌 충돌
     for (let i = 0; i < brick.length; i++) {
