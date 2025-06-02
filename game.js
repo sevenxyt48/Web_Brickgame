@@ -102,6 +102,7 @@ $(document).ready(function () {
     hideAll();
     $("#mainStart").show();
 
+    $("#gameScreen").on("click", ()=>{ if(!ballMoving && isGameRunning) ballMoving = true; });
     $("#startButton").click(function () {
         hideAll();
         $("#story").show();
