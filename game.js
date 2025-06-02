@@ -144,6 +144,9 @@ $(document).ready(function () {
         // }
          else if ($('#difficulty').is(':visible')) {
             hideAll();
+            if (!selectedHouse) {
+                selectedHouse = 'house1'; // 기본 기숙사 선택
+            }
             $("#myCanvas").show();
 
             applyHouseTheme(selectedHouse);
