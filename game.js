@@ -530,14 +530,17 @@ function updateGame() {
     if (
         ball.y + ball.r >= paddleY &&
         ball.x >= paddleX &&
-        ball.x <= paddleX + paddleWidth &&
-        ball.y <= paddleY + paddleHeight
+        ball.x <= paddleX + paddleWidth 
     ) {
-        let hitPoint = (ball.x - (paddleX + paddleWidth / 2)) / (paddleWidth / 2);
-        let angle = hitPoint * (Math.PI / 3);
-        let speed = Math.sqrt(ball.vX * ball.vX + ball.vY * ball.vY);
-        ball.vX = speed * Math.sin(angle);
-        ball.vY = -Math.abs(speed * Math.cos(angle));
+     const relativeIntersectX = ball.x - (paddleX + paddleWidth / 2);
+    const normalized = relativeIntersectX / (paddleWidth / 2);  // -1 ~ +1
+
+    const maxBounceAngle = Math.PI / 3; // 최대 반사각 60도
+    const bounceAngle = normalized * maxBounceAngle;
+
+    const speed = Math.sqrt(ball.vX * ball.vX + ball.vY * ball.vY);
+    ball.vX = speed * Math.sin(bounceAngle);
+    ball.vY = -Math.abs(speed * Math.cos(bounceAngle));
     }
 
     //벽돌 충돌
