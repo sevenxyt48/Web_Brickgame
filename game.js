@@ -166,14 +166,6 @@ $(document).ready(function () {
                 selectedHouse = 'house1'; // 기본 기숙사 선택
             }
         }
-        // else if ($('#chooseHouse').is(':visible')) {
-        //     // 기숙사 선택 화면일 때 -> 난이도 선택 화면으로 전환
-        //     $('#chooseHouse').hide();
-        //     $('#difficulty').show();
-        //     if (!selectedHouse) {
-        //         selectedHouse = 'house1';
-        //     }
-        // }
          else if ($('#difficulty').is(':visible')) {
             hideAll();
             if (!selectedHouse) {
@@ -188,7 +180,6 @@ $(document).ready(function () {
             startGame(selectedHouse);
         }
     });
-    // $("#houseSelect").click(difficultyPage);
     $("#houseSelect").click(function () {
         hideAll();
         $('#settings').show();
