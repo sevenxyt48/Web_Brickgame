@@ -109,38 +109,6 @@ function handleFullScreenToggle(checkbox) {
     }
 }
 
-
-// function handleChangeTheme() {
-//     // 드롭다운을 토글하는 코드
-//     console.log("handleChangeTheme 함수 호출됨");
-//     const dropdownContainer = document.getElementById('themeDropdownContainer');
-//     const existingDropdown = document.getElementById('themeDropdown');
-//     if (existingDropdown) {
-//         dropdownContainer.removeChild(existingDropdown);
-//         console.log("#themeDropdown 제거됨");
-//         // $("#themeDropdown").remove();
-//     } else {
-//         const dropdown = document.createElement('select');
-//         dropdown.id = 'themeDropdown';
-
-//         dropdown.innerHTML = `
-//             <option value='house1'>Gryffindor</option>
-//             <option value='house2'>Slytherin</option>
-//             <option value='house3'>Hufflepuff</option>
-//             <option value='house4'>Ravenclaw</option>
-//         `;
-//         dropdown.addEventListener('change', function () {
-//             const selectedTheme = this.value;
-//             console.log("선택된 테마:", selectedTheme);
-//             document.getElementById('gameScreen').style.backgroundImage =
-//                 `url('img/background/${selectedTheme}.png')`;
-//             gameState.selectedHouse = selectedTheme;
-//         });
-//         dropdownContainer.appendChild(dropdown);
-//         console.log("#themeDropdown 생성됨");
-//     }
-// }
-
 // 설정 메뉴
 function settingPage() {
     hideAll();
@@ -180,13 +148,6 @@ function storyPage() {
     $('#story').show();
     $("#backButton").show();
 }
-
-//난이도 선택 페이지
-// function housePage() {
-//     $('#story').hide();
-//     $('#chooseHouse').show();
-//     $("#backButton").show();
-// }
 
 //인게임 화면
 function playPage() {

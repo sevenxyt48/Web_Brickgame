@@ -339,7 +339,7 @@ canvas {
 }
 
 /* changeBGM 버튼 스타일 */
-#changeBGM-select{
+#changeBGM-select {
     margin-top: 10px;
     font-size: 14px;
     padding: 6px 10px;
@@ -351,7 +351,7 @@ canvas {
     transition: background-color 0.2s;
 }
 
-/* obtion 스타일 */
+/* option 스타일 */
 option {
     color: black;
     background-color: white;
@@ -444,7 +444,7 @@ option {
     font-weight: bold;
 }
 
-#changeThemeButton{
+#changeThemeButton {
     color: #fff;
     border: 2px solid #ccc;
     border-radius: 8px;
@@ -462,22 +462,6 @@ option {
     transform: scale(1.05);
 }
 
-#themeDropdownContainer {
-    background-color: white;
-    width: 200px;
-    height: auto;
-    border: 1px solid #ccc;
-}
-
-#themeDropdownContainer select {
-    margin-left: 10px;
-    padding: 4px 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    font-size: 14px;
-}
-
 /* Lives 표시 */
 #lives {
     position: absolute;
@@ -486,12 +470,6 @@ option {
     z-index: 20;
     font-size: 28px;
 }
-
-/* .life {
-    width: 30px;
-    height: 30px;
-    margin-right: 5px;
-} */
 
 #pauseBtn {
     background: url('img/pause.png') no-repeat center center;
@@ -523,6 +501,7 @@ option {
 }
 
 #gradeSelection .dif.selected h1 {
-    color: yellow;       /* 선택됐을 때 표시할 색상 */
+    color: yellow;
+    /* 선택됐을 때 표시할 색상 */
     /* 필요하다면 font-weight, text-shadow 등 추가 가능 */
 }
