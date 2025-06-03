@@ -27,12 +27,13 @@ var brickGapY = 5; // 벽돌 사이의 세로 간격
 var isBrickMoving = false; // 벽돌 하강 여부
 var brickVy = 0.1; // 벽돌이 내려오는 속도
 
-function Brick(x, y, width, height, type) {
+function Brick(x, y, width, height, type, magic) {
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
     this.type = type; // 벽돌 종류. 기본:0, 좋은벽돌:1, 나쁜벽돌:2
+    this.magic = magic;
     this.alive = true; // 벽돌의 깨짐 유무 표시. true:존재 false:깨짐
     this.opacity = 1.0 // 벽돌 투명해지기 마법을 위한 요소. 처음엔 전부 불투명명
 }
@@ -96,6 +97,37 @@ badImg.src = "img/stone/stone_gray.png";
 badImg1.src = "img/stone/stone_green.png";
 
 var isCountdownRunning = false; // 카운트다운 상태 변수 추가
+
+const levelSettings = {
+    1:{
+        rows:3,
+        cols:5,
+        goodBricks:3,
+        badBricks:1
+    },
+    2:{
+        rows:4,
+        cols:5,
+        goodBricks:4,
+        badBricks:2
+    },
+    3:{
+        rows:5,
+        cols:5,
+        goodBricks:4,
+        badBricks:4
+    },
+    4:{
+        rows:6,
+        cols:5,
+        goodBricks:3,
+        badBricks:7
+    }
+};
+
+// 마법 리스트
+const goodMagicList = ['impedimenta','geminio','bombarda','lumos'];
+const badMagicList = ['ascendio','reparo','disillusionment','confundo'];
 
 $(document).ready(function () {
 
@@ -194,17 +226,17 @@ $(document).ready(function () {
 
     $('#restartBtn').click(function () {
         $('#pauseMenu').hide();
-        reset();
+        reset(selectedHouse);
         startGame(selectedHouse);
     });
     $('#settingsBtn').click(function () {
         $('#pauseMenu').hide();
-        reset();
+        reset(selectedHouse);
         //게임화면에 있는 설정창 
     });
     $('#menuBtn').click(function () {
         $('#pauseMenu').hide();
-        reset();
+        reset(selectedHouse);
         goToMenu();
     });
 
@@ -215,7 +247,7 @@ $(document).ready(function () {
 
     $("#pauseBtn").click("click", function () {
         pauseGame();
-        resetAll();
+        resetAll(selectedHouse);
         document.getElementById('pauseMenu').style.display = 'block';
     });
 
@@ -232,16 +264,16 @@ $(document).ready(function () {
         $(this).addClass('selected');
     });
 
-    $(".dif h1:contains('1')").click(function () {
+    $("#grade1").click(function () {
         stage(1);
     });
-    $(".dif h1:contains('2')").click(function () {
+    $("#grade2").click(function () {
         stage(2);
     });
-    $(".dif h1:contains('3')").click(function () {
+    $("#grade3").click(function () {
         stage(3);
     });
-    $(".dif h1:contains('4')").click(function () {
+    $("#grade4").click(function () {
         stage(4);
     });
 
@@ -288,8 +320,8 @@ $(document).ready(function () {
 function stage(n) {
     console.log(`Current stage:${n}`);
     gameLevel = n;
-    setDifficulty(n); // 단계 설정
-    reset();
+    // setDifficulty(n); // 단계 설정
+    reset(n);
     switch (n) {
         case 1:
             musicObj.stopMusic();
@@ -314,10 +346,10 @@ function stage(n) {
 
 //난이도 별 벽돌 수
 //공 속도(추가 필요)
-function setDifficulty(level) {
-    brickRow = level + 2;
-    brickColumn = 5;
-}
+// function setDifficulty(level) {
+//     brickRow = level + 2;
+//     brickColumn = 5;
+// }
 
 function updateScore(score) {
     document.getElementById('score').textContent = 'Score: ' + score;
@@ -386,7 +418,7 @@ function applyHouseTheme(houseId) {
     });
 
 }
-function reset() {
+function reset(difficulty) {
     // 게임 상태 초기화
     totalScore = 0;
     lives = 3;
@@ -395,7 +427,7 @@ function reset() {
     // 공 초기화
     resetBall();
     // 벽돌 초기화
-    initBricks();
+    initBricks(difficulty);
     // 점수 및 목숨 표시 업데이트
     updateScore(totalScore);
     updateLives(lives);
@@ -444,7 +476,7 @@ function gameInit() {
 
     // 게임 객체 초기화
     resetBall();
-    initBricks();
+    initBricks(gameLevel);
 
     // 게임 루프 시작
     requestAnimationFrame(gameLoop);
@@ -605,22 +637,68 @@ balls.forEach(ball => {
     updateLives(lives);
 }
 // 초기 벽돌설정
-function initBricks() {
-    brick = []; // 기존 벽돌 배열 초기화
+function initBricks(difficulty) {
+    // brick = []; // 기존 벽돌 배열 초기화
 
-    brickRow = 3; // 행 수 -> 임의로 설정
-    brickColumn = 5; // 열 수
+    // brickRow = 3; // 행 수 -> 임의로 설정
+    // brickColumn = 5; // 열 수
+    // brickWidth = (canvas.width - (brickColumn - 1) * brickGapX) / brickColumn;
+    // brickHeight = 30;
+
+    // for (let row = 0; row < brickRow; row++) {
+    //     for (let col = 0; col < brickColumn; col++) {
+    //         let x = startX + col * (brickWidth + brickGapX);
+    //         let y = startY + row * (brickHeight + brickGapY);
+    //         let type = 0; // 이벤트 처리시 사용할듯?
+    //         brick.push(new Brick(x, y, brickWidth, brickHeight, type));
+    //     }
+    // }
+    const setting = levelSettings[difficulty];
+    brickRow = setting.rows;
+    brickColumn = setting.cols;
     brickWidth = (canvas.width - (brickColumn - 1) * brickGapX) / brickColumn;
     brickHeight = 30;
+    brick = [];
 
-    for (let row = 0; row < brickRow; row++) {
-        for (let col = 0; col < brickColumn; col++) {
+    let totalBricks = brickRow*brickColumn;
+    let indices = Array.from({length:totalBricks},(_,i)=>i);
+    shuffle(indices);
+
+    const goodIndices = indices.splice(0, setting.goodBricks);
+    const badIndices = indices.splice(0, setting.badBricks);
+
+    for(let row=0; row<brickRow; row++){
+        for(let col=0; col<brickColumn; col++){
+            const i = row*brickColumn + col;
             let x = startX + col * (brickWidth + brickGapX);
             let y = startY + row * (brickHeight + brickGapY);
-            let type = 0; // 이벤트 처리시 사용할듯?
-            brick.push(new Brick(x, y, brickWidth, brickHeight, type));
+
+            let type = 0;
+            let magic = null;
+
+            if(goodIndices.includes(i)){
+                type = 1;
+                magic = getRandomFrom(goodMagicList);
+            }
+            else if(badIndices.includes(i)){
+                type = 2;
+                magic = getRandomFrom(badMagicList);
+            }
+            
+            brick.push(new Brick(x,y,brickWidth,brickHeight,type,magic));
         }
     }
+}
+
+function shuffle(array){
+    for(let i = array.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [array[i],array[j]] = [array[j],array[i]];
+    }
+}
+
+function getRandomFrom(list){
+    return list[Math.floor(Math.random()*list.length)];
 }
 
 // 게임 그리기 함수
@@ -655,7 +733,15 @@ function drawBricks(ctx) {
             ctx.save();
             ctx.globalAlpha = brick[i].opacity ?? 1.0;
             // 기본 벽돌 이미지만 사용
-            ctx.drawImage(brickImg[0], brick[i].x, brick[i].y, brickWidth, brickHeight);
+            if(brick[i].type==1){
+                ctx.drawImage(goodImg, brick[i].x, brick[i].y, brickWidth, brickHeight);
+            }
+            else if(brick[i].type==2){
+                ctx.drawImage(badImg, brick[i].x, brick[i].y, brickWidth, brickHeight);
+            }
+            else{
+                ctx.drawImage(brickImg[0], brick[i].x, brick[i].y, brickWidth, brickHeight);
+            }
             ctx.restore();
     }
 }
