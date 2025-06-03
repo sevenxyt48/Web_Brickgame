@@ -1,13 +1,13 @@
-//수정 필요할 부분:
-//중지 메뉴 css
-//중지 메뉴 설정 화면 추가 필요
-//게임 화면에서 마우스 클릭시 공이 안 움직임.
+//!!!!!!수정 완료한 부분을 삭제해주세요:
 //중지 메뉴 버튼 resume함수와 continue함수 수정 필요.
 //게임 화면 점수 및 라이프 정보 위치 바꿀 필요.
 //초시 벽돌 수량 조절 필요.
 //credit화면, setting화면 footer추가 필요
 //setting 화면 드럼다운 버튼 활성화 필요
 //게임 클리어, 게임 오버 화면 수정 필요, 버튼 활성화 필요.
+
+//수정 설명:
+//게임 초시 상태에는 music은 닫은상태고, 플레이어가 키는 동작해야 music자동 생성합니다.
 
 //게임 로직 js코드
 var canvas;
@@ -129,14 +129,19 @@ const goodMagicList = ['impedimenta', 'geminio', 'bombarda', 'lumos'];
 const badMagicList = ['ascendio', 'reparo', 'disillusionment', 'confundo'];
 
 $(document).ready(function () {
+    console.log("Document ready! Music object is safe to use.");
+    vControl();
     hideAll();
     $("#mainStart").show();
     $("#gameScreen").on("click", () => { if (!ballMoving && isGameRunning) ballMoving = true; });
+
     $("#startButton").click(function () {
+
         hideAll();
         $("#story").show();
         $("#backButton").show();
         $("#skipButton").show();
+
     });
 
     $("#storyStart").click(function () {
@@ -191,6 +196,7 @@ $(document).ready(function () {
 
     // 학년 선택 버튼 클릭 시 -> 게임 화면
     $('#gradeSelect').click(function () {
+        if (!gameLevel) gameLevel = 1;
         if (!selectedHouse) {
             selectedHouse = 'house1';
         }
@@ -228,8 +234,9 @@ $(document).ready(function () {
         createSettingsElements();
     });
     $('#menuBtn').click(function () {
+        console.log("Menu button clicked");
         $('#pauseMenu').hide();
-        reset(selectedHouse);
+        reset(gameLevel);
         goToMenu();
     });
 
@@ -757,6 +764,7 @@ function mouseMoveHandler(e) {
 }
 
 function goToMenu() {
+    console.log("goToMenu called");
     document.getElementById('pauseMenu').style.display = 'none';
     isGameRunning = false;
     ballMoving = false;
