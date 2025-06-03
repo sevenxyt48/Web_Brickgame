@@ -1,14 +1,13 @@
-//완성한 부분을 삭제해주세요!!!
-//수정 필요할 부분:
-//중지 메뉴 설정 화면 추가 완료
-//중지 메뉴 설정.메뉴 버튼 클릭시 동작 않음. 
-//게임 화면에서 마우스 클릭시 공이 안 움직임.
+//!!!!!!수정 완료한 부분을 삭제해주세요:
 //중지 메뉴 버튼 resume함수와 continue함수 수정 필요.
 //게임 화면 점수 및 라이프 정보 위치 바꿀 필요.
 //초시 벽돌 수량 조절 필요.
 //credit화면, setting화면 footer추가 필요
 //setting 화면 드럼다운 버튼 활성화 필요
 //게임 클리어, 게임 오버 화면 수정 필요, 버튼 활성화 필요.
+
+//수정 설명:
+//게임 초시 상태에는 music은 닫은상태고, 플레이어가 키는 동작해야 music자동 생성합니다.
 
 //게임 로직 js코드
 var canvas;
@@ -130,21 +129,27 @@ const goodMagicList = ['impedimenta', 'geminio', 'bombarda', 'lumos'];
 const badMagicList = ['ascendio', 'reparo', 'disillusionment', 'confundo'];
 
 $(document).ready(function () {
-
+    console.log("Document ready! Music object is safe to use.");
+    vControl();
+    $("#lives").hide();
     hideAll();
     $("#mainStart").show();
+    $("#gameScreen").on("click", () => {
+        if (!ballMoving && isGameRunning) ballMoving = true;
+        $("#lives").show();
+    });
 
-    $("#gameScreen").on("click", () => { if (!ballMoving && isGameRunning) ballMoving = true; });
     $("#startButton").click(function () {
+
         hideAll();
         $("#story").show();
         $("#backButton").show();
         $("#skipButton").show();
+
     });
 
     $("#storyStart").click(function () {
         hideAll();
-        // $("#chooseHouse").show();
         $('#difficulty').show();
         $("#backButton").show();
         $("#skipButton").show();
@@ -165,14 +170,13 @@ $(document).ready(function () {
             if (!selectedHouse) {
                 selectedHouse = 'house1'; // 기본 기숙사 선택
             }
-        }
+        }//난이도 -> 게임화면
         else if ($('#difficulty').is(':visible')) {
             hideAll();
             if (!selectedHouse) {
-                selectedHouse = 'house1'; // 기본 기숙사 선택
+                selectedHouse = 'house1';
             }
             $("#myCanvas").show();
-
             applyHouseTheme(selectedHouse);
             $('#chooseHouse').hide();
             $('#gameScreen').show();
@@ -187,7 +191,7 @@ $(document).ready(function () {
 
     });
 
-    // 기숙사 -> 난이도 
+    // 기숙사 선택 동적 화면 
     let selectedHouse = null;
     $('#houseSelection .house').click(function () {
         selectedHouse = $(this).find('img').attr('id');
@@ -196,6 +200,7 @@ $(document).ready(function () {
 
     // 학년 선택 버튼 클릭 시 -> 게임 화면
     $('#gradeSelect').click(function () {
+        if (!gameLevel) gameLevel = 1;
         if (!selectedHouse) {
             selectedHouse = 'house1';
         }
@@ -213,7 +218,7 @@ $(document).ready(function () {
     $("#pauseBtn").click(function () {
         pauseGame();
         resetAll(selectedHouse);
-        document.getElementById('pauseMenu').style.display = 'block';
+        $('#pauseMenu').show();
     });
 
     $('#resumeBtn').click(function () {
@@ -228,18 +233,23 @@ $(document).ready(function () {
     });
     createSettingsElements();
     $('#settingsBtn').click(function () {
-        console.log("Settings button clicked");
-        $('#pauseMenu').hide();
-        reset(selectedHouse);
+        console.log(`click settingBtn`);
         //게임화면에 있는 설정창
-        // $('#settingPause').show();
-        document.getElementById('settingPause').style.display = 'block';
+        $('#settingPause').show();
+        createSettingsElements();
     });
+    $('#menuBtn').click(function () {
+        console.log("Menu button clicked");
+        $('#pauseMenu').hide();
+        reset(gameLevel);
+        goToMenu();
+    });
+
 
     canvas = document.getElementById("myCanvas");
     context = canvas.getContext("2d");
     darkR = canvas.width;
-    // updateLives();
+    updateLives(lives);
 
     $(".reTry").on("click", function () {
         stage(gameLevel);
@@ -760,12 +770,14 @@ function mouseMoveHandler(e) {
 }
 
 function goToMenu() {
+    console.log("goToMenu called");
     document.getElementById('pauseMenu').style.display = 'none';
     isGameRunning = false;
     ballMoving = false;
     // 메인 메뉴 보여주기
     hideAll();
     $("#mainStart").show();
+    $("#skipButton").hide();
 }
 
 //좋은 이벤트 - 공의 속도를 느리게 하는 마법
