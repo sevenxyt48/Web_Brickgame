@@ -1,5 +1,4 @@
 //수정 필요할 부분:
-//뒤로 가기 버튼 위치 수정
 //중지 메뉴 css
 //중지 메뉴 설정 화면 추가 필요
 //게임 화면에서 마우스 클릭시 공이 안 움직임.
@@ -99,42 +98,42 @@ badImg1.src = "img/stone/stone_green.png";
 var isCountdownRunning = false; // 카운트다운 상태 변수 추가
 
 const levelSettings = {
-    1:{
-        rows:3,
-        cols:5,
-        goodBricks:3,
-        badBricks:1
+    1: {
+        rows: 3,
+        cols: 5,
+        goodBricks: 3,
+        badBricks: 1
     },
-    2:{
-        rows:4,
-        cols:5,
-        goodBricks:4,
-        badBricks:2
+    2: {
+        rows: 4,
+        cols: 5,
+        goodBricks: 4,
+        badBricks: 2
     },
-    3:{
-        rows:5,
-        cols:5,
-        goodBricks:4,
-        badBricks:4
+    3: {
+        rows: 5,
+        cols: 5,
+        goodBricks: 4,
+        badBricks: 4
     },
-    4:{
-        rows:6,
-        cols:5,
-        goodBricks:3,
-        badBricks:7
+    4: {
+        rows: 6,
+        cols: 5,
+        goodBricks: 3,
+        badBricks: 7
     }
 };
 
 // 마법 리스트
-const goodMagicList = ['impedimenta','geminio','bombarda','lumos'];
-const badMagicList = ['ascendio','reparo','disillusionment','confundo'];
+const goodMagicList = ['impedimenta', 'geminio', 'bombarda', 'lumos'];
+const badMagicList = ['ascendio', 'reparo', 'disillusionment', 'confundo'];
 
 $(document).ready(function () {
 
     hideAll();
     $("#mainStart").show();
 
-    $("#gameScreen").on("click", ()=>{ if(!ballMoving && isGameRunning) ballMoving = true; });
+    $("#gameScreen").on("click", () => { if (!ballMoving && isGameRunning) ballMoving = true; });
     $("#startButton").click(function () {
         hideAll();
         $("#story").show();
@@ -160,13 +159,13 @@ $(document).ready(function () {
     $("#skipButton").click(function () {
         if ($('#story').is(':visible')) {
             // 스토리 화면일 때 -> 난이도 화면으로 전환
-            $('#story').hide();''
+            $('#story').hide(); ''
             $('#difficulty').show();
             if (!selectedHouse) {
                 selectedHouse = 'house1'; // 기본 기숙사 선택
             }
         }
-         else if ($('#difficulty').is(':visible')) {
+        else if ($('#difficulty').is(':visible')) {
             hideAll();
             if (!selectedHouse) {
                 selectedHouse = 'house1'; // 기본 기숙사 선택
@@ -210,6 +209,12 @@ $(document).ready(function () {
         startGame(selectedHouse);
     });
 
+    $("#pauseBtn").click(function () {
+        pauseGame();
+        resetAll(selectedHouse);
+        document.getElementById('pauseMenu').style.display = 'block';
+    });
+
     $('#resumeBtn').click(function () {
         $('#pauseMenu').hide();
         resumeGame();
@@ -223,7 +228,8 @@ $(document).ready(function () {
     $('#settingsBtn').click(function () {
         $('#pauseMenu').hide();
         reset(selectedHouse);
-        //게임화면에 있는 설정창 
+        //게임화면에 있는 설정창
+        document.getElementById('settingPause').style.display = 'block';
     });
     $('#menuBtn').click(function () {
         $('#pauseMenu').hide();
@@ -236,12 +242,6 @@ $(document).ready(function () {
     darkR = canvas.width;
     // updateLives();
 
-    $("#pauseBtn").click("click", function () {
-        pauseGame();
-        resetAll(selectedHouse);
-        document.getElementById('pauseMenu').style.display = 'block';
-    });
-
     $(".reTry").on("click", function () {
         stage(gameLevel);
     });
@@ -250,7 +250,7 @@ $(document).ready(function () {
         stage(++gameLevel);
     });
 
-        $('#gradeSelection .dif').click(function() {
+    $('#gradeSelection .dif').click(function () {
         $('#gradeSelection .dif').removeClass('selected');
         $(this).addClass('selected');
     });
@@ -584,27 +584,28 @@ function updateGame() {
     });
 
     //패들 충돌
-balls.forEach(ball => {
+    balls.forEach(ball => {
 
-    if (ball.y + ball.r >= paddleY) {
-        const paddleLeft  = paddleX - paddleWidth / 2;
-        const paddleRight = paddleX + paddleWidth / 2;
+        if (ball.y + ball.r >= paddleY) {
+            const paddleLeft = paddleX - paddleWidth / 2;
+            const paddleRight = paddleX + paddleWidth / 2;
 
-        // 공이 패들 가로 범위 안에 들어왔는지 확인
-        if (ball.x + ball.r >= paddleLeft && ball.x - ball.r <= paddleRight) {
-            // 패들에 닿았다면 반사
-            const relativeIntersectX = ball.x - paddleX;
-            const normalized = relativeIntersectX / (paddleWidth / 2);
-            const maxBounceAngle = Math.PI / 3;
-            const bounceAngle = normalized * maxBounceAngle;
+            // 공이 패들 가로 범위 안에 들어왔는지 확인
+            if (ball.x + ball.r >= paddleLeft && ball.x - ball.r <= paddleRight) {
+                // 패들에 닿았다면 반사
+                const relativeIntersectX = ball.x - paddleX;
+                const normalized = relativeIntersectX / (paddleWidth / 2);
+                const maxBounceAngle = Math.PI / 3;
+                const bounceAngle = normalized * maxBounceAngle;
 
-            // 공이 패들 안쪽으로 약간 파고들지 않도록 Y 위치 보정
-            ball.y = paddleY - ball.r - 1;
+                // 공이 패들 안쪽으로 약간 파고들지 않도록 Y 위치 보정
+                ball.y = paddleY - ball.r - 1;
 
-            ball.vX = currentSpeed * Math.sin(bounceAngle);
-            ball.vY = -Math.abs(currentSpeed * Math.cos(bounceAngle));
+                ball.vX = currentSpeed * Math.sin(bounceAngle);
+                ball.vY = -Math.abs(currentSpeed * Math.cos(bounceAngle));
+            }
         }
-}});
+    });
 
 
     //벽돌 충돌
@@ -651,45 +652,45 @@ function initBricks(difficulty) {
     brickHeight = 30;
     brick = [];
 
-    let totalBricks = brickRow*brickColumn;
-    let indices = Array.from({length:totalBricks},(_,i)=>i);
+    let totalBricks = brickRow * brickColumn;
+    let indices = Array.from({ length: totalBricks }, (_, i) => i);
     shuffle(indices);
 
     const goodIndices = indices.splice(0, setting.goodBricks);
     const badIndices = indices.splice(0, setting.badBricks);
 
-    for(let row=0; row<brickRow; row++){
-        for(let col=0; col<brickColumn; col++){
-            const i = row*brickColumn + col;
+    for (let row = 0; row < brickRow; row++) {
+        for (let col = 0; col < brickColumn; col++) {
+            const i = row * brickColumn + col;
             let x = startX + col * (brickWidth + brickGapX);
             let y = startY + row * (brickHeight + brickGapY);
 
             let type = 0;
             let magic = null;
 
-            if(goodIndices.includes(i)){
+            if (goodIndices.includes(i)) {
                 type = 1;
                 magic = getRandomFrom(goodMagicList);
             }
-            else if(badIndices.includes(i)){
+            else if (badIndices.includes(i)) {
                 type = 2;
                 magic = getRandomFrom(badMagicList);
             }
-            
-            brick.push(new Brick(x,y,brickWidth,brickHeight,type,magic));
+
+            brick.push(new Brick(x, y, brickWidth, brickHeight, type, magic));
         }
     }
 }
 
-function shuffle(array){
-    for(let i = array.length-1;i>0;i--){
-        const j = Math.floor(Math.random()*(i+1));
-        [array[i],array[j]] = [array[j],array[i]];
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
     }
 }
 
-function getRandomFrom(list){
-    return list[Math.floor(Math.random()*list.length)];
+function getRandomFrom(list) {
+    return list[Math.floor(Math.random() * list.length)];
 }
 
 // 게임 그리기 함수
@@ -706,7 +707,7 @@ function drawGame(ctx) {
     // drawScore();
 
 
-    
+
 }
 
 function drawBall(ctx) {
@@ -724,18 +725,18 @@ function drawBricks(ctx) {
             ctx.save();
             ctx.globalAlpha = brick[i].opacity ?? 1.0;
             // 기본 벽돌 이미지만 사용
-            if(brick[i].type==1){
+            if (brick[i].type == 1) {
                 ctx.drawImage(goodImg, brick[i].x, brick[i].y, brickWidth, brickHeight);
             }
-            else if(brick[i].type==2){
+            else if (brick[i].type == 2) {
                 ctx.drawImage(badImg, brick[i].x, brick[i].y, brickWidth, brickHeight);
             }
-            else{
+            else {
                 ctx.drawImage(brickImg[0], brick[i].x, brick[i].y, brickWidth, brickHeight);
             }
             ctx.restore();
+        }
     }
-}
 }
 
 
@@ -798,18 +799,18 @@ function geminio(brickX, brickY) {
 
 //좋은 이벤트 - 상하좌우 폭발 마법
 function bombarda(brickX, brickY) {
-    const index = brick.findIndex(brick => brick.x==brickX && brick.y==brickY);
+    const index = brick.findIndex(brick => brick.x == brickX && brick.y == brickY);
     brick[index].alive = false;
-    if(brick[index-brickColumn] != null)
-        brick[index-brickColumn].alive = false;
-    if(brick[index+brickColumn] != null)
-        brick[index+brickColumn].alive = false;
-    if(brick[index+1] != null)
-        brick[index+1].alive = false;
-    if(brick[index-1] != null)
-        brick[index-1].alive = false;
+    if (brick[index - brickColumn] != null)
+        brick[index - brickColumn].alive = false;
+    if (brick[index + brickColumn] != null)
+        brick[index + brickColumn].alive = false;
+    if (brick[index + 1] != null)
+        brick[index + 1].alive = false;
+    if (brick[index - 1] != null)
+        brick[index - 1].alive = false;
     drawBricks();
-    
+
 }
 
 //좋은 이벤트 - 빛 생성 마법 (level2 이상에서만 존재)
@@ -848,12 +849,12 @@ function reparo() {
 
 //나쁜 이벤트 - 벽돌을 투명하게 하는 마법
 function disillusionment() {
-    for (let i = 0; i < brick.length; i++){
+    for (let i = 0; i < brick.length; i++) {
         brick[i].opacity = 0.1;
     }
 
-    for(let i=0;i<brick.length;i++){
-        setTimeout(()=>{
+    for (let i = 0; i < brick.length; i++) {
+        setTimeout(() => {
             brick[i].opacity = 1.0;
         }, 30000)
     }
@@ -892,7 +893,7 @@ function darkness(context) { // 매 프레임마다 호출하여 실시간으로
     context.save();
     context.fillStyle = 'rgba(0,0,0,0.8)'; // 반투명(80%)한 어둠
     context.beginPath();
-    context.rect(0, 0, canvas.width, canvas.height); 
+    context.rect(0, 0, canvas.width, canvas.height);
     context.arc(centerX, centerY, darkR, 0, Math.PI * 2, true);
     context.closePath();
     context.fill("evenodd");

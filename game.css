@@ -99,9 +99,11 @@ body:fullscreen #container #gameScreen {
 
 .backButton {
     position: absolute;
-    z-index: 100;
+    z-index: 50;
     cursor: pointer;
     color: white;
+    top: 30px;
+    right: 35px;
 }
 
 .backButton span {
@@ -127,39 +129,61 @@ body:fullscreen #container #gameScreen {
     text-shadow: 5px 5px black;
 }
 
-#pauseMenu {
+#pauseMenu,
+#settingPause {
     position: absolute;
-    /* position: fixed; */
     display: flex;
+    width: 430px;
+    height: 550px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     flex-direction: column;
-    gap: 15px;
+    align-items: center;
+    gap: 50px;
     cursor: pointer;
-    color: white;
-    background-color: brown;
-    font-size: 60px;
+    color: black;
+    background-color: white;
+    font-size: 28px;
     padding: 20px;
     border-radius: 10px;
     text-align: center;
+    z-index: 1000;
+}
+
+#pauseMenu h2 {
+    margin-bottom: 50px;
+    margin-top: 20px;
 }
 
 .pause-btn {
+    width: 250px;
+    height: 60px;
     padding: 10px 20px;
-    font-size: 38px;
+    font-size: 28px;
     cursor: pointer;
     background-color: transparent;
     border: none;
-    color: white;
+    color: black;
     transition: color 0.3s ease;
+    margin-bottom: 30px;
+}
+
+.pause-btn:last-child {
+    margin-bottom: 0;
+}
+
+#pauseMenu button {
+    pointer-events: auto;
+
 }
 
 .pause-btn:hover {
-    color: yellow;
+    color: darkgray;
+    transform: scale(1.05);
 }
 
-canvas {
+#myCanvas {
     background: #eee;
     display: none;
     position: absolute;
@@ -167,6 +191,8 @@ canvas {
     left: 50%;
     transform: translate(-50%, -50%);
     border: 1px solid black;
+    z-index: 0;
+    pointer-events: none;
 }
 
 #mainStart {
@@ -376,6 +402,7 @@ option {
 }
 
 #settings h2,
+#difficulty h2,
 #credit h2 {
     font-size: 32px;
     margin-bottom: 20px;
@@ -501,7 +528,8 @@ option {
 }
 
 #gradeSelection .dif.selected h1 {
-    color: yellow;
+    color: darkgray;
+    transform: scale(1.05);
     /* 선택됐을 때 표시할 색상 */
     /* 필요하다면 font-weight, text-shadow 등 추가 가능 */
 }
