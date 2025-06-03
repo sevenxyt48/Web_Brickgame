@@ -1,19 +1,19 @@
 //화면 전환 js코드
 
-$(document).ready(function(){
+$(document).ready(function () {
     const bgmList = [
-    "bgm/bgm1.mp3",
-    "bgm/bgm2.mp3",
-    "bgm/bgm3.mp3",
-    "bgm/bgm4.mp3",
+        "bgm/bgm1.mp3",
+        "bgm/bgm2.mp3",
+        "bgm/bgm3.mp3",
+        "bgm/bgm4.mp3",
     ];
 
     // 페이지 열리자마자는 재생이 안돼서 클릭 한 번 해야 재생되도록 해놓음
-    $(document).one('click', function() {
+    $(document).one('click', function () {
         musicObj.playMusic(bgmList[0]);
     });
 
-    $("#changeBGM-select").on("change",function(){  // select가 바뀌면 오디오 변경
+    $("#changeBGM-select").on("change", function () {  // select가 바뀌면 오디오 변경
         const index = parseInt($(this).val());
         if (gameState.isMusicOn) {
             musicObj.playMusic(bgmList[index]);
@@ -27,16 +27,16 @@ $(document).ready(function(){
 
 
     // music 버튼 활성화
-    $('#musicSwitch').on('change', function(){ 
+    $('#musicSwitch').on('change', function () {
         handleMusicToggle(this, bgmList);
     });
 
     // fullscreen 버튼 활성화
-    $('#fullScreenSwitch').on('change', function() {
+    $('#fullScreenSwitch').on('change', function () {
         handleFullScreenToggle(this);
     });
 
-    $('#changeThemeButton').on('click', function() {
+    $('#changeThemeButton').on('click', function () {
         handleChangeTheme();
     });
 });
@@ -84,27 +84,24 @@ function difficultyPage() {
 
 // music 버튼 토글 핸들러
 function handleMusicToggle(checkbox, bgmList) {
-    if (checkbox.checked)
-        {
-            musicObj.playMusic(bgmList[0]);
-        }
-    else if (!checkbox.checked)
-        {
-            musicObj.stopMusic();
-        }
+    if (checkbox.checked) {
+        musicObj.playMusic(bgmList[0]);
+    }
+    else if (!checkbox.checked) {
+        musicObj.stopMusic();
+    }
 }
 
 // 전체화면 토글 핸들러
 function handleFullScreenToggle(checkbox) {
     var gameScreen = document.body;
-    if (checkbox.checked)
-    {
+    if (checkbox.checked) {
         gameScreen.requestFullscreen();
-        
+
         // gameScreen.style.width = "100%";
         // gameScreen.style.height = "100%";
     }
-    else{
+    else {
         document.exitFullscreen();
     }
 }
@@ -212,6 +209,7 @@ function hideAll() {
     $("canvas").hide();
     $(".skipButton").hide();
     $("#backButton").hide();
+    // $('#settingPause').hide();
 
 }
 
@@ -220,8 +218,95 @@ function vControl() {
 }
 
 // 기숙사 설정
-function handleChangeTheme()
-{
+function handleChangeTheme() {
     hideAll();
     $("#chooseHouse").show();
 }
+
+const settingPause = document.getElementById('settingPause');
+
+// 생성할 항목 리스트
+const settingsOptions = [
+    {
+        label: 'Sound',
+        type: 'checkbox',
+        id: 'soundSwitchPause'
+    },
+    {
+        label: 'Music',
+        type: 'checkbox',
+        id: 'musicSwitchPause'
+    },
+    {
+        label: 'Full Screen',
+        type: 'checkbox',
+        id: 'fullScreenSwitchPause'
+    },
+    {
+        label: 'Change Theme',
+        type: 'button',
+        id: 'changeThemeButtonPause',
+        text: 'Click'
+    },
+    {
+        label: 'Change BGM',
+        type: 'select',
+        id: 'changeBGMPause',
+        options: ['BGM 1', 'BGM 2', 'BGM 3', 'BGM 4']
+    },
+    {
+        label: '',
+        type: 'button',
+        id: 'backToPauseMenuBtn',
+        text: 'Back'
+    }
+];
+
+// 중지메뉴에 있는 설정 메뉴 함수
+function createSettingsElements() {
+    settingsOptions.forEach(option => {
+        const container = document.createElement('div');
+        container.classList.add('choose');
+
+        if (option.type === 'checkbox') {
+            const label = document.createElement('label');
+            label.setAttribute('for', option.id);
+            label.textContent = option.label;
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.id = option.id;
+            container.appendChild(label);
+            container.appendChild(input);
+        }
+        else if (option.type === 'button') {
+            const label = document.createElement('span');
+            label.textContent = option.label;
+            const button = document.createElement('button');
+            button.id = option.id;
+            button.textContent = option.text;
+            container.appendChild(label);
+            container.appendChild(button);
+        }
+        else if (option.type === 'select') {
+            const label = document.createElement('label');
+            label.setAttribute('for', option.id);
+            label.textContent = option.label;
+            const select = document.createElement('select');
+            select.id = option.id;
+            option.options.forEach((optText, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.textContent = optText;
+                if (index === 0) opt.selected = true;
+                select.appendChild(opt);
+            });
+            container.appendChild(label);
+            container.appendChild(select);
+        }
+
+        settingPause.appendChild(container);
+    });
+}
+
+// 페이지가 로드될 때 호출
+createSettingsElements();

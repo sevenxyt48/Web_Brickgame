@@ -129,8 +129,7 @@ body:fullscreen #container #gameScreen {
     text-shadow: 5px 5px black;
 }
 
-#pauseMenu,
-#settingPause {
+#pauseMenu {
     position: absolute;
     display: flex;
     width: 430px;
@@ -181,6 +180,26 @@ body:fullscreen #container #gameScreen {
 .pause-btn:hover {
     color: darkgray;
     transform: scale(1.05);
+}
+
+#settingPause {
+    display: none;
+    position: absolute;
+    width: 430px;
+    height: 550px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    color: black;
+    font-size: 24px;
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1500;
+}
+
+.choose {
+    margin-bottom: 15px;
 }
 
 #myCanvas {

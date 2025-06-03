@@ -1,6 +1,7 @@
+//완성한 부분을 삭제해주세요!!!
 //수정 필요할 부분:
-//중지 메뉴 css
-//중지 메뉴 설정 화면 추가 필요
+//중지 메뉴 설정 화면 추가 완료
+//중지 메뉴 설정.메뉴 버튼 클릭시 동작 않음. 
 //게임 화면에서 마우스 클릭시 공이 안 움직임.
 //중지 메뉴 버튼 resume함수와 continue함수 수정 필요.
 //게임 화면 점수 및 라이프 정보 위치 바꿀 필요.
@@ -225,16 +226,14 @@ $(document).ready(function () {
         reset(selectedHouse);
         startGame(selectedHouse);
     });
+    createSettingsElements();
     $('#settingsBtn').click(function () {
+        console.log("Settings button clicked");
         $('#pauseMenu').hide();
         reset(selectedHouse);
         //게임화면에 있는 설정창
+        // $('#settingPause').show();
         document.getElementById('settingPause').style.display = 'block';
-    });
-    $('#menuBtn').click(function () {
-        $('#pauseMenu').hide();
-        reset(selectedHouse);
-        goToMenu();
     });
 
     canvas = document.getElementById("myCanvas");
