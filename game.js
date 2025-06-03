@@ -129,10 +129,8 @@ const goodMagicList = ['impedimenta', 'geminio', 'bombarda', 'lumos'];
 const badMagicList = ['ascendio', 'reparo', 'disillusionment', 'confundo'];
 
 $(document).ready(function () {
-
     hideAll();
     $("#mainStart").show();
-
     $("#gameScreen").on("click", () => { if (!ballMoving && isGameRunning) ballMoving = true; });
     $("#startButton").click(function () {
         hideAll();
@@ -143,7 +141,6 @@ $(document).ready(function () {
 
     $("#storyStart").click(function () {
         hideAll();
-        // $("#chooseHouse").show();
         $('#difficulty').show();
         $("#backButton").show();
         $("#skipButton").show();
@@ -164,14 +161,13 @@ $(document).ready(function () {
             if (!selectedHouse) {
                 selectedHouse = 'house1'; // 기본 기숙사 선택
             }
-        }
+        }//난이도 -> 게임화면
         else if ($('#difficulty').is(':visible')) {
             hideAll();
             if (!selectedHouse) {
-                selectedHouse = 'house1'; // 기본 기숙사 선택
+                selectedHouse = 'house1';
             }
             $("#myCanvas").show();
-
             applyHouseTheme(selectedHouse);
             $('#chooseHouse').hide();
             $('#gameScreen').show();
@@ -186,7 +182,7 @@ $(document).ready(function () {
 
     });
 
-    // 기숙사 -> 난이도 
+    // 기숙사 선택 동적 화면 
     let selectedHouse = null;
     $('#houseSelection .house').click(function () {
         selectedHouse = $(this).find('img').attr('id');
@@ -212,7 +208,7 @@ $(document).ready(function () {
     $("#pauseBtn").click(function () {
         pauseGame();
         resetAll(selectedHouse);
-        document.getElementById('pauseMenu').style.display = 'block';
+        $('#pauseMenu').show();
     });
 
     $('#resumeBtn').click(function () {
@@ -226,10 +222,10 @@ $(document).ready(function () {
         startGame(selectedHouse);
     });
     $('#settingsBtn').click(function () {
-        $('#pauseMenu').hide();
-        reset(selectedHouse);
+        console.log(`click settingBtn`);
         //게임화면에 있는 설정창
-        document.getElementById('settingPause').style.display = 'block';
+        $('#settingPause').show();
+        createSettingsElements();
     });
     $('#menuBtn').click(function () {
         $('#pauseMenu').hide();

@@ -129,8 +129,7 @@ body:fullscreen #container #gameScreen {
     text-shadow: 5px 5px black;
 }
 
-#pauseMenu,
-#settingPause {
+#pauseMenu {
     position: absolute;
     display: flex;
     width: 430px;
@@ -140,7 +139,6 @@ body:fullscreen #container #gameScreen {
     transform: translate(-50%, -50%);
     flex-direction: column;
     align-items: center;
-    gap: 50px;
     cursor: pointer;
     color: black;
     background-color: white;
@@ -149,6 +147,66 @@ body:fullscreen #container #gameScreen {
     border-radius: 10px;
     text-align: center;
     z-index: 1000;
+}
+
+#settingPause {
+    z-index: 2000;
+    position: absolute;
+    display: none;
+    width: 430px;
+    height: 550px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    color: black;
+    background-color: white;
+    font-size: 28px;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#settingPause button {
+    padding: 10px;
+    font-size: 18px;
+    background-color: lightgray;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#settingPause input[type="checkbox"] {
+    transform: scale(1.5);
+}
+
+#settingPause select {
+    padding: 5px;
+    font-size: 18px;
+}
+
+#settingPause.choose {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+#settingPause.choose label,
+#settingPause.choose span {
+    flex: 1;
+    text-align: left;
+}
+
+#settingPause.choose input[type="checkbox"],
+#settingPause.choose button,
+#settingPause.choose select {
+    flex: 1;
+    max-width: 200px;
 }
 
 #pauseMenu h2 {
@@ -506,8 +564,8 @@ option {
     height: 50px;
     cursor: pointer;
     position: absolute;
-    top: 10px;
-    right: 20px;
+    top: 30px;
+    right: 35px;
 }
 
 #gameScreen {

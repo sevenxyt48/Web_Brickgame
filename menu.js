@@ -1,19 +1,19 @@
 //화면 전환 js코드
 
-$(document).ready(function(){
+$(document).ready(function () {
     const bgmList = [
-    "bgm/bgm1.mp3",
-    "bgm/bgm2.mp3",
-    "bgm/bgm3.mp3",
-    "bgm/bgm4.mp3",
+        "bgm/bgm1.mp3",
+        "bgm/bgm2.mp3",
+        "bgm/bgm3.mp3",
+        "bgm/bgm4.mp3",
     ];
 
     // 페이지 열리자마자는 재생이 안돼서 클릭 한 번 해야 재생되도록 해놓음
-    $(document).one('click', function() {
+    $(document).on('click', function () {
         musicObj.playMusic(bgmList[0]);
     });
 
-    $("#changeBGM-select").on("change",function(){  // select가 바뀌면 오디오 변경
+    $("#changeBGM-select").on("change", function () {  // select가 바뀌면 오디오 변경
         const index = parseInt($(this).val());
         if (gameState.isMusicOn) {
             musicObj.playMusic(bgmList[index]);
@@ -27,16 +27,16 @@ $(document).ready(function(){
 
 
     // music 버튼 활성화
-    $('#musicSwitch').on('change', function(){ 
+    $('#musicSwitch').on('change', function () {
         handleMusicToggle(this, bgmList);
     });
 
     // fullscreen 버튼 활성화
-    $('#fullScreenSwitch').on('change', function() {
+    $('#fullScreenSwitch').on('change', function () {
         handleFullScreenToggle(this);
     });
 
-    $('#changeThemeButton').on('click', function() {
+    $('#changeThemeButton').on('click', function () {
         handleChangeTheme();
     });
 });
@@ -84,27 +84,24 @@ function difficultyPage() {
 
 // music 버튼 토글 핸들러
 function handleMusicToggle(checkbox, bgmList) {
-    if (checkbox.checked)
-        {
-            musicObj.playMusic(bgmList[0]);
-        }
-    else if (!checkbox.checked)
-        {
-            musicObj.stopMusic();
-        }
+    if (checkbox.checked) {
+        musicObj.playMusic(bgmList[0]);
+    }
+    else if (!checkbox.checked) {
+        musicObj.stopMusic();
+    }
 }
 
 // 전체화면 토글 핸들러
 function handleFullScreenToggle(checkbox) {
     var gameScreen = document.body;
-    if (checkbox.checked)
-    {
+    if (checkbox.checked) {
         gameScreen.requestFullscreen();
-        
+
         // gameScreen.style.width = "100%";
         // gameScreen.style.height = "100%";
     }
-    else{
+    else {
         document.exitFullscreen();
     }
 }
@@ -120,8 +117,6 @@ function settingPage() {
     musicSwitch.checked = true;
     fullScreenSwitch.checked = !!document.fullscreenElement;
 
-    // // 드롭다운이 열려있으면 닫기
-    // $("#themeDropdown").remove();
     // 기존 드롭다운 제거
     const existingDropdown = document.getElementById('themeDropdown');
     if (existingDropdown) {
@@ -220,8 +215,99 @@ function vControl() {
 }
 
 // 기숙사 설정
-function handleChangeTheme()
-{
+function handleChangeTheme() {
     hideAll();
     $("#chooseHouse").show();
 }
+
+const settingPause = document.getElementById('settingPause');
+
+//게임화면 설정메뉴
+function createSettingsElements() {
+    const container = $('#settingPause');
+    container.empty();
+    container.append('<p>Setting</p>');
+    // Music 체크박스
+    const musicDiv = document.createElement('div');
+    musicDiv.classList.add('choose');
+    const musicLabel = document.createElement('label');
+    musicLabel.setAttribute('for', 'musicSwitchPause');
+    musicLabel.textContent = 'Music';
+    const musicCheckbox = document.createElement('input');
+    musicCheckbox.type = 'checkbox';
+    musicCheckbox.id = 'musicSwitchPause';
+    musicCheckbox.checked = true; // 기본값 ON
+    musicCheckbox.addEventListener('change', e => {
+        if (e.target.checked) {
+            console.log('Music ON');
+            musicObj.playMusic();
+        } else {
+            console.log('Music OFF');
+            musicObj.stopMusic();
+        }
+    });
+    musicDiv.appendChild(musicLabel);
+    musicDiv.appendChild(musicCheckbox);
+    container.append(musicDiv);
+
+    // Sound 체크박스
+    const soundDiv = $('<div>').addClass('choose');
+    const soundLabel = $('<label>').attr('for', 'soundSwitchPause').text('Sound');
+    const soundCheckbox = $('<input>').attr({
+        type: 'checkbox',
+        id: 'soundSwitchPause',
+        checked: gameState.isSoundOn
+    });
+    soundCheckbox.on('change', function () {
+        gameState.isSoundOn = $(this).is(':checked');
+        console.log(`Sound 상태: ${gameState.isSoundOn}`);
+    });
+    soundDiv.append(soundLabel).append(soundCheckbox);
+    container.append(soundDiv);
+
+    // Full Screen 체크박스
+    const fullScreenDiv = document.createElement('div');
+    fullScreenDiv.classList.add('choose');
+    const fullScreenLabel = document.createElement('label');
+    fullScreenLabel.setAttribute('for', 'fullScreenSwitchPause');
+    fullScreenLabel.textContent = 'Full Screen';
+    const fullScreenCheckbox = document.createElement('input');
+    fullScreenCheckbox.type = 'checkbox';
+    fullScreenCheckbox.id = 'fullScreenSwitchPause';
+    fullScreenCheckbox.checked = false;
+    fullScreenCheckbox.addEventListener('change', e => {
+        var gameScreen = document.body;
+        if (e.target.checked) {
+            gameScreen.requestFullscreen();
+        } else {
+            document.exitFullscreen();
+        }
+    });
+    fullScreenDiv.appendChild(fullScreenLabel);
+    fullScreenDiv.appendChild(fullScreenCheckbox);
+    container.append(fullScreenDiv);
+
+    // Change Theme 버튼 수정필요! 테마 선택 페이지로 이동한뒤 다시 설정화면으로 감. 
+    const themeDiv = $('<div>').addClass('choose');
+    const themeLabel = $('<span>').text('Change Theme');
+    const themeButton = $('<button>').attr('id', 'changeThemeButtonPause').text('Click');
+    themeButton.on('click', function () {
+        handleChangeTheme();
+    });
+    themeDiv.append(themeLabel).append(themeButton);
+    container.append(themeDiv);
+
+    // Back 버튼
+    const backDiv = document.createElement('div');
+    backDiv.classList.add('choose');
+    const backButton = document.createElement('button');
+    backButton.id = 'backToPauseMenuBtn';
+    backButton.textContent = 'Back';
+    backButton.addEventListener('click', () => {
+        $('#settingPause').hide();
+        $('#pauseMenu').show();
+    });
+    backDiv.appendChild(backButton);
+    container.append(backDiv);
+}
+
