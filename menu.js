@@ -1,4 +1,5 @@
 //화면 전환 js코드
+
 var music = "";
 var mVol = 0;
 // BGM 리스트
@@ -16,6 +17,7 @@ const bgmList = [
 //         musicObj.playMusic(bgmList[0]);
 //     });
 
+
 //     $("#changeBGM-select").on("change", function () {  // select가 바뀌면 오디오 변경
 //         const index = parseInt($(this).val());
 //         if (gameState.isMusicOn) {
@@ -27,7 +29,6 @@ const bgmList = [
 //         // audio[0].load();
 //         // audio[0].play();
 //     });
-
 
 //     // music 버튼 활성화
 //     $('#musicSwitch').on('change', function () {
@@ -43,6 +44,7 @@ const bgmList = [
 //         handleChangeTheme();
 //     });
 // });
+
 
 
 // 게임 상태 관리 객체
@@ -239,6 +241,7 @@ function hideAll() {
     $("canvas").hide();
     $(".skipButton").hide();
     $("#backButton").hide();
+    // $('#settingPause').hide();
 
 }
 

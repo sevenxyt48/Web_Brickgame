@@ -231,6 +231,7 @@ $(document).ready(function () {
         reset(selectedHouse);
         startGame(selectedHouse);
     });
+    createSettingsElements();
     $('#settingsBtn').click(function () {
         console.log(`click settingBtn`);
         //게임화면에 있는 설정창
@@ -243,6 +244,7 @@ $(document).ready(function () {
         reset(gameLevel);
         goToMenu();
     });
+
 
     canvas = document.getElementById("myCanvas");
     context = canvas.getContext("2d");
