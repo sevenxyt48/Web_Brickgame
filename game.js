@@ -144,7 +144,6 @@ $(document).ready(function () {
 
     $("#storyStart").click(function () {
         hideAll();
-        // $("#chooseHouse").show();
         $('#difficulty').show();
         $("#backButton").show();
         $("#skipButton").show();
@@ -209,7 +208,7 @@ $(document).ready(function () {
         gameInit();
         startGame(selectedHouse);
     });
-
+    createSettingsElements();
     $("#pauseBtn").click(function () {
         pauseGame();
         resetAll(selectedHouse);
@@ -226,7 +225,7 @@ $(document).ready(function () {
         reset(selectedHouse);
         startGame(selectedHouse);
     });
-    createSettingsElements();
+
     $('#settingsBtn').click(function () {
         console.log("Settings button clicked");
         $('#pauseMenu').hide();
