@@ -234,7 +234,7 @@ function hideAll() {
     $("#gameOver").hide();
     $("#pauseMenu").hide();
     $("#settingPause").hide();
-    $("#lives").hide();
+    // $("#lives").hide();
     $("#start").hide();
     $("canvas").hide();
     $(".skipButton").hide();
@@ -380,21 +380,49 @@ function createSettingsElements() {
     container.append($(fullScreenDiv));
 
     // Change Theme 버튼
-    const themeDiv = document.createElement('div');
-    themeDiv.classList.add('choose');
-    styleChooseDiv(themeDiv);
+    const houseDiv = document.createElement('div');
+    houseDiv.classList.add('choose');
+    styleChooseDiv(houseDiv);
 
-    const themeLabel = document.createElement('span');
-    themeLabel.textContent = 'Change Theme';
-    const themeButton = document.createElement('button');
-    themeButton.id = 'changeThemeButtonPause';
-    themeButton.textContent = 'Click';
-    themeButton.addEventListener('click', function () {
-        handleChangeTheme();
+    const houseLabel = document.createElement('label');
+    houseLabel.setAttribute('for', 'houseSelectPause');
+    houseLabel.textContent = 'Select House';
+
+    const houseSelect = document.createElement('select');
+    houseSelect.id = 'houseSelectPause';
+
+    // 기숙사 목록 (id와 표시명)
+    const houses = [
+        { id: 'house1', name: 'House 1' },
+        { id: 'house2', name: 'House 2' },
+        { id: 'house3', name: 'House 3' },
+        { id: 'house4', name: 'House 4' },
+    ];
+
+    houses.forEach(h => {
+        const option = document.createElement('option');
+        option.value = h.id;
+        option.textContent = h.name;
+        houseSelect.appendChild(option);
     });
-    themeDiv.append(themeLabel);
-    themeDiv.appendChild(themeButton);
-    container.append($(themeDiv));
+
+    // 현재 선택된 기숙사(selectedHouse) 값으로 초기화
+    if (typeof selectedHouse !== 'undefined' && selectedHouse !== null) {
+        houseSelect.value = selectedHouse;
+    } else {
+        houseSelect.value = 'house1'; // 기본값
+        selectedHouse = 'house1';
+    }
+
+    houseSelect.addEventListener('change', function () {
+        selectedHouse = this.value;
+        console.log(`기숙사 변경됨: ${selectedHouse}`);
+        applyHouseTheme(selectedHouse); // 배경 변경 함수 호출
+    });
+
+    houseDiv.appendChild(houseLabel);
+    houseDiv.appendChild(houseSelect);
+    container.append($(houseDiv));
 
     // Change BGM select
     const bgmDiv = document.createElement('div');

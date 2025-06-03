@@ -131,9 +131,13 @@ const badMagicList = ['ascendio', 'reparo', 'disillusionment', 'confundo'];
 $(document).ready(function () {
     console.log("Document ready! Music object is safe to use.");
     vControl();
+    $("#lives").hide();
     hideAll();
     $("#mainStart").show();
-    $("#gameScreen").on("click", () => { if (!ballMoving && isGameRunning) ballMoving = true; });
+    $("#gameScreen").on("click", () => {
+        if (!ballMoving && isGameRunning) ballMoving = true;
+        $("#lives").show();
+    });
 
     $("#startButton").click(function () {
 
@@ -243,7 +247,7 @@ $(document).ready(function () {
     canvas = document.getElementById("myCanvas");
     context = canvas.getContext("2d");
     darkR = canvas.width;
-    // updateLives();
+    updateLives(lives);
 
     $(".reTry").on("click", function () {
         stage(gameLevel);
@@ -771,6 +775,7 @@ function goToMenu() {
     // 메인 메뉴 보여주기
     hideAll();
     $("#mainStart").show();
+    $("#skipButton").hide();
 }
 
 //좋은 이벤트 - 공의 속도를 느리게 하는 마법

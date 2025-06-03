@@ -550,9 +550,9 @@ option {
 /* Lives 표시 */
 #lives {
     position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 20;
+    top: 70px;
+    left: 120px;
+    z-index: 1000;
     font-size: 28px;
 }
 
@@ -582,7 +582,14 @@ option {
 }
 
 #gameInfo {
-    font-size: 20px;
+    position: absolute;
+    font-size: 36px;
+    left: 30px;
+    top: 30px;
+    flex-direction: column;
+    display: flex;
+    text-align: left;
+
 }
 
 #gradeSelection .dif.selected h1 {
