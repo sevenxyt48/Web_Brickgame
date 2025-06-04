@@ -17,24 +17,6 @@ const bgmList = [
 
 $(document).ready(function () {
 
-    // 페이지 열리자마자는 재생이 안돼서 클릭 한 번 해야 재생되도록 해놓음
-    // $(document).on('click', function () {
-    //     musicObj.playMusic(bgmList[0]);
-    // });
-
-
-    // $("#changeBGM-select").on("change", function () {  // select가 바뀌면 오디오 변경
-    //     const index = parseInt($(this).val());
-    //     if (gameState.isMusicOn) {
-    //         musicObj.playMusic(bgmList[index]);
-    //     } else {
-    //         musicObj.stopMusic();
-    //     }
-        // audio.attr("src",bgmList[index]);
-        // audio[0].load();
-        // audio[0].play();
-    // });
-
     // music 버튼 활성화
     // $('#musicSwitch').on('change', function () {
     //     handleMusicToggle(this, bgmList);
@@ -58,7 +40,7 @@ const gameState = {
     isSoundOn: true,
     isMusicOn: false,
     isFullScreen: false,
-    currentBgmIndex: 0,  // 추가
+    currentBgmIndex: 0,
 };
 
 // 음악 관리 객체
@@ -70,7 +52,6 @@ const musicObj = {
     playMusic(src) {
         const audio = this.audio;
         if (!audio) {
-            // console.error("bgmAudio element is missing!");
             return;
         }
         if (!src) {
@@ -83,7 +64,6 @@ const musicObj = {
     stopMusic() {
         const audio = this.audio;
         if (!audio) {
-            // console.error("bgmAudio element is missing!");
             return;
         }
         audio.pause();
@@ -286,7 +266,7 @@ function vControl() {
 
         if (musicSwitch.checked)
             musicObj.playMusic(bgmList[index]);
-            console.log(`BGM 변경: ${index+1}`);
+        console.log(`BGM 변경: ${index + 1}`);
     });
 }
 

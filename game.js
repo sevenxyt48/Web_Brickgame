@@ -1,8 +1,6 @@
 //!!!!!!수정 완료한 부분을 삭제해주세요:
-//게임 화면 점수 및 라이프 정보 위치 바꿀 필요.
 //초시 벽돌 수량 조절 필요.
 //credit화면, setting화면 footer추가 필요
-//setting 화면 드럼다운 버튼 활성화 필요
 //게임 클리어, 게임 오버 화면 수정 필요, 버튼 활성화 필요.
 
 //수정 사항:
@@ -277,17 +275,13 @@ $(document).ready(function () {
         $(this).addClass('selected');
 
         const selectedGradeId = $(this).attr('id');
-        if (selectedGradeId === 'grade1') 
-        {
+        if (selectedGradeId === 'grade1') {
             gameLevel = 1;
-        } else if (selectedGradeId == 'grade2')
-        {
+        } else if (selectedGradeId == 'grade2') {
             gameLevel = 2;
-        } else if (selectedGradeId == 'grade3')
-        {
+        } else if (selectedGradeId == 'grade3') {
             gameLevel = 3;
-        } else if (selectedGradeId == 'grade4') 
-        {
+        } else if (selectedGradeId == 'grade4') {
             gameLevel = 4;
         }
         console.log("선택된 난이도: " + gameLevel);
