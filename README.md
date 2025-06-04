@@ -5,7 +5,7 @@
 A. 시작 구조 (index.html)
 메인 메뉴 → 스토리 → 난이도 선택 → 게임 실행.
 
-모든 화면은 <div class="menu">로 구성되어 있으며 hideAll()로 숨기고 필요한 화면만 .show()로 전환.
+모든 화면은 div class="menu"로 구성되어 있으며 hideAll()로 숨기고 필요한 화면만 .show()로 전환.
 
 canvas를 중심으로 게임이 실행됨.
 
