@@ -2,6 +2,8 @@
 //초시 벽돌 수량 조절 필요.
 //credit화면, setting화면 footer추가 필요
 //게임 클리어, 게임 오버 화면 수정 필요, 버튼 활성화 필요.
+//게임 종료할 수가 없음
+//특수 벽돌 이벤트 ???
 
 //수정 사항:
 //-> 설정 들어갈 때마다 상태 초기화되던거 수정
@@ -133,7 +135,7 @@ const badMagicList = ['ascendio', 'reparo', 'disillusionment', 'confundo'];
 
 $(document).ready(function () {
     console.log("Document ready! Music object is safe to use.");
-    vControl();
+
     $("#lives").hide();
     hideAll();
     $("#mainStart").show();
@@ -177,17 +179,11 @@ $(document).ready(function () {
             }
         }//난이도 -> 게임화면
         else if ($('#difficulty').is(':visible')) {
-            hideAll();
             if (!selectedHouse) {
                 selectedHouse = 'house1';
             }
-            $("#myCanvas").show();
-            applyHouseTheme(selectedHouse);
-            $('#chooseHouse').hide();
-            $('#gameScreen').show();
-
-            gameInit(gameLevel);
-            startGame(selectedHouse);
+            if (!gameLevel) gameLevel = 1;
+            stage(gameLevel);
         }
     });
     $("#houseSelect").click(function () {
@@ -206,19 +202,12 @@ $(document).ready(function () {
 
     // 학년 선택 버튼 클릭 시 -> 게임 화면
     $('#gradeSelect').click(function () {
+
         if (!gameLevel) gameLevel = 1;
         if (!selectedHouse) {
             selectedHouse = 'house1';
         }
-
-        hideAll();
-        $("#myCanvas").show();
-
-        applyHouseTheme(selectedHouse);
-        $('#chooseHouse').hide();
-        $('#gameScreen').show();
-        gameInit(gameLevel);
-        startGame(selectedHouse);
+        stage(gameLevel);
     });
     createSettingsElements();
     $("#pauseBtn").click(function () {
@@ -245,15 +234,11 @@ $(document).ready(function () {
         createSettingsElements();
     });
     $('#menuBtn').click(function () {
-        console.log("Menu button clicked");
-        // $('#pauseMenu').hide();
         reset(gameLevel);
         updateLives(lives);
         $('#gradeSelection .dif').removeClass('selected');
-        // resetAll();
         goToMenu();
     });
-
 
     canvas = document.getElementById("myCanvas");
     context = canvas.getContext("2d");
@@ -269,7 +254,9 @@ $(document).ready(function () {
         console.log(`Start next stage`);
         stage(++gameLevel);
     });
-
+    $('#backToMain').click(function () {
+        goToMenu();
+    });
     $('#gradeSelection .dif').click(function () {
         $('#gradeSelection .dif').removeClass('selected');
         $(this).addClass('selected');
@@ -340,28 +327,23 @@ $(document).ready(function () {
 });
 
 //난이도별 함수
-// function stage(n) {
-//     console.log(`Current stage:${n}`);
-//     gameLevel = n;
-//     // setDifficulty(n); // 단계 설정
-//     reset(n);
-//     switch (n) {
-//         case 1:
-//             playEasy();
-//             break;
-//         case 2:
-//             musicObj.playNormal();
-//             break;
-//         case 3:
-//             musicObj.playHard();
-//             break;
-//         case 4:
-//             musicObj.playHard();
-//             break;
-//         default:
-//     }
-//     playPage();
-// }
+function stage(n) {
+    console.log(`Current stage:${n}`);
+    gameLevel = n;
+    reset(gameLevel);
+    $("#lives").show();
+
+    hideAll();
+    $("#myCanvas").show();
+    $("#gameScreen").show();
+
+    if (!selectedHouse) {
+        selectedHouse = "house1";
+    }
+    applyHouseTheme(selectedHouse);
+
+    startGame(selectedHouse);
+}
 
 //난이도 별 벽돌 수
 //공 속도(추가 필요)
@@ -443,6 +425,11 @@ function reset(difficulty) {
     lives = 3;
     ballMoving = false;
     isGameRunning = false;
+    isGameAllClear = false;
+
+    // 캔버스 초기화
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
     // 공 초기화
     resetBall();
     // 벽돌 초기화
@@ -450,8 +437,7 @@ function reset(difficulty) {
     // 점수 및 목숨 표시 업데이트
     updateScore(totalScore);
     updateLives(lives);
-    // 캔버스 초기화
-    context.clearRect(0, 0, canvas.width, canvas.height);
+
 }
 
 function resetAll() {
@@ -468,19 +454,17 @@ function resetAll() {
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-// isGameOver 함수 추가
+// isGameOver
 function isGameOver() {
     return lives <= 0;
 }
 function gameLoop() {
+    if (!isGameRunning) return;
     updateGame();
     drawGame(context);
 
-    if (!isGameOver()) {
-        requestAnimationFrame(gameLoop);
-    } else {
-        gameOver();
-    }
+    requestAnimationFrame(gameLoop);
+
 }
 
 function gameInit(gameLevel) {
@@ -534,18 +518,32 @@ function continueGame() {
     animaitionFrameId = requestAnimationFrame(gameLoop);
 }
 
-//전체 게임 종료
+//전체 게임 종료(4단계 다 클리어)
 function gameOver() {
     pauseGame();
-    isGameAllClear = false;
+    isGameAllClear = true;
+    //score visible
+    document.querySelector('#gameOver .score').textContent = 'Score: ' + totalScore;
+
     $('#gameOver').show();
 }
+//게임 클리어(승리) 다음학년으로 
 function gameClear() {
     pauseGame();
-    isGameAllClear = true;
+    isGameAllClear = false;
+    //score visible
+    document.querySelector('#win .score').textContent = 'Score: ' + totalScore;
     $('#win').show();
 }
+//게임 클리어(실패 Lives=0) 다음학년으로
+function gameFail() {
+    pauseGame();
+    isGameAllClear = false;
+    //score visible
+    document.querySelector('#fail .score').textContent = 'Score: ' + totalScore;
 
+    $('#fail').show();
+}
 function nextGrade() {
     // 다음 학년 시작 로직
     document.getElementById('win').style.display = 'none';
@@ -610,6 +608,10 @@ function updateGame() {
                 resetBall();   // balls 배열을 재생성하거나, 공을 리셋하는 함수로 이동
                 updateLives(lives);
                 ballMoving = false; // 공 멈추고, 다음 클릭 때 재발사
+
+                if (lives <= 0) {
+                    gameFail();//실패 처리
+                }
             }
         }
     });
@@ -658,6 +660,15 @@ function updateGame() {
 
     updateScore(totalScore);
     // updateLives(lives);
+
+    const remainingBricks = brick.filter(b => b.alive);
+    if (remainingBricks.length === 0) {
+        if (gameLevel < 4) {
+            gameClear();//게임 클리어 (다음 학년으로)
+        } else {
+            gameOver();//4단계 종료 시 졸업 화면
+        }
+    }
 }
 // 초기 벽돌설정
 function initBricks(difficulty) {
@@ -734,10 +745,6 @@ function drawGame(ctx) {
     drawBall(ctx);
     drawPaddle(ctx);
     drawBricks(ctx);
-    // drawLives();
-    // drawScore();
-
-
 
 }
 
@@ -770,20 +777,6 @@ function drawBricks(ctx) {
     }
 }
 
-
-// 점수 위치
-function drawScore() {
-    context.font = "28px";
-    context.fillStyle = "white";
-    context.fillText("Score: " + Score, 30, 40); // X=30, Y=40
-}
-
-// 라이프 위치
-function drawLives() {
-    context.font = "38px";
-    context.fillStyle = "white";
-    context.fillText("Lives: " + lives, 30, 40);
-}
 function mouseMoveHandler(e) {
     const relativeX = e.clientX - canvas.getBoundingClientRect().left;
     if (relativeX > 0 && relativeX < canvas.width) {
@@ -800,6 +793,7 @@ function goToMenu() {
     hideAll();
     $("#mainStart").show();
     $("#skipButton").hide();
+
 }
 
 //좋은 이벤트 - 공의 속도를 느리게 하는 마법

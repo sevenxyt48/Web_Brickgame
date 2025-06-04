@@ -617,5 +617,61 @@ option {
     color: darkgray;
     transform: scale(1.05);
     /* 선택됐을 때 표시할 색상 */
-    /* 필요하다면 font-weight, text-shadow 등 추가 가능 */
+}
+
+.clearButton {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    position: absolute;
+    transform: translateX(-50%);
+    bottom: 40px;
+    left: 50%;
+    z-index: 1000;
+}
+
+.clearButton h1 {
+    font-size: 32px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 10px 30px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+    white-space: nowrap;
+}
+
+.clearButton h1:hover {
+    transform: scale(1.05);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.gradeClear {
+    font-size: 48px;
+    color: white;
+    text-shadow: 3px 3px 8px black;
+    margin-bottom: 20px;
+}
+
+.score {
+    font-size: 36px;
+    color: white;
+    margin-top: 80px;
+    margin-bottom: 120px;
+    text-shadow: 2px 2px 4px black;
+}
+
+#win,
+#fail,
+#gameOver {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    width: 1280px;
+    height: 840px;
+    z-index: 2000;
 }
