@@ -1,13 +1,18 @@
 //!!!!!!수정 완료한 부분을 삭제해주세요:
-//중지 메뉴 버튼 resume함수와 continue함수 수정 필요.
 //게임 화면 점수 및 라이프 정보 위치 바꿀 필요.
 //초시 벽돌 수량 조절 필요.
 //credit화면, setting화면 footer추가 필요
 //setting 화면 드럼다운 버튼 활성화 필요
 //게임 클리어, 게임 오버 화면 수정 필요, 버튼 활성화 필요.
 
-//수정 설명:
-//게임 초시 상태에는 music은 닫은상태고, 플레이어가 키는 동작해야 music자동 생성합니다.
+//수정 사항:
+//-> 설정 들어갈 때마다 상태 초기화되던거 수정
+//-> 난이도 선택하고 게임 진행될 때 발생하던 이상?한 오류 수정
+//-> lives 반복 업데이트 수정
+//-> restart 오류 수정
+//-> continue 버튼 활성화
+
+
 
 //게임 로직 js코드
 var canvas;
@@ -157,9 +162,11 @@ $(document).ready(function () {
 
     $("#settingsButton").click(settingPage);
     $("#creditButton").click(creditPage);
+
     $("#backButton").click(function () {
         $("#mainStart").show();
         $("#backButton").hide();
+        $("#skipButton").hide();
     });
 
     $("#skipButton").click(function () {
@@ -180,7 +187,8 @@ $(document).ready(function () {
             applyHouseTheme(selectedHouse);
             $('#chooseHouse').hide();
             $('#gameScreen').show();
-            gameInit();
+
+            gameInit(gameLevel);
             startGame(selectedHouse);
         }
     });
@@ -211,24 +219,24 @@ $(document).ready(function () {
         applyHouseTheme(selectedHouse);
         $('#chooseHouse').hide();
         $('#gameScreen').show();
-        gameInit();
+        gameInit(gameLevel);
         startGame(selectedHouse);
     });
     createSettingsElements();
     $("#pauseBtn").click(function () {
         pauseGame();
-        resetAll(selectedHouse);
+        // resetAll(selectedHouse);
         $('#pauseMenu').show();
     });
 
-    $('#resumeBtn').click(function () {
+    $('#continueBtn').click(function () {
         $('#pauseMenu').hide();
-        resumeGame();
+        continueGame();
     });
 
     $('#restartBtn').click(function () {
         $('#pauseMenu').hide();
-        reset(selectedHouse);
+        reset(gameLevel);
         startGame(selectedHouse);
     });
 
@@ -240,8 +248,11 @@ $(document).ready(function () {
     });
     $('#menuBtn').click(function () {
         console.log("Menu button clicked");
-        $('#pauseMenu').hide();
+        // $('#pauseMenu').hide();
         reset(gameLevel);
+        updateLives(lives);
+        $('#gradeSelection .dif').removeClass('selected');
+        // resetAll();
         goToMenu();
     });
 
@@ -249,8 +260,10 @@ $(document).ready(function () {
     canvas = document.getElementById("myCanvas");
     context = canvas.getContext("2d");
     darkR = canvas.width;
-    updateLives(lives);
+    // updateLives(lives);
 
+
+    // stage 안쓸거면 여기 수정해야 할거같은데
     $(".reTry").on("click", function () {
         stage(gameLevel);
     });
@@ -262,20 +275,36 @@ $(document).ready(function () {
     $('#gradeSelection .dif').click(function () {
         $('#gradeSelection .dif').removeClass('selected');
         $(this).addClass('selected');
+
+        const selectedGradeId = $(this).attr('id');
+        if (selectedGradeId === 'grade1') 
+        {
+            gameLevel = 1;
+        } else if (selectedGradeId == 'grade2')
+        {
+            gameLevel = 2;
+        } else if (selectedGradeId == 'grade3')
+        {
+            gameLevel = 3;
+        } else if (selectedGradeId == 'grade4') 
+        {
+            gameLevel = 4;
+        }
+        console.log("선택된 난이도: " + gameLevel);
     });
 
-    $("#grade1").click(function () {
-        stage(1);
-    });
-    $("#grade2").click(function () {
-        stage(2);
-    });
-    $("#grade3").click(function () {
-        stage(3);
-    });
-    $("#grade4").click(function () {
-        stage(4);
-    });
+    // $("#grade1").click(function () {
+    //     stage(1);
+    // });
+    // $("#grade2").click(function () {
+    //     stage(2);
+    // });
+    // $("#grade3").click(function () {
+    //     stage(3);
+    // });
+    // $("#grade4").click(function () {
+    //     stage(4);
+    // });
 
     //패들 이동 코드
     $(document).mousemove(function (e) {
@@ -306,7 +335,7 @@ $(document).ready(function () {
         }
         paddleX = mX; // 마우스 위치에 따라 패들 이동
         // 새로운 패들 위치 그리기
-        drawPaddle();
+        // drawPaddle();
     });
     canvas.addEventListener("click", function () {
         if (!ballMoving && isGameRunning) {
@@ -317,32 +346,28 @@ $(document).ready(function () {
 });
 
 //난이도별 함수
-function stage(n) {
-    console.log(`Current stage:${n}`);
-    gameLevel = n;
-    // setDifficulty(n); // 단계 설정
-    reset(n);
-    switch (n) {
-        case 1:
-            musicObj.stopMusic();
-            musicObj.playEasy();
-            break;
-        case 2:
-            musicObj.stopMusic();
-            musicObj.playNormal();
-            break;
-        case 3:
-            musicObj.stopMusic();
-            musicObj.playHard();
-            break;
-        case 4:
-            musicObj.stopMusic();
-            musicObj.playHard();
-            break;
-        default:
-    }
-    playPage();
-}
+// function stage(n) {
+//     console.log(`Current stage:${n}`);
+//     gameLevel = n;
+//     // setDifficulty(n); // 단계 설정
+//     reset(n);
+//     switch (n) {
+//         case 1:
+//             playEasy();
+//             break;
+//         case 2:
+//             musicObj.playNormal();
+//             break;
+//         case 3:
+//             musicObj.playHard();
+//             break;
+//         case 4:
+//             musicObj.playHard();
+//             break;
+//         default:
+//     }
+//     playPage();
+// }
 
 //난이도 별 벽돌 수
 //공 속도(추가 필요)
@@ -439,13 +464,12 @@ function resetAll() {
     clearInterval(drawInterval);
     // document.getElementById('pauseMenu').style.display = 'none';
     totalScore = 0;
-
-    lives = 3;
-    balls = [];
-    brick = [];
     isBrickMoving = false;
     isGameRunning = false;
     isGameAllClear = false;
+    lives = 3;
+    // balls = [];
+    brick = [];
     $("#lives").hide();
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
@@ -465,7 +489,7 @@ function gameLoop() {
     }
 }
 
-function gameInit() {
+function gameInit(gameLevel) {
     totalScore = 0;
     lives = 3;
     // 캔버스 초기화 (한 번만 생성되도록 조건 넣어도 됨)
@@ -490,26 +514,30 @@ function startGame(house) {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     applyHouseTheme(house);
-    gameInit();
+    gameInit(gameLevel);
 
 }
+
+let animaitionFrameId = null;
 
 function pauseGame() {
     // 일시정지 기능 구현 (애니메이션 중지 등)
     isGameRunning = false;
     isBrickMoving = false;
     ballMoving = false;
-    clearInterval(drawInterval);
-    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    // clearInterval(drawInterval);
+    // context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 //pause에서 continue 게임 함수
-function resumeGame() {
+function continueGame() {
     document.getElementById('pauseMenu').style.display = 'none';
     isGameRunning = true;
     isBrickMoving = true;
     ballMoving = true;
-    requestAnimationFrame(gameLoop);
+    // drawBricks(context);
+    animaitionFrameId = requestAnimationFrame(gameLoop);
 }
 
 //전체 게임 종료
@@ -635,7 +663,7 @@ function updateGame() {
     }
 
     updateScore(totalScore);
-    updateLives(lives);
+    // updateLives(lives);
 }
 // 초기 벽돌설정
 function initBricks(difficulty) {
@@ -704,10 +732,10 @@ function getRandomFrom(list) {
 
 // 게임 그리기 함수
 function drawGame(ctx) {
-    if (!isGameRunning) {
-        console.log(`그리기 거부`)
-        return; // 게임이 중지되면 그리지 않음
-    }
+    // if (!isGameRunning) {
+    //     console.log(`그리기 거부`);
+    //     return; // 게임이 중지되면 그리지 않음
+    // }
     ctx.clearRect(0, 0, 1280, 840);
     drawBall(ctx);
     drawPaddle(ctx);

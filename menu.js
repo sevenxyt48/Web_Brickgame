@@ -1,3 +1,8 @@
+//수정사항:
+//-> change bgm 오류 해결
+//-> change theme 오류 해결
+
+
 //화면 전환 js코드
 
 var music = "";
@@ -10,41 +15,40 @@ const bgmList = [
     "bgm/bgm4.mp3"
 ];
 
-// $(document).ready(function () {
+$(document).ready(function () {
 
-//     // 페이지 열리자마자는 재생이 안돼서 클릭 한 번 해야 재생되도록 해놓음
-//     $(document).on('click', function () {
-//         musicObj.playMusic(bgmList[0]);
-//     });
+    // 페이지 열리자마자는 재생이 안돼서 클릭 한 번 해야 재생되도록 해놓음
+    // $(document).on('click', function () {
+    //     musicObj.playMusic(bgmList[0]);
+    // });
 
 
-//     $("#changeBGM-select").on("change", function () {  // select가 바뀌면 오디오 변경
-//         const index = parseInt($(this).val());
-//         if (gameState.isMusicOn) {
-//             musicObj.playMusic(bgmList[index]);
-//         } else {
-//             musicObj.stopMusic();
-//         }
-//         // audio.attr("src",bgmList[index]);
-//         // audio[0].load();
-//         // audio[0].play();
-//     });
+    // $("#changeBGM-select").on("change", function () {  // select가 바뀌면 오디오 변경
+    //     const index = parseInt($(this).val());
+    //     if (gameState.isMusicOn) {
+    //         musicObj.playMusic(bgmList[index]);
+    //     } else {
+    //         musicObj.stopMusic();
+    //     }
+        // audio.attr("src",bgmList[index]);
+        // audio[0].load();
+        // audio[0].play();
+    // });
 
-//     // music 버튼 활성화
-//     $('#musicSwitch').on('change', function () {
-//         handleMusicToggle(this, bgmList);
-//     });
+    // music 버튼 활성화
+    // $('#musicSwitch').on('change', function () {
+    //     handleMusicToggle(this, bgmList);
+    // });
 
-//     // fullscreen 버튼 활성화
-//     $('#fullScreenSwitch').on('change', function () {
-//         handleFullScreenToggle(this);
-//     });
+    // fullscreen 버튼 활성화
+    // $('#fullScreenSwitch').on('change', function () {
+    //     handleFullScreenToggle(this);
+    // });
 
-//     $('#changeThemeButton').on('click', function () {
-//         handleChangeTheme();
-//     });
-// });
-
+    $('#changeThemeButton').on('click', function () {
+        handleChangeTheme();
+    });
+});
 
 
 // 게임 상태 관리 객체
@@ -66,7 +70,7 @@ const musicObj = {
     playMusic(src) {
         const audio = this.audio;
         if (!audio) {
-            console.error("bgmAudio element is missing!");
+            // console.error("bgmAudio element is missing!");
             return;
         }
         if (!src) {
@@ -79,7 +83,7 @@ const musicObj = {
     stopMusic() {
         const audio = this.audio;
         if (!audio) {
-            console.error("bgmAudio element is missing!");
+            // console.error("bgmAudio element is missing!");
             return;
         }
         audio.pause();
@@ -141,8 +145,8 @@ function settingPage() {
     $("#backButton").show();
 
     // 상태 초기화
-    soundSwitch.checked = true;
-    musicSwitch.checked = false;
+    // soundSwitch.checked = true;
+    // musicSwitch.checked = false;
     fullScreenSwitch.checked = !!document.fullscreenElement;
 
     // 기존 드롭다운 제거
@@ -236,12 +240,12 @@ function hideAll() {
     $("#gameOver").hide();
     $("#pauseMenu").hide();
     $("#settingPause").hide();
-    // $("#lives").hide();
+    $("#lives").hide();
     $("#start").hide();
     $("canvas").hide();
     $(".skipButton").hide();
     $("#backButton").hide();
-    // $('#settingPause').hide();
+    $('#settingPause').hide();
 
 }
 
@@ -279,12 +283,10 @@ function vControl() {
     const bgmSelect = document.getElementById('changeBGM-select');
     bgmSelect.addEventListener('change', function () {
         const index = parseInt(this.value);
-        gameState.currentBgmIndex = index;  // 상태 갱신
-        if (gameState.isMusicOn) {
+
+        if (musicSwitch.checked)
             musicObj.playMusic(bgmList[index]);
-        } else {
-            musicObj.stopMusic();
-        }
+            console.log(`BGM 변경: ${index+1}`);
     });
 }
 
