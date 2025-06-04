@@ -378,10 +378,10 @@ function createSettingsElements() {
 
     // 기숙사 목록 (id와 표시명)
     const houses = [
-        { id: 'house1', name: 'House 1' },
-        { id: 'house2', name: 'House 2' },
-        { id: 'house3', name: 'House 3' },
-        { id: 'house4', name: 'House 4' },
+        { id: 'house1', name: 'Gryffindor' },
+        { id: 'house2', name: 'Slytherin' },
+        { id: 'house3', name: 'Hufflepuff' },
+        { id: 'house4', name: 'Ravencelaw' },
     ];
 
     houses.forEach(h => {
