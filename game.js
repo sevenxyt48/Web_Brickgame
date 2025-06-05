@@ -42,9 +42,11 @@ var startY = 50; // 벽돌 시작 Y 위치 (캔버스 위쪽에서 떨어진 거
 
 // 패들
 var paddleWidth = 400; // 너비
+var originalPaddleWidth = paddleWidth;
 var paddleHeight = 50; // 높이
 var paddleX = 0; // 초기 x 좌표
 var paddleY = 790; // 초기 y 좌표 (캔버스 바닥에서 약간 위)
+
 
 var balls = []; // 공의 초기 위치와 속도
 var ballNum = 0; // 공 개수
@@ -126,7 +128,7 @@ const levelSettings = {
 
 // 마법 리스트
 const goodMagicList = ['impedimenta', 'geminio', 'bombarda', 'lumos'];
-const badMagicList = ['ascendio', 'reparo', 'disillusionment', 'confundo'];
+const badMagicList = ['ascendio', 'reparo', 'disillusionment', 'reducio'];
 
 $(document).ready(function () {
     console.log("Document ready! Music object is safe to use.");
@@ -726,9 +728,10 @@ function setMagic(magic, brickX, brickY) {
             disillusionment();
             console.log('disillusionment');
             break;
-        // case "confundo":
-        //     confundo();
-        //     break;
+        case "reducio":
+            reducio();
+            console.log('reducio');
+            break;
         default:
             break;
     }
@@ -756,10 +759,13 @@ function initBricks(difficulty) {
 
     if (difficulty == 1) {
         goodList = ['impedimenta', 'geminio', 'bombarda'];
-        badList = ['ascendio', 'reparo', 'disillusionment', 'confundo'];
+        badList = ['ascendio', 'reparo', 'disillusionment', 'reducio'];
     } else {
-        goodList = ['impedimenta', 'geminio', 'bombarda', 'lumos'];
-        badList = ['ascendio', 'reparo', 'disillusionment', 'confundo'];
+        // goodList = ['impedimenta', 'geminio', 'bombarda', 'lumos'];
+        // badList = ['ascendio', 'reparo', 'disillusionment', 'reducio'];
+
+        goodList = [, 'geminio', 'bombarda', 'lumos'];
+        badList = [, 'reparo', , 'reducio'];
     }
 
     for (let row = 0; row < brickRow; row++) {
@@ -967,9 +973,15 @@ function disillusionment() {
     }
 }
 
-//나쁜 이벤트 - 벽돌 위치 변경 마법
-function confundo() {
-
+//나쁜 이벤트 - 패들 사이 변경 마법
+function reducio() {
+    if(originalPaddleWidth > paddleWidth) return;
+    paddleWidth = originalPaddleWidth * 0.5;
+    drawPaddle(context);
+    setTimeout(() => {
+        paddleWidth = originalPaddleWidth;
+        drawPaddle(context);
+    }, 10000);
 }
 
 //레벨2부터 점점 어두워지는 화면 구현
