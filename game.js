@@ -487,6 +487,11 @@ function startGame(house) {
     applyHouseTheme(house);
     gameInit(gameLevel);
 
+    if(gameLevel>=2){
+        lumos(gameLevel);
+    }
+
+
     if(!animationFrameId){
         animationFrameId = requestAnimationFrame(gameLoop);
     }
@@ -790,6 +795,7 @@ function drawGame(ctx) {
     drawBall(ctx);
     drawPaddle(ctx);
     drawBricks(ctx);
+    darkness(ctx);
 
 }
 
@@ -928,7 +934,7 @@ function disillusionment() {
     for (let i = 0; i < brick.length; i++) {
         setTimeout(() => {
             brick[i].opacity = 1.0;
-        }, 30000)
+        }, 10000)
     }
 }
 
@@ -941,15 +947,15 @@ function confundo() {
 function nox(gameLevel) { // level을 시작할 때 각 level을 받아 2~4 사이 레벨일 때만 nox함수 호출.
     let speed;
     switch (gameLevel) {
-        case 2: speed = 1; break;
-        case 3: speed = 2; break;
-        case 4: speed = 3; break;
+        case 2: speed = 0.5; break;
+        case 3: speed = 1; break;
+        case 4: speed = 1.5; break;
         default: speed = 0; break;
     }
 
     function reducedVisibility() {
         darkR -= speed;
-        if (darkR > 50) {
+        if (darkR > paddleWidth) {
             requestAnimationFrame(reducedVisibility);
         }
     }
@@ -959,8 +965,8 @@ function nox(gameLevel) { // level을 시작할 때 각 level을 받아 2~4 사�
 function darkness(context) { // 매 프레임마다 호출하여 실시간으로 어두워질 수 있도록.
     if (gameLevel < 2) return;
 
-    const centerX = paddleX + paddleWidth / 2; // paddleX에 (canvas.width-paddleWidth)/2 들어있다 가정. 영웅이 push하면 그 변수 따라 바꿀게요
-    const centerY = paddleY + paddleHeight / 2;
+    const centerX = paddleX; // paddleX에 (canvas.width-paddleWidth)/2 들어있다 가정. 영웅이 push하면 그 변수 따라 바꿀게요
+    const centerY = paddleY;
 
     context.save();
     context.fillStyle = 'rgba(0,0,0,0.8)'; // 반투명(80%)한 어둠
