@@ -718,9 +718,10 @@ function setMagic(magic, brickX, brickY) {
             ascendio();
             console.log('ascendio');
             break;
-        // case "reparo":
-        //     reparo();
-        //     break;
+        case "reparo":
+            reparo();
+            console.log('reparo');
+            break;
         case "disillusionment":
             disillusionment();
             console.log('disillusionment');
@@ -935,7 +936,24 @@ function ascendio() { //조금 마법 이름이 기능이랑 조금 다른데 �
 
 //나쁜 이벤트 - 깨진 벽돌 중에 일부 회복(수리 마법)
 function reparo() {
+    // 필요한 것
+    // 깨진 블럭의 개수
+    var nonAliveNum = 0;
+    var nonAliveBricks=[];
+    for(var index = 0;  index < brick.length; index++){
+        if(!brick[index].alive){ 
+            nonAliveNum++;
+            nonAliveBricks.push(index);
+             }
+    }
+    shuffle(nonAliveBricks);
+var repairNum = Math.min(
+    Math.floor(Math.random() * (nonAliveNum + 1)),
+    nonAliveBricks.length);
 
+    for(var index = 0; index < repairNum; index++){
+        brick[nonAliveBricks[index]].alive = true;
+    }
 }
 
 //나쁜 이벤트 - 벽돌을 투명하게 하는 마법
