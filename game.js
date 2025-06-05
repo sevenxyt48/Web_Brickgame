@@ -178,7 +178,15 @@ $(document).ready(function () {
                 selectedHouse = 'house1';
             }
             if (!gameLevel) gameLevel = 1;
-            stage(gameLevel);
+            // stage(gameLevel);
+            hideAll();
+        $("#myCanvas").show();
+
+        applyHouseTheme(selectedHouse);
+        $('#chooseHouse').hide();
+        $('#gameScreen').show();
+        gameInit(gameLevel);
+        startGame(selectedHouse);
         }
     });
     $("#houseSelect").click(function () {
@@ -202,7 +210,15 @@ $(document).ready(function () {
         if (!selectedHouse) {
             selectedHouse = 'house1';
         }
-        stage(gameLevel);
+        // stage(gameLevel);
+        hideAll();
+        $("#myCanvas").show();
+
+        applyHouseTheme(selectedHouse);
+        $('#chooseHouse').hide();
+        $('#gameScreen').show();
+        gameInit(gameLevel);
+        startGame(selectedHouse);
     });
     createSettingsElements();
     $("#pauseBtn").click(function () {
@@ -484,6 +500,10 @@ function startGame(house) {
 
     applyHouseTheme(house);
     gameInit(gameLevel);
+
+    if(gameLevel >= 2){
+        lumos(gameLevel);
+    }
 
     if (!animationFrameId) {
         animationFrameId = requestAnimationFrame(gameLoop);
