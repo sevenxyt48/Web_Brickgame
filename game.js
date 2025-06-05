@@ -35,7 +35,7 @@ function Brick(x, y, width, height, type, magic) {
     this.magic = magic;
     this.alive = true; // 벽돌의 깨짐 유무 표시. true:존재 false:깨짐
     this.opacity = 1.0 // 벽돌 투명해지기 마법을 위한 요소. 처음엔 전부 불투명명
-}x
+};
 
 var startX = 0; // 벽돌 시작 X 위치 조정 가능
 var startY = 50; // 벽돌 시작 Y 위치 (캔버스 위쪽에서 떨어진 거리)
@@ -621,7 +621,7 @@ function updateGame() {
                 ball.y = paddleY - ball.r - 1;
 
                 // 고정 속도(currentSpeed)로 방향만 재설정
-                ball.vX = currentSpeed * Math.sin(bounceAngle);
+                ball.vX =ball.vX * Math.sin(bounceAngle);
                 ball.vY = -Math.abs(currentSpeed * Math.cos(bounceAngle));
             }
             else if (ball.y + ball.r > canvas.height) {
