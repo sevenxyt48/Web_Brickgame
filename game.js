@@ -761,11 +761,8 @@ function initBricks(difficulty) {
         goodList = ['impedimenta', 'geminio', 'bombarda'];
         badList = ['ascendio', 'reparo', 'disillusionment', 'reducio'];
     } else {
-        // goodList = ['impedimenta', 'geminio', 'bombarda', 'lumos'];
-        // badList = ['ascendio', 'reparo', 'disillusionment', 'reducio'];
-
-        goodList = [, 'geminio', 'bombarda', 'lumos'];
-        badList = [, 'reparo', , 'reducio'];
+        goodList = ['impedimenta', 'geminio', 'bombarda', 'lumos'];
+        badList = ['ascendio', 'reparo', 'disillusionment', 'reducio'];
     }
 
     for (let row = 0; row < brickRow; row++) {
