@@ -38,7 +38,7 @@ function Brick(x, y, width, height, type, magic) {
 };
 
 var startX = 0; // 벽돌 시작 X 위치 조정 가능
-var startY = 50; // 벽돌 시작 Y 위치 (캔버스 위쪽에서 떨어진 거리)
+var startY = 120; // 벽돌 시작 Y 위치 (캔버스 위쪽에서 떨어진 거리)
 
 // 패들
 var paddleWidth = 400; // 너비
@@ -182,13 +182,13 @@ $(document).ready(function () {
             if (!gameLevel) gameLevel = 1;
             // stage(gameLevel);
             hideAll();
-        $("#myCanvas").show();
+            $("#myCanvas").show();
 
-        applyHouseTheme(selectedHouse);
-        $('#chooseHouse').hide();
-        $('#gameScreen').show();
-        gameInit(gameLevel);
-        startGame(selectedHouse);
+            applyHouseTheme(selectedHouse);
+            $('#chooseHouse').hide();
+            $('#gameScreen').show();
+            gameInit(gameLevel);
+            startGame(selectedHouse);
         }
     });
     $("#houseSelect").click(function () {
@@ -285,19 +285,6 @@ $(document).ready(function () {
         console.log("선택된 난이도: " + gameLevel);
     });
 
-    // $("#grade1").click(function () {
-    //     stage(1);
-    // });
-    // $("#grade2").click(function () {
-    //     stage(2);
-    // });
-    // $("#grade3").click(function () {
-    //     stage(3);
-    // });
-    // $("#grade4").click(function () {
-    //     stage(4);
-    // });
-
     //패들 이동 코드
     $(document).mousemove(function (e) {
         if (!isGameRunning) return;  // 게임 중지 시 패들 이동 막기
@@ -355,13 +342,6 @@ function stage(n) {
 
     startGame(selectedHouse);
 }
-
-//난이도 별 벽돌 수
-//공 속도(추가 필요)
-// function setDifficulty(level) {
-//     brickRow = level + 2;
-//     brickColumn = 5;
-// }
 
 function updateScore(score) {
     document.getElementById('score').textContent = 'Score: ' + score;
@@ -503,7 +483,7 @@ function startGame(house) {
     applyHouseTheme(house);
     gameInit(gameLevel);
 
-    if(gameLevel >= 2){
+    if (gameLevel >= 2) {
         lumos(gameLevel);
     }
 
@@ -566,12 +546,6 @@ function gameFail() {
     document.querySelector('#fail .score').textContent = 'Score: ' + totalScore;
 
     $('#fail').show();
-}
-function nextGrade() {
-    // 다음 학년 시작 로직
-    document.getElementById('win').style.display = 'none';
-    document.getElementById('gameScreen').style.display = 'block';
-    startNextStage(); // 새 스테이지 초기화
 }
 
 // 단일 공 객체
@@ -757,7 +731,7 @@ function initBricks(difficulty) {
     const setting = levelSettings[difficulty];
     brickRow = setting.rows;
     brickColumn = setting.cols;
-    brickWidth = (canvas.width - (brickColumn - 1) * brickGapX) / brickColumn;
+    brickWidth = 200;
     brickHeight = 30;
     brick = [];
 
@@ -779,6 +753,9 @@ function initBricks(difficulty) {
         goodList = ['impedimenta', 'geminio', 'bombarda', 'lumos'];
         badList = ['ascendio', 'reparo', 'disillusionment', 'reducio'];
     }
+    // 화면 중앙 정렬 계산
+    const totalWidth = brickColumn * (brickWidth + brickGapX) - brickGapX;
+    const startX = (canvas.width - totalWidth) / 2;
 
     for (let row = 0; row < brickRow; row++) {
         for (let col = 0; col < brickColumn; col++) {
@@ -800,6 +777,7 @@ function initBricks(difficulty) {
             brick.push(new Brick(x, y, brickWidth, brickHeight, type, magic));
         }
     }
+
 }
 
 function shuffle(array) {
@@ -959,21 +937,21 @@ function reparo() {
     // 필요한 것
     // 깨진 블럭의 개수
     var nonAliveNum = 0;
-    var nonAliveBricks=[];
-    for(var index = 0;  index < brick.length; index++){
-        if(brick[index].magic != "reparo"){
-            if(!brick[index].alive){ 
+    var nonAliveBricks = [];
+    for (var index = 0; index < brick.length; index++) {
+        if (brick[index].magic != "reparo") {
+            if (!brick[index].alive) {
                 nonAliveNum++;
                 nonAliveBricks.push(index);
-             }
-         }
+            }
+        }
     }
     shuffle(nonAliveBricks);
-var repairNum = Math.min(
-    Math.floor(Math.random() * (nonAliveNum + 1)),
-    nonAliveBricks.length);
+    var repairNum = Math.min(
+        Math.floor(Math.random() * (nonAliveNum + 1)),
+        nonAliveBricks.length);
 
-    for(var index = 0; index < repairNum; index++){
+    for (var index = 0; index < repairNum; index++) {
         brick[nonAliveBricks[index]].alive = true;
     }
 }
@@ -994,8 +972,12 @@ function disillusionment() {
 
 //나쁜 이벤트 - 패들 사이 변경 마법
 function reducio() {
+<<<<<<< HEAD
     console.log('reducio called');
     if(originalPaddleWidth > paddleWidth) return;
+=======
+    if (originalPaddleWidth > paddleWidth) return;
+>>>>>>> fe2d9fb256b9745d3dbb211d861279bc2f401b9c
     paddleWidth = originalPaddleWidth * 0.5;
     drawPaddle(context);
     setTimeout(() => {

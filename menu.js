@@ -159,16 +159,6 @@ function settingPage() {
     }
 }
 
-function mainPage() {
-
-    resetAll();
-    totalScore = 0; // 점수 초기화 추가
-    isCountdownRunning = false; // 카운트다운 상태 초기화 추가
-
-    hideAll();
-    $("#mainStart").show();
-}
-
 function creditPage() {
     hideAll();
     $("#credit").show();
