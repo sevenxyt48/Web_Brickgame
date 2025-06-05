@@ -663,6 +663,9 @@ function updateGame() {
             ball.vY *= -1;
             b.alive = false;
             totalScore += 10;
+            if(b.magic!=null){
+                setMagic(b.magic, b.x, b.y);
+            }
             break;
         }
     }
@@ -670,6 +673,44 @@ function updateGame() {
     updateScore(totalScore);
     // updateLives(lives);
 }
+
+//magic 적용
+function setMagic(magic, brickX, brickY){
+    switch(magic){
+        case "impedimenta":
+           impedimenta();
+           console.log('impedimenta');
+            break;
+        // case "geminio":
+        //     geminio(brickX, brickY);
+        //     break;
+        case "bombarda":
+            bombarda(brickX, brickY);
+            console.log('bombarda');
+            break;
+        case "lumos":
+            lumos(gameLevel);
+            console.log('lumos');
+            break;
+        case "ascendio":
+            ascendio();
+            console.log('ascendio');
+            break;
+        // case "reparo":
+        //     reparo();
+        //     break;
+        case "disillusionment":
+            disillusionment();
+            console.log('disillusionment');
+            break;
+        // case "confundo":
+        //     confundo();
+        //     break;
+        default:
+            break;
+    }
+}
+
 // 초기 벽돌설정
 function initBricks(difficulty) {
     // brick = []; // 기존 벽돌 배열 초기화
@@ -853,7 +894,7 @@ function bombarda(brickX, brickY) {
         brick[index + 1].alive = false;
     if (brick[index - 1] != null)
         brick[index - 1].alive = false;
-    drawBricks();
+    drawBricks(context);
 
 }
 
