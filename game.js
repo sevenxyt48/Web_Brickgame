@@ -905,7 +905,7 @@ function ascendio() { //조금 마법 이름이 기능이랑 조금 다른데 �
 
     const originalSpeed = [];
     balls.forEach((ball, index) => {
-        originalSpeed[index].push({ vX: ball.vX, vY: ball.vY });
+        originalSpeed[index] = { vX: ball.vX, vY: ball.vY };
         ball.vX *= 1.3;
         ball.vY *= 1.3;
     })
