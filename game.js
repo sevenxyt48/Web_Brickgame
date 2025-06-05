@@ -182,13 +182,13 @@ $(document).ready(function () {
             if (!gameLevel) gameLevel = 1;
             // stage(gameLevel);
             hideAll();
-        $("#myCanvas").show();
+            $("#myCanvas").show();
 
-        applyHouseTheme(selectedHouse);
-        $('#chooseHouse').hide();
-        $('#gameScreen').show();
-        gameInit(gameLevel);
-        startGame(selectedHouse);
+            applyHouseTheme(selectedHouse);
+            $('#chooseHouse').hide();
+            $('#gameScreen').show();
+            gameInit(gameLevel);
+            startGame(selectedHouse);
         }
     });
     $("#houseSelect").click(function () {
@@ -285,19 +285,6 @@ $(document).ready(function () {
         console.log("선택된 난이도: " + gameLevel);
     });
 
-    // $("#grade1").click(function () {
-    //     stage(1);
-    // });
-    // $("#grade2").click(function () {
-    //     stage(2);
-    // });
-    // $("#grade3").click(function () {
-    //     stage(3);
-    // });
-    // $("#grade4").click(function () {
-    //     stage(4);
-    // });
-
     //패들 이동 코드
     $(document).mousemove(function (e) {
         if (!isGameRunning) return;  // 게임 중지 시 패들 이동 막기
@@ -355,13 +342,6 @@ function stage(n) {
 
     startGame(selectedHouse);
 }
-
-//난이도 별 벽돌 수
-//공 속도(추가 필요)
-// function setDifficulty(level) {
-//     brickRow = level + 2;
-//     brickColumn = 5;
-// }
 
 function updateScore(score) {
     document.getElementById('score').textContent = 'Score: ' + score;
@@ -503,7 +483,7 @@ function startGame(house) {
     applyHouseTheme(house);
     gameInit(gameLevel);
 
-    if(gameLevel >= 2){
+    if (gameLevel >= 2) {
         lumos(gameLevel);
     }
 
@@ -567,12 +547,6 @@ function gameFail() {
 
     $('#fail').show();
 }
-function nextGrade() {
-    // 다음 학년 시작 로직
-    document.getElementById('win').style.display = 'none';
-    document.getElementById('gameScreen').style.display = 'block';
-    startNextStage(); // 새 스테이지 초기화
-}
 
 // 단일 공 객체
 var ball;
@@ -623,7 +597,7 @@ function updateGame() {
                 ball.y = paddleY - ball.r - 1;
 
                 // 고정 속도(currentSpeed)로 방향만 재설정
-                ball.vX =ball.vX * Math.sin(bounceAngle);
+                ball.vX = ball.vX * Math.sin(bounceAngle);
                 ball.vY = -Math.abs(currentSpeed * Math.cos(bounceAngle));
             }
             else if (ball.y + ball.r > canvas.height) {
@@ -938,21 +912,21 @@ function reparo() {
     // 필요한 것
     // 깨진 블럭의 개수
     var nonAliveNum = 0;
-    var nonAliveBricks=[];
-    for(var index = 0;  index < brick.length; index++){
-        if(brick[index].magic != "reparo"){
-            if(!brick[index].alive){ 
+    var nonAliveBricks = [];
+    for (var index = 0; index < brick.length; index++) {
+        if (brick[index].magic != "reparo") {
+            if (!brick[index].alive) {
                 nonAliveNum++;
                 nonAliveBricks.push(index);
-             }
-         }
+            }
+        }
     }
     shuffle(nonAliveBricks);
-var repairNum = Math.min(
-    Math.floor(Math.random() * (nonAliveNum + 1)),
-    nonAliveBricks.length);
+    var repairNum = Math.min(
+        Math.floor(Math.random() * (nonAliveNum + 1)),
+        nonAliveBricks.length);
 
-    for(var index = 0; index < repairNum; index++){
+    for (var index = 0; index < repairNum; index++) {
         brick[nonAliveBricks[index]].alive = true;
     }
 }
@@ -972,7 +946,7 @@ function disillusionment() {
 
 //나쁜 이벤트 - 패들 사이 변경 마법
 function reducio() {
-    if(originalPaddleWidth > paddleWidth) return;
+    if (originalPaddleWidth > paddleWidth) return;
     paddleWidth = originalPaddleWidth * 0.5;
     drawPaddle(context);
     setTimeout(() => {
