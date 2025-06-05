@@ -54,7 +54,7 @@ var ballBottom;
 var ballLeft;
 var ballRight;
 var ballMoving = false;
-var currentSpeed = 5.5;
+var currentSpeed = 10;
 // 공
 function Ball(x, y, vX, vY) {
     this.x = x;
@@ -457,9 +457,7 @@ function gameLoop() {
     if (!isGameRunning) return;
     updateGame();
     drawGame(context);
-
     requestAnimationFrame(gameLoop);
-
 }
 
 function gameInit(gameLevel) {
@@ -476,7 +474,7 @@ function gameInit(gameLevel) {
     initBricks(gameLevel);
 
     // 게임 루프 시작
-    requestAnimationFrame(gameLoop);
+    // requestAnimationFrame(gameLoop);
 }
 
 //실제 게임 시작 함수
@@ -489,9 +487,13 @@ function startGame(house) {
     applyHouseTheme(house);
     gameInit(gameLevel);
 
+    if(!animationFrameId){
+        animationFrameId = requestAnimationFrame(gameLoop);
+    }
+
 }
 
-let animaitionFrameId = null;
+let animationFrameId = null;
 
 function pauseGame() {
     // 일시정지 기능 구현 (애니메이션 중지 등)
@@ -499,6 +501,10 @@ function pauseGame() {
     isBrickMoving = false;
     ballMoving = false;
 
+    if(animationFrameId){
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+    }
     // clearInterval(drawInterval);
     // context.clearRect(0, 0, canvas.width, canvas.height);
 }
@@ -510,7 +516,9 @@ function continueGame() {
     isBrickMoving = true;
     ballMoving = true;
     // drawBricks(context);
-    animaitionFrameId = requestAnimationFrame(gameLoop);
+    if(!animationFrameId){
+        animationFrameId = requestAnimationFrame(gameLoop);
+    }
 }
 
 //전체 게임 종료(4단계 다 클리어)
@@ -554,6 +562,7 @@ function resetBall() {
     balls = [];
     ball = new Ball(canvas.width / 2, canvas.height - 50, 3, -3);
     balls.push(ball);
+
 }
 
 // 게임 상태 갱신
@@ -649,6 +658,9 @@ function updateGame() {
             ball.vY *= -1;
             b.alive = false;
             totalScore += 10;
+            if(b.magic!=null){
+                setMagic(b.magic, b.x, b.y);
+            }
             break;
         }
     }
@@ -665,6 +677,44 @@ function updateGame() {
         }
     }
 }
+
+//magic 적용
+function setMagic(magic, brickX, brickY){
+    switch(magic){
+        case "impedimenta":
+           impedimenta();
+           console.log('impedimenta');
+            break;
+        // case "geminio":
+        //     geminio(brickX, brickY);
+        //     break;
+        case "bombarda":
+            bombarda(brickX, brickY);
+            console.log('bombarda');
+            break;
+        case "lumos":
+            lumos(gameLevel);
+            console.log('lumos');
+            break;
+        case "ascendio":
+            ascendio();
+            console.log('ascendio');
+            break;
+        // case "reparo":
+        //     reparo();
+        //     break;
+        case "disillusionment":
+            disillusionment();
+            console.log('disillusionment');
+            break;
+        // case "confundo":
+        //     confundo();
+        //     break;
+        default:
+            break;
+    }
+}
+
 // 초기 벽돌설정
 function initBricks(difficulty) {
     // brick = []; // 기존 벽돌 배열 초기화
@@ -831,7 +881,7 @@ function bombarda(brickX, brickY) {
         brick[index + 1].alive = false;
     if (brick[index - 1] != null)
         brick[index - 1].alive = false;
-    drawBricks();
+    drawBricks(context);
 
 }
 
