@@ -35,7 +35,7 @@ function Brick(x, y, width, height, type, magic) {
     this.magic = magic;
     this.alive = true; // 벽돌의 깨짐 유무 표시. true:존재 false:깨짐
     this.opacity = 1.0 // 벽돌 투명해지기 마법을 위한 요소. 처음엔 전부 불투명명
-}
+}x
 
 var startX = 0; // 벽돌 시작 X 위치 조정 가능
 var startY = 50; // 벽돌 시작 Y 위치 (캔버스 위쪽에서 떨어진 거리)
@@ -736,21 +736,6 @@ function setMagic(magic, brickX, brickY) {
 
 // 초기 벽돌설정
 function initBricks(difficulty) {
-    // brick = []; // 기존 벽돌 배열 초기화
-
-    // brickRow = 3; // 행 수 -> 임의로 설정
-    // brickColumn = 5; // 열 수
-    // brickWidth = (canvas.width - (brickColumn - 1) * brickGapX) / brickColumn;
-    // brickHeight = 30;
-
-    // for (let row = 0; row < brickRow; row++) {
-    //     for (let col = 0; col < brickColumn; col++) {
-    //         let x = startX + col * (brickWidth + brickGapX);
-    //         let y = startY + row * (brickHeight + brickGapY);
-    //         let type = 0; // 이벤트 처리시 사용할듯?
-    //         brick.push(new Brick(x, y, brickWidth, brickHeight, type));
-    //     }
-    // }
     const setting = levelSettings[difficulty];
     brickRow = setting.rows;
     brickColumn = setting.cols;
@@ -765,6 +750,18 @@ function initBricks(difficulty) {
     const goodIndices = indices.splice(0, setting.goodBricks);
     const badIndices = indices.splice(0, setting.badBricks);
 
+    // 레벨별 매직 리스트 분기
+    let goodList = [];
+    let badList = [];
+
+    if (difficulty == 1) {
+        goodList = ['impedimenta', 'geminio', 'bombarda'];
+        badList = ['ascendio', 'reparo', 'disillusionment', 'confundo'];
+    } else {
+        goodList = ['impedimenta', 'geminio', 'bombarda', 'lumos'];
+        badList = ['ascendio', 'reparo', 'disillusionment', 'confundo'];
+    }
+
     for (let row = 0; row < brickRow; row++) {
         for (let col = 0; col < brickColumn; col++) {
             const i = row * brickColumn + col;
@@ -776,11 +773,10 @@ function initBricks(difficulty) {
 
             if (goodIndices.includes(i)) {
                 type = 1;
-                magic = getRandomFrom(goodMagicList);
-            }
-            else if (badIndices.includes(i)) {
+                magic = getRandomFrom(goodList);
+            } else if (badIndices.includes(i)) {
                 type = 2;
-                magic = getRandomFrom(badMagicList);
+                magic = getRandomFrom(badList);
             }
 
             brick.push(new Brick(x, y, brickWidth, brickHeight, type, magic));
@@ -941,10 +937,12 @@ function reparo() {
     var nonAliveNum = 0;
     var nonAliveBricks=[];
     for(var index = 0;  index < brick.length; index++){
-        if(!brick[index].alive){ 
-            nonAliveNum++;
-            nonAliveBricks.push(index);
+        if(brick[index].magic != "reparo"){
+            if(!brick[index].alive){ 
+                nonAliveNum++;
+                nonAliveBricks.push(index);
              }
+         }
     }
     shuffle(nonAliveBricks);
 var repairNum = Math.min(
