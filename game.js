@@ -38,7 +38,7 @@ function Brick(x, y, width, height, type, magic) {
 };
 
 var startX = 0; // 벽돌 시작 X 위치 조정 가능
-var startY = 50; // 벽돌 시작 Y 위치 (캔버스 위쪽에서 떨어진 거리)
+var startY = 120; // 벽돌 시작 Y 위치 (캔버스 위쪽에서 떨어진 거리)
 
 // 패들
 var paddleWidth = 400; // 너비
@@ -716,7 +716,7 @@ function initBricks(difficulty) {
     const setting = levelSettings[difficulty];
     brickRow = setting.rows;
     brickColumn = setting.cols;
-    brickWidth = (canvas.width - (brickColumn - 1) * brickGapX) / brickColumn;
+    brickWidth = 200;
     brickHeight = 30;
     brick = [];
 
@@ -738,6 +738,9 @@ function initBricks(difficulty) {
         goodList = ['impedimenta', 'geminio', 'bombarda', 'lumos'];
         badList = ['ascendio', 'reparo', 'disillusionment', 'reducio'];
     }
+    // 화면 중앙 정렬 계산
+    const totalWidth = brickColumn * (brickWidth + brickGapX) - brickGapX;
+    const startX = (canvas.width - totalWidth) / 2;
 
     for (let row = 0; row < brickRow; row++) {
         for (let col = 0; col < brickColumn; col++) {
@@ -759,6 +762,7 @@ function initBricks(difficulty) {
             brick.push(new Brick(x, y, brickWidth, brickHeight, type, magic));
         }
     }
+
 }
 
 function shuffle(array) {
