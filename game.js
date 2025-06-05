@@ -611,20 +611,28 @@ function updateGame() {
 
         // 아래쪽(바닥 혹은 패들 영역) 충돌 처리
         if (ball.y + ball.r >= paddleY) {
-            // -- 패들 영역 x 범위인 경우 →
-            if (ball.x + ball.r >= paddleX && ball.x - ball.r <= paddleX + paddleWidth) {
-                // 패들에 닿음 → 반사 각도 계산
-                const relativeIntersectX = ball.x - (paddleX + paddleWidth / 2);
-                const normalized = relativeIntersectX / (paddleWidth / 2);
-                const maxBounceAngle = Math.PI / 3; // 60도
+            // -- 패들 영역 x 범위인 경우 → ** 조건 값 변경 
+            if (ball.x + ball.r >= paddleX - paddleWidth / 2 && ball.x - ball.r <= paddleX + paddleWidth / 2) {
+                const relativeIntersectX = ball.x - paddleX; // 중심 기준
+                
+                // -1 ~ 1 사이로 값 강제 변환
+                let normalized = relativeIntersectX / (paddleWidth / 2); // -1 ~ 1 변환
+                normalized = Math.max(-1, Math.min(1, normalized)); // 강제 변환
+
+                const maxBounceAngle = Math.PI / 3; // 최대 60도
                 const bounceAngle = normalized * maxBounceAngle;
 
                 // 공이 패들 위에 붙어서 뚫고 가지 않도록 y 위치 보정
                 ball.y = paddleY - ball.r - 1;
 
-                // 고정 속도(currentSpeed)로 방향만 재설정
-                ball.vX =ball.vX * Math.sin(bounceAngle);
-                ball.vY = -Math.abs(currentSpeed * Math.cos(bounceAngle));
+                // vY값의 제한(공 속도 느려짐 방지지)
+                ball.vX = currentSpeed * Math.sin(bounceAngle);
+
+                const minYRatio = 0.7;
+                ball.vY = -Math.max(
+                    Math.abs(currentSpeed * Math.cos(bounceAngle)),
+                    currentSpeed * minYRatio
+                );
             }
             else if (ball.y + ball.r > canvas.height) {
                 // 패들 범위도 아니고 바닥으로 떨어진 경우 → 목숨 차감 & 재생성
@@ -642,24 +650,31 @@ function updateGame() {
 
     //패들 충돌
     balls.forEach(ball => {
+    if (ball.y + ball.r >= paddleY) {
+        const paddleLeft = paddleX - paddleWidth / 2; // 값 변경 (이미지 벗어난 영역 없앰앰) 
+        const paddleRight = paddleX + paddleWidth / 2;
 
-        if (ball.y + ball.r >= paddleY) {
-            const paddleLeft = paddleX - paddleWidth / 2;
-            const paddleRight = paddleX + paddleWidth / 2;
+        if (ball.x + ball.r >= paddleLeft && ball.x - ball.r <= paddleRight) {
+                const relativeIntersectX = ball.x - paddleX; // 중심 기준
+                
+                // -1 ~ 1 사이로 값 강제 변환
+                let normalized = relativeIntersectX / (paddleWidth / 2); // -1 ~ 1 변환
+                normalized = Math.max(-1, Math.min(1, normalized)); // 강제 변환
 
-            // 공이 패들 가로 범위 안에 들어왔는지 확인
-            if (ball.x + ball.r >= paddleLeft && ball.x - ball.r <= paddleRight) {
-                // 패들에 닿았다면 반사
-                const relativeIntersectX = ball.x - paddleX;
-                const normalized = relativeIntersectX / (paddleWidth / 2);
-                const maxBounceAngle = Math.PI / 3;
+                const maxBounceAngle = Math.PI / 3; // 최대 60도
                 const bounceAngle = normalized * maxBounceAngle;
 
-                // 공이 패들 안쪽으로 약간 파고들지 않도록 Y 위치 보정
+                // 공이 패들 위에 붙어서 뚫고 가지 않도록 y 위치 보정
                 ball.y = paddleY - ball.r - 1;
 
+                // vY값의 제한(공 속도 느려짐 방지지)
                 ball.vX = currentSpeed * Math.sin(bounceAngle);
-                ball.vY = -Math.abs(currentSpeed * Math.cos(bounceAngle));
+
+                const minYRatio = 0.7;
+                ball.vY = -Math.max(
+                    Math.abs(currentSpeed * Math.cos(bounceAngle)),
+                    currentSpeed * minYRatio
+                );
             }
         }
     });
@@ -862,6 +877,7 @@ function goToMenu() {
 
 //좋은 이벤트 - 공의 속도를 느리게 하는 마법
 function impedimenta() {
+    console.log('impedimenta called');
     if (balls.length == 0) return;
 
     const originalSpeed = [];
@@ -883,6 +899,7 @@ function impedimenta() {
 
 //좋은 이벤트 - 공 복제 마법
 function geminio(brickX, brickY) {
+    console.log('geminio called');
     balls[ballNum] = new Ball(brickX, brickY, 0, 3); // 아래로 떨어짐.
     //공이 패들에 닿았을 경우 속도 기본 값으로 변경. 패들에 닿는 위치마다 각도 다르게.
     //패들에 닿지 않고 화면 아래쪽으로 사라지면 삭제.
@@ -890,6 +907,7 @@ function geminio(brickX, brickY) {
 
 //좋은 이벤트 - 상하좌우 폭발 마법
 function bombarda(brickX, brickY) {
+    console.log('bombarda called');
     const index = brick.findIndex(brick => brick.x == brickX && brick.y == brickY);
     brick[index].alive = false;
     if (brick[index - brickColumn] != null)
@@ -906,6 +924,7 @@ function bombarda(brickX, brickY) {
 
 //좋은 이벤트 - 빛 생성 마법 (level2 이상에서만 존재)
 function lumos(gameLevel) {
+    console.log('lumos called');
     darkR = canvas.width;
     setTimeout(() => {
         nox(gameLevel);
@@ -914,6 +933,7 @@ function lumos(gameLevel) {
 
 //나쁜 이벤트 - 공의 속도를 빠르게 하는 마법
 function ascendio() { //조금 마법 이름이 기능이랑 조금 다른데 속도 빠르게가 없어서 그나마 비슷한걸루 일단 해놨습니다.
+    console.log('ascendio called');
     if (balls.length == 0) return;
 
     const originalSpeed = [];
@@ -935,6 +955,7 @@ function ascendio() { //조금 마법 이름이 기능이랑 조금 다른데 �
 
 //나쁜 이벤트 - 깨진 벽돌 중에 일부 회복(수리 마법)
 function reparo() {
+    console.log('reparo called');
     // 필요한 것
     // 깨진 블럭의 개수
     var nonAliveNum = 0;
@@ -959,6 +980,7 @@ var repairNum = Math.min(
 
 //나쁜 이벤트 - 벽돌을 투명하게 하는 마법
 function disillusionment() {
+    console.log('disillusionment called');
     for (let i = 0; i < brick.length; i++) {
         brick[i].opacity = 0.1;
     }
@@ -972,6 +994,7 @@ function disillusionment() {
 
 //나쁜 이벤트 - 패들 사이 변경 마법
 function reducio() {
+    console.log('reducio called');
     if(originalPaddleWidth > paddleWidth) return;
     paddleWidth = originalPaddleWidth * 0.5;
     drawPaddle(context);
@@ -983,6 +1006,7 @@ function reducio() {
 
 //레벨2부터 점점 어두워지는 화면 구현
 function nox(gameLevel) { // level을 시작할 때 각 level을 받아 2~4 사이 레벨일 때만 nox함수 호출.
+    console.log('nox called');
     let speed;
     switch (gameLevel) {
         case 2: speed = 0.5; break;
