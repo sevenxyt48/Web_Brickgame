@@ -588,7 +588,7 @@ function updateGame() {
             // -- 패들 영역 x 범위인 경우 → ** 조건 값 변경 
             if (ball.x + ball.r >= paddleX - paddleWidth / 2 && ball.x - ball.r <= paddleX + paddleWidth / 2) {
                 const relativeIntersectX = ball.x - paddleX; // 중심 기준
-                
+
                 // -1 ~ 1 사이로 값 강제 변환
                 let normalized = relativeIntersectX / (paddleWidth / 2); // -1 ~ 1 변환
                 normalized = Math.max(-1, Math.min(1, normalized)); // 강제 변환
@@ -624,13 +624,13 @@ function updateGame() {
 
     //패들 충돌
     balls.forEach(ball => {
-    if (ball.y + ball.r >= paddleY) {
-        const paddleLeft = paddleX - paddleWidth / 2; // 값 변경 (이미지 벗어난 영역 없앰앰) 
-        const paddleRight = paddleX + paddleWidth / 2;
+        if (ball.y + ball.r >= paddleY) {
+            const paddleLeft = paddleX - paddleWidth / 2; // 값 변경 (이미지 벗어난 영역 없앰앰) 
+            const paddleRight = paddleX + paddleWidth / 2;
 
-        if (ball.x + ball.r >= paddleLeft && ball.x - ball.r <= paddleRight) {
+            if (ball.x + ball.r >= paddleLeft && ball.x - ball.r <= paddleRight) {
                 const relativeIntersectX = ball.x - paddleX; // 중심 기준
-                
+
                 // -1 ~ 1 사이로 값 강제 변환
                 let normalized = relativeIntersectX / (paddleWidth / 2); // -1 ~ 1 변환
                 normalized = Math.max(-1, Math.min(1, normalized)); // 강제 변환
@@ -972,12 +972,10 @@ function disillusionment() {
 
 //나쁜 이벤트 - 패들 사이 변경 마법
 function reducio() {
-<<<<<<< HEAD
+
     console.log('reducio called');
-    if(originalPaddleWidth > paddleWidth) return;
-=======
     if (originalPaddleWidth > paddleWidth) return;
->>>>>>> fe2d9fb256b9745d3dbb211d861279bc2f401b9c
+
     paddleWidth = originalPaddleWidth * 0.5;
     drawPaddle(context);
     setTimeout(() => {
