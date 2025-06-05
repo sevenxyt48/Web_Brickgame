@@ -183,19 +183,19 @@
         <!-- 게임 종료화면 -->
         <div class="menu" id="win">
             <h2 class="gradeClear">You Win!</h2>
+            <h1 class="score">Score:</h1>
             <div class="clearButton">
-                <h1 class="score">Score:</h1>
                 <h1 class="reTry">Retry</h1>
                 <h1 class="nextGrade">Next</h1>
-                <h1 class="backToMain">Menu</h1>
+                <h1 class="backToMain" id="backToMain">Menu</h1>
             </div>
         </div>
         <div class="menu" id="fail">
             <h2 class="gradeClear">You Fail!</h2>
+            <h1 class="score">Score:</h1>
             <div class="clearButton">
-                <h1 class="score">Score:</h1>
                 <h1 class="reTry">Retry</h1>
-                <h1 class="backToMain">Menu</h1>
+                <h1 class="backToMain" id="backToMain">Menu</h1>
                 <h1 class="nextGrade">Skip</h1>
             </div>
         </div>
@@ -203,8 +203,10 @@
         <div class="menu" id="gameOver">
             <h2>Graduation!</h2>
             <h1 class="score">Score:</h1>
-            <h1 class="reTry">Retry</h1>
-            <h1 class="backToMain">Menu</h1>
+            <div class="clearButton">
+                <h1 class="reTry">Retry</h1>
+                <h1 class="backToMain" id="backToMain">Menu</h1>
+            </div>
         </div>
     </div>
 </body>

@@ -4,9 +4,6 @@
 
 
 //화면 전환 js코드
-
-var music = "";
-var mVol = 0;
 // BGM 리스트
 const bgmList = [
     "bgm/bgm1.mp3",
@@ -16,17 +13,7 @@ const bgmList = [
 ];
 
 $(document).ready(function () {
-
-    // music 버튼 활성화
-    // $('#musicSwitch').on('change', function () {
-    //     handleMusicToggle(this, bgmList);
-    // });
-
-    // fullscreen 버튼 활성화
-    // $('#fullScreenSwitch').on('change', function () {
-    //     handleFullScreenToggle(this);
-    // });
-
+    vControl();
     $('#changeThemeButton').on('click', function () {
         handleChangeTheme();
     });
@@ -35,12 +22,48 @@ $(document).ready(function () {
 
 // 게임 상태 관리 객체
 const gameState = {
+    level: 1,
     selectedHouse: "house1",
+    score: 0,
+    lives: 3,
     mVol: 0.5,
     isSoundOn: true,
     isMusicOn: false,
     isFullScreen: false,
     currentBgmIndex: 0,
+};
+
+const audioManager = {
+    bgmList: ["bgm/bgm1.mp3", "bgm/bgm2.mp3", "bgm/bgm3.mp3", "bgm/bgm4.mp3"],
+    currentBgmIndex: 0,
+    isMusicOn: false,
+    isSoundOn: false, // 초기값 false
+    audio: document.getElementById("bgmAudio"),
+
+    playMusic(index = 0) {
+        if (!this.audio) return;
+        this.audio.src = this.bgmList[index];
+        this.audio.loop = true;
+        this.audio.volume = 0.5;
+        this.audio.play();
+        this.isMusicOn = true;
+    },
+
+    stopMusic() {
+        if (!this.audio) return;
+        this.audio.pause();
+        this.audio.currentTime = 0;
+        this.isMusicOn = false;
+    },
+
+    changeMusic(index) {
+        this.currentBgmIndex = index;
+        if (this.isMusicOn) {
+            this.playMusic(index);
+        } else {
+            this.audio.src = this.bgmList[index];
+        }
+    }
 };
 
 // 음악 관리 객체
@@ -288,7 +311,6 @@ function createSettingsElements() {
         div.style.width = '300px';
         div.style.height = '30px';
         div.style.margin = '10px auto 50px auto'
-        // div.style.marginBottom = '50px';
         div.style.display = 'flex';
         div.style.alignItems = 'center';
         div.style.justifyContent = 'space-between';
