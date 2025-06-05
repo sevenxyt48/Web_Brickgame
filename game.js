@@ -1,5 +1,5 @@
 //!!!!!!수정 완료한 부분을 삭제해주세요:
-//특수 벽돌 이벤트 ???
+//특수 벽돌 이벤트
 //효과음 넣기 
 //게임 마지막 단계일때 실패하면 다음 skip하면 게임 졸업화면으로 자동으로 넘어가나요?
 
@@ -240,8 +240,6 @@ $(document).ready(function () {
     darkR = canvas.width;
     // updateLives(lives);
 
-
-    // stage 안쓸거면 여기 수정해야 할거같은데
     $(".reTry").on("click", function () {
         stage(gameLevel);
     });
@@ -487,7 +485,7 @@ function startGame(house) {
     applyHouseTheme(house);
     gameInit(gameLevel);
 
-    if(!animationFrameId){
+    if (!animationFrameId) {
         animationFrameId = requestAnimationFrame(gameLoop);
     }
 
@@ -501,7 +499,7 @@ function pauseGame() {
     isBrickMoving = false;
     ballMoving = false;
 
-    if(animationFrameId){
+    if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
         animationFrameId = null;
     }
@@ -516,7 +514,7 @@ function continueGame() {
     isBrickMoving = true;
     ballMoving = true;
     // drawBricks(context);
-    if(!animationFrameId){
+    if (!animationFrameId) {
         animationFrameId = requestAnimationFrame(gameLoop);
     }
 }
@@ -658,7 +656,7 @@ function updateGame() {
             ball.vY *= -1;
             b.alive = false;
             totalScore += 10;
-            if(b.magic!=null){
+            if (b.magic != null) {
                 setMagic(b.magic, b.x, b.y);
             }
             break;
@@ -679,11 +677,11 @@ function updateGame() {
 }
 
 //magic 적용
-function setMagic(magic, brickX, brickY){
-    switch(magic){
+function setMagic(magic, brickX, brickY) {
+    switch (magic) {
         case "impedimenta":
-           impedimenta();
-           console.log('impedimenta');
+            impedimenta();
+            console.log('impedimenta');
             break;
         // case "geminio":
         //     geminio(brickX, brickY);
