@@ -57,7 +57,7 @@ var ballBottom;
 var ballLeft;
 var ballRight;
 var ballMoving = false;
-var currentSpeed = 5.5;
+var currentSpeed = 10;
 // 공
 function Ball(x, y, vX, vY) {
     this.x = x;
@@ -477,7 +477,7 @@ function gameLoop() {
     drawGame(context);
 
     if (!isGameOver()) {
-        requestAnimationFrame(gameLoop);
+        animationFrameId = requestAnimationFrame(gameLoop);
     } else {
         gameOver();
     }
@@ -497,7 +497,7 @@ function gameInit(gameLevel) {
     initBricks(gameLevel);
 
     // 게임 루프 시작
-    requestAnimationFrame(gameLoop);
+    // requestAnimationFrame(gameLoop);
 }
 
 //실제 게임 시작 함수
@@ -510,9 +510,13 @@ function startGame(house) {
     applyHouseTheme(house);
     gameInit(gameLevel);
 
+    if(!animationFrameId){
+        animationFrameId = requestAnimationFrame(gameLoop);
+    }
+
 }
 
-let animaitionFrameId = null;
+let animationFrameId = null;
 
 function pauseGame() {
     // 일시정지 기능 구현 (애니메이션 중지 등)
@@ -520,6 +524,10 @@ function pauseGame() {
     isBrickMoving = false;
     ballMoving = false;
 
+    if(animationFrameId){
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+    }
     // clearInterval(drawInterval);
     // context.clearRect(0, 0, canvas.width, canvas.height);
 }
@@ -531,7 +539,9 @@ function continueGame() {
     isBrickMoving = true;
     ballMoving = true;
     // drawBricks(context);
-    animaitionFrameId = requestAnimationFrame(gameLoop);
+    if(!animationFrameId){
+        animationFrameId = requestAnimationFrame(gameLoop);
+    }
 }
 
 //전체 게임 종료
@@ -561,6 +571,7 @@ function resetBall() {
     balls = [];
     ball = new Ball(canvas.width / 2, canvas.height - 50, 3, -3);
     balls.push(ball);
+
 }
 
 // 게임 상태 갱신
