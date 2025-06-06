@@ -169,6 +169,10 @@ body:fullscreen #container #gameScreen {
     text-align: center;
 }
 
+#settingPause h2 {
+    margin-bottom: 50px;
+}
+
 #settingPause button {
     padding: 10px;
     font-size: 18px;
@@ -188,9 +192,12 @@ body:fullscreen #container #gameScreen {
 }
 
 #settingPause.choose {
+    /* width: 300px; */
+    height: 30px;
+    margin: 10px auto 50px auto;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
     margin-bottom: 20px;
     font-size: 20px;
@@ -207,6 +214,22 @@ body:fullscreen #container #gameScreen {
 #settingPause.choose select {
     flex: 1;
     max-width: 200px;
+}
+
+.back-container{
+    width: 250px;
+    margin: 10px auto 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#backToPauseMenuBtn{
+    width: 100px;
+    height: 40px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 30px;
 }
 
 #pauseMenu h2 {
@@ -241,7 +264,7 @@ body:fullscreen #container #gameScreen {
     transform: scale(1.05);
 }
 
-#settingPause {
+/* #settingPause {
     display: none;
     position: absolute;
     width: 430px;
@@ -255,10 +278,23 @@ body:fullscreen #container #gameScreen {
     padding: 20px;
     border-radius: 10px;
     z-index: 1500;
-}
+} */
+
+/* 이건 또 왜 2개야 */
+/* .choose {
+    width: 400px;
+    margin-bottom: 15px;
+} */
 
 .choose {
-    margin-bottom: 15px;
+    width: 400px;
+    margin: 15px auto;
+    /* margin-bottom: 15px; */
+    text-align: left;
+    display: flex;
+    font-size: 28px;
+    /* line-height: 1.5em; */
+    justify-content: space-between;
 }
 
 #myCanvas {
@@ -487,14 +523,14 @@ option {
     align-items: center;
 }
 
-.choose {
+/* .choose {
     width: 400px;
     text-align: left;
     display: flex;
     font-size: 28px;
     line-height: 1.5em;
     justify-content: space-between;
-}
+} */
 
 .choose label {
     font-weight: bold;

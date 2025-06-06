@@ -27,7 +27,7 @@ const gameState = {
     score: 0,
     lives: 3,
     mVol: 0.5,
-    isSoundOn: true,
+    isSoundOn: false,
     isMusicOn: false,
     isFullScreen: false,
     currentBgmIndex: 0,
@@ -242,45 +242,143 @@ function hideAll() {
 
 }
 
+// 메인 메뉴 설정 컨트롤
 function vControl() {
     //설정 음성 컨트롤
     const bgm = document.getElementById("bgmAudio");
     const musicSwitch = document.getElementById('musicSwitch');
     musicSwitch.addEventListener('change', function () {
         if (!bgm) return;
+
+        gameState.isMusicOn = this.checked;
+        console.log(`Music 상태: ${gameState.isMusicOn}`);
+
         if (this.checked) {
             musicObj.playMusic('bgm/bgm1.mp3');
         } else {
             musicObj.stopMusic();
         }
+        updateSettingsUI();
     });
 
-    // Sound 컨트롤 (효과음 on/off)
+    // Sound 컨트롤
     const soundSwitch = document.getElementById('soundSwitch');
     soundSwitch.addEventListener('change', function () {
         gameState.isSoundOn = this.checked;
         console.log(`Sound 상태: ${gameState.isSoundOn}`);
+
+        updateSettingsUI();
     });
 
     // FullScreen 컨트롤
     const fullScreenSwitch = document.getElementById('fullScreenSwitch');
     fullScreenSwitch.addEventListener('change', function () {
+        gameState.isFullScreen = this.checked;
+        console.log(`FullScreen 상태: ${gameState.isFullScreen}`);
+
         if (this.checked) {
             document.body.requestFullscreen();
         } else {
             document.exitFullscreen();
         }
+
+        updateSettingsUI();
     });
 
     // Change BGM select
     const bgmSelect = document.getElementById('changeBGM-select');
     bgmSelect.addEventListener('change', function () {
+        gameState.currentBgmIndex = parseInt(this.value, 10);
         const index = parseInt(this.value);
 
         if (musicSwitch.checked)
             musicObj.playMusic(bgmList[index]);
         console.log(`BGM 변경: ${index + 1}`);
+
+        updateSettingsUI();
     });
+
+    updateSettingsUI();
+}
+
+// 인게임 설정 컨트롤
+function vControlInGame() {
+    // 인게임 muscic 컨트롤
+    $('#ingame-musicSwitch').off('change').on('change', function () {
+        gameState.isMusicOn = this.checked;
+        localStorage.setItem('isMusicOn', this.checked);
+        console.log(`Music 상태: ${gameState.isMusicOn}`);
+        
+        if (gameState.isMusicOn) {
+            musicObj.playMusic(bgmList[gameState.currentBgmIndex]);
+        } else {
+            musicObj.stopMusic();
+        }
+        updateSettingsUI();
+    });
+
+    // 인게임 Sound 컨트롤
+    $('#ingame-soundSwitch').off('change').on('change', function () {
+        gameState.isSoundOn = this.checked;
+        updateSettingsUI();
+        console.log(`Sound 상태: ${gameState.isSoundOn}`);
+    });
+
+    // 인게임 FullScreen 컨트롤
+    $('#ingame-fullScreenSwitch').off('change').on('change', function () {
+        gameState.isFullScreen = this.checked;
+        console.log(`FullScreen 상태: ${gameState.isFullScreen}`);
+        if (this.checked) {
+            document.body.requestFullscreen().catch(err => console.error(err));
+        } else {
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            }
+        }
+        updateSettingsUI();
+    });
+
+    // 인게임 BGM 컨트롤
+    $('#ingame-changeBGM-select').off('change').on('change', function () {
+        gameState.currentBgmIndex = parseInt(this.value, 10);
+        const index = parseInt(this.value);
+
+        if (gameState.isMusicOn) {
+            musicObj.playMusic(bgmList[gameState.currentBgmIndex]);
+        }
+        console.log(`BGM 변경: ${index + 1}`);
+        updateSettingsUI();
+    });
+
+    // 인게임 기숙사 변경
+    $('#houseSelectPause').off('change').on('change', function() {
+        gameState.selectedHouse = this.value;
+        console.log(`기숙사 변경됨: ${gameState.selectedHouse}`);
+        applyHouseTheme(gameState.selectedHouse);
+        updateSettingsUI(); 
+    });
+    
+    // 뒤로가기 버튼
+    $('#backToPauseMenuBtn').off('click').on('click', function () {
+        $('#settingPause').hide();
+        $('#pauseMenu').show();
+    });
+}
+
+// 설정 동기화
+function updateSettingsUI() {
+    const { isSoundOn, isMusicOn, isFullScreen, currentBgmIndex, selectedHouse } = gameState;
+
+    $('#soundSwitch').prop('checked', isSoundOn);
+    $('#musicSwitch').prop('checked', isMusicOn);
+    $('#fullScreenSwitch').prop('checked', isFullScreen);
+    $('#changeBGM-select').val(currentBgmIndex);
+
+    $('#ingame-soundSwitch').prop('checked', isSoundOn);
+    $('#ingame-musicSwitch').prop('checked', isMusicOn);
+    $('#ingame-fullScreenSwitch').prop('checked', isFullScreen);
+    $('#ingame-changeBGM-select').val(currentBgmIndex);
+    $('#houseSelectPause').val(selectedHouse);
 }
 
 // 기숙사 설정
@@ -289,195 +387,199 @@ function handleChangeTheme() {
     $("#chooseHouse").show();
 }
 
+
+
 const settingPause = document.getElementById('settingPause');
 
+
+
 //게임화면 설정메뉴
-function createSettingsElements() {
-    const container = $('#settingPause');
-    container.empty();
-    container.append('<h2>Setting</h2>');
+// function createSettingsElements() {
+//     const container = $('#settingPause');
+//     container.empty();
+//     container.append('<h2>Setting</h2>');
 
-    function styleChooseDiv(div) {
-        div.style.width = '300px';
-        div.style.height = '30px';
-        div.style.margin = '10px auto 50px auto'
-        div.style.display = 'flex';
-        div.style.alignItems = 'center';
-        div.style.justifyContent = 'space-between';
-    }
-    // Sound 체크박스
-    const soundDiv = document.createElement('div');
-    soundDiv.classList.add('choose');
-    styleChooseDiv(soundDiv);
-    const soundLabel = document.createElement('label');
-    soundLabel.setAttribute('for', 'soundSwitchPause');
-    soundLabel.textContent = 'Sound';
-    const soundCheckbox = document.createElement('input');
-    soundCheckbox.type = 'checkbox';
-    soundCheckbox.id = 'soundSwitchPause';
-    soundCheckbox.checked = gameState.isSoundOn;
-    soundCheckbox.addEventListener('change', function () {
-        gameState.isSoundOn = this.checked;
-        console.log(`Sound 상태: ${gameState.isSoundOn}`);
-    });
-    soundDiv.append(soundLabel)
-    soundDiv.append(soundCheckbox);
-    container.append($(soundDiv));
+//     function styleChooseDiv(div) {
+//         div.style.width = '300px';
+//         div.style.height = '30px';
+//         div.style.margin = '10px auto 50px auto'
+//         div.style.display = 'flex';
+//         div.style.alignItems = 'center';
+//         div.style.justifyContent = 'space-between';
+//     }
+//     // Sound 체크박스
+//     const soundDiv = document.createElement('div');
+//     soundDiv.classList.add('choose');
+//     styleChooseDiv(soundDiv);
+//     const soundLabel = document.createElement('label');
+//     soundLabel.setAttribute('for', 'soundSwitchPause');
+//     soundLabel.textContent = 'Sound';
+//     const soundCheckbox = document.createElement('input');
+//     soundCheckbox.type = 'checkbox';
+//     soundCheckbox.id = 'soundSwitchPause';
+//     soundCheckbox.checked = gameState.isSoundOn;
+//     soundCheckbox.addEventListener('change', function () {
+//         gameState.isSoundOn = this.checked;
+//         console.log(`Sound 상태: ${gameState.isSoundOn}`);
+//     });
+//     soundDiv.append(soundLabel)
+//     soundDiv.append(soundCheckbox);
+//     container.append($(soundDiv));
 
-    // Music 체크박스
-    const musicDiv = document.createElement('div');
-    musicDiv.classList.add('choose');
-    styleChooseDiv(musicDiv);
+//     // Music 체크박스
+//     const musicDiv = document.createElement('div');
+//     musicDiv.classList.add('choose');
+//     styleChooseDiv(musicDiv);
 
-    const musicLabel = document.createElement('label');
-    musicLabel.setAttribute('for', 'musicSwitchPause');
-    musicLabel.textContent = 'Music';
-    const musicCheckbox = document.createElement('input');
-    musicCheckbox.type = 'checkbox';
-    musicCheckbox.id = 'musicSwitchPause';
-    musicCheckbox.checked = gameState.isMusicOn; // 기본값 ON
-    musicCheckbox.addEventListener('change', function () {
-        gameState.isMusicOn = this.checked;
-        localStorage.setItem('isMusicOn', this.checked); // 저장
-        if (gameState.isMusicOn) {
-            console.log('Music ON');
-            musicObj.playMusic(bgmList[gameState.currentBgmIndex]);  // [수정] 현재 선택된 BGM 재생
-        } else {
-            console.log('Music OFF');
-            musicObj.stopMusic();
-        }
-    });
+//     const musicLabel = document.createElement('label');
+//     musicLabel.setAttribute('for', 'musicSwitchPause');
+//     musicLabel.textContent = 'Music';
+//     const musicCheckbox = document.createElement('input');
+//     musicCheckbox.type = 'checkbox';
+//     musicCheckbox.id = 'musicSwitchPause';
+//     musicCheckbox.checked = gameState.isMusicOn; // 기본값 ON
+//     musicCheckbox.addEventListener('change', function () {
+//         gameState.isMusicOn = this.checked;
+//         localStorage.setItem('isMusicOn', this.checked); // 저장
+//         if (gameState.isMusicOn) {
+//             console.log('Music ON');
+//             musicObj.playMusic(bgmList[gameState.currentBgmIndex]);  // [수정] 현재 선택된 BGM 재생
+//         } else {
+//             console.log('Music OFF');
+//             musicObj.stopMusic();
+//         }
+//     });
 
-    musicDiv.appendChild(musicLabel);
-    musicDiv.appendChild(musicCheckbox);
-    container.append(musicDiv);
+//     musicDiv.appendChild(musicLabel);
+//     musicDiv.appendChild(musicCheckbox);
+//     container.append(musicDiv);
 
-    // Full Screen 체크박스
-    const fullScreenDiv = document.createElement('div');
-    fullScreenDiv.classList.add('choose');
-    styleChooseDiv(fullScreenDiv);
+//     // Full Screen 체크박스
+//     const fullScreenDiv = document.createElement('div');
+//     fullScreenDiv.classList.add('choose');
+//     styleChooseDiv(fullScreenDiv);
 
-    const fullScreenLabel = document.createElement('label');
-    fullScreenLabel.setAttribute('for', 'fullScreenSwitchPause');
-    fullScreenLabel.textContent = 'Full Screen';
-    const fullScreenCheckbox = document.createElement('input');
-    fullScreenCheckbox.type = 'checkbox';
-    fullScreenCheckbox.id = 'fullScreenSwitchPause';
-    fullScreenCheckbox.checked = false;
-    fullScreenCheckbox.addEventListener('change', e => {
-        var gameScreen = document.body;
-        if (e.target.checked) {
-            gameScreen.requestFullscreen();
-        } else {
-            document.exitFullscreen();
-        }
-    });
-    fullScreenDiv.appendChild(fullScreenLabel);
-    fullScreenDiv.appendChild(fullScreenCheckbox);
-    container.append($(fullScreenDiv));
+//     const fullScreenLabel = document.createElement('label');
+//     fullScreenLabel.setAttribute('for', 'fullScreenSwitchPause');
+//     fullScreenLabel.textContent = 'Full Screen';
+//     const fullScreenCheckbox = document.createElement('input');
+//     fullScreenCheckbox.type = 'checkbox';
+//     fullScreenCheckbox.id = 'fullScreenSwitchPause';
+//     fullScreenCheckbox.checked = false;
+//     fullScreenCheckbox.addEventListener('change', e => {
+//         var gameScreen = document.body;
+//         if (e.target.checked) {
+//             gameScreen.requestFullscreen();
+//         } else {
+//             document.exitFullscreen();
+//         }
+//     });
+//     fullScreenDiv.appendChild(fullScreenLabel);
+//     fullScreenDiv.appendChild(fullScreenCheckbox);
+//     container.append($(fullScreenDiv));
 
-    // Change Theme 버튼
-    const houseDiv = document.createElement('div');
-    houseDiv.classList.add('choose');
-    styleChooseDiv(houseDiv);
+//     // Change Theme 버튼
+//     const houseDiv = document.createElement('div');
+//     houseDiv.classList.add('choose');
+//     styleChooseDiv(houseDiv);
 
-    const houseLabel = document.createElement('label');
-    houseLabel.setAttribute('for', 'houseSelectPause');
-    houseLabel.textContent = 'Select House';
+//     const houseLabel = document.createElement('label');
+//     houseLabel.setAttribute('for', 'houseSelectPause');
+//     houseLabel.textContent = 'Select House';
 
-    const houseSelect = document.createElement('select');
-    houseSelect.id = 'houseSelectPause';
+//     const houseSelect = document.createElement('select');
+//     houseSelect.id = 'houseSelectPause';
 
-    // 기숙사 목록 (id와 표시명)
-    const houses = [
-        { id: 'house1', name: 'Gryffindor' },
-        { id: 'house2', name: 'Slytherin' },
-        { id: 'house3', name: 'Hufflepuff' },
-        { id: 'house4', name: 'Ravencelaw' },
-    ];
+//     // 기숙사 목록 (id와 표시명)
+//     const houses = [
+//         { id: 'house1', name: 'Gryffindor' },
+//         { id: 'house2', name: 'Slytherin' },
+//         { id: 'house3', name: 'Hufflepuff' },
+//         { id: 'house4', name: 'Ravencelaw' },
+//     ];
 
-    houses.forEach(h => {
-        const option = document.createElement('option');
-        option.value = h.id;
-        option.textContent = h.name;
-        houseSelect.appendChild(option);
-    });
+//     houses.forEach(h => {
+//         const option = document.createElement('option');
+//         option.value = h.id;
+//         option.textContent = h.name;
+//         houseSelect.appendChild(option);
+//     });
 
-    // 현재 선택된 기숙사(selectedHouse) 값으로 초기화
-    if (typeof selectedHouse !== 'undefined' && selectedHouse !== null) {
-        houseSelect.value = selectedHouse;
-    } else {
-        houseSelect.value = 'house1'; // 기본값
-        selectedHouse = 'house1';
-    }
+//     // 현재 선택된 기숙사(selectedHouse) 값으로 초기화
+//     if (typeof selectedHouse !== 'undefined' && selectedHouse !== null) {
+//         houseSelect.value = selectedHouse;
+//     } else {
+//         houseSelect.value = 'house1'; // 기본값
+//         selectedHouse = 'house1';
+//     }
 
-    houseSelect.addEventListener('change', function () {
-        selectedHouse = this.value;
-        console.log(`기숙사 변경됨: ${selectedHouse}`);
-        applyHouseTheme(selectedHouse); // 배경 변경 함수 호출
-    });
+//     houseSelect.addEventListener('change', function () {
+//         selectedHouse = this.value;
+//         console.log(`기숙사 변경됨: ${selectedHouse}`);
+//         applyHouseTheme(selectedHouse); // 배경 변경 함수 호출
+//     });
 
-    houseDiv.appendChild(houseLabel);
-    houseDiv.appendChild(houseSelect);
-    container.append($(houseDiv));
+//     houseDiv.appendChild(houseLabel);
+//     houseDiv.appendChild(houseSelect);
+//     container.append($(houseDiv));
 
-    // Change BGM select
-    const bgmDiv = document.createElement('div');
-    bgmDiv.classList.add('choose');
-    styleChooseDiv(bgmDiv);
+//     // Change BGM select
+//     const bgmDiv = document.createElement('div');
+//     bgmDiv.classList.add('choose');
+//     styleChooseDiv(bgmDiv);
 
-    const bgmLabel = document.createElement('label');
-    bgmLabel.setAttribute('for', 'changeBGMPause');
-    bgmLabel.textContent = 'Change BGM';
+//     const bgmLabel = document.createElement('label');
+//     bgmLabel.setAttribute('for', 'changeBGMPause');
+//     bgmLabel.textContent = 'Change BGM';
 
-    const bgmSelect = document.createElement('select');
-    bgmSelect.id = 'changeBGMPause';
+//     const bgmSelect = document.createElement('select');
+//     bgmSelect.id = 'changeBGMPause';
 
-    bgmList.forEach((bgm, idx) => {
-        const option = document.createElement('option');
-        option.value = idx;
-        option.textContent = `BGM ${idx + 1}`;
-        bgmSelect.appendChild(option);
-    });
+//     bgmList.forEach((bgm, idx) => {
+//         const option = document.createElement('option');
+//         option.value = idx;
+//         option.textContent = `BGM ${idx + 1}`;
+//         bgmSelect.appendChild(option);
+//     });
 
-    bgmSelect.value = 0;
-    bgmSelect.addEventListener('change', function () {
-        const index = parseInt(this.value);
-        gameState.currentBgmIndex = index;  // [추가] 선택 인덱스 저장
-        if (gameState.isMusicOn) {
-            musicObj.playMusic(bgmList[index]);
-        } else {
-            musicObj.stopMusic();
-        }
-        console.log(`BGM 변경: ${index}`);
-    });
+//     bgmSelect.value = 0;
+//     bgmSelect.addEventListener('change', function () {
+//         const index = parseInt(this.value);
+//         gameState.currentBgmIndex = index;  // [추가] 선택 인덱스 저장
+//         if (gameState.isMusicOn) {
+//             musicObj.playMusic(bgmList[index]);
+//         } else {
+//             musicObj.stopMusic();
+//         }
+//         console.log(`BGM 변경: ${index}`);
+//     });
 
-    bgmDiv.appendChild(bgmLabel);
-    bgmDiv.appendChild(bgmSelect);
-    container.append($(bgmDiv));
+//     bgmDiv.appendChild(bgmLabel);
+//     bgmDiv.appendChild(bgmSelect);
+//     container.append($(bgmDiv));
 
-    // Back 버튼
-    const backDiv = document.createElement('div');
-    backDiv.classList.add('choose');
-    backDiv.style.width = '250px';
-    backDiv.style.margin = '10px auto 0'; // 위쪽 50px, 좌우 자동(가운데 정렬)
-    backDiv.style.display = 'flex';
-    backDiv.style.justifyContent = 'center';
-    backDiv.style.alignItems = 'center';
+//     // Back 버튼
+//     const backDiv = document.createElement('div');
+//     backDiv.classList.add('choose');
+//     backDiv.style.width = '250px';
+//     backDiv.style.margin = '10px auto 0'; // 위쪽 50px, 좌우 자동(가운데 정렬)
+//     backDiv.style.display = 'flex';
+//     backDiv.style.justifyContent = 'center';
+//     backDiv.style.alignItems = 'center';
 
-    const backButton = document.createElement('button');
-    backButton.id = 'backToPauseMenuBtn';
-    backButton.textContent = 'Back';
-    backButton.style.width = '100px';
-    backButton.style.height = '40px';
-    backButton.style.fontSize = '16px';
-    backButton.style.cursor = 'pointer';
+//     const backButton = document.createElement('button');
+//     backButton.id = 'backToPauseMenuBtn';
+//     backButton.textContent = 'Back';
+//     backButton.style.width = '100px';
+//     backButton.style.height = '40px';
+//     backButton.style.fontSize = '16px';
+//     backButton.style.cursor = 'pointer';
 
-    backButton.addEventListener('click', () => {
-        $('#settingPause').hide();
-        $('#pauseMenu').show();
-    });
-    backDiv.appendChild(backButton);
-    container.append(backDiv);
-}
+//     backButton.addEventListener('click', () => {
+//         $('#settingPause').hide();
+//         $('#pauseMenu').show();
+//     });
+//     backDiv.appendChild(backButton);
+//     container.append(backDiv);
+// }
 

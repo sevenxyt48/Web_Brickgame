@@ -196,6 +196,8 @@ $(document).ready(function () {
     let selectedHouse = null;
     $('#houseSelection .house').click(function () {
         selectedHouse = $(this).find('img').attr('id');
+        gameState.selectedHouse = selectedHouse;
+        updateSettingsUI();
         $('.detail p').text($(this).find('h1').text() + ' 선택됨');
     })
 
@@ -216,7 +218,7 @@ $(document).ready(function () {
         gameInit(gameLevel);
         startGame(selectedHouse);
     });
-    createSettingsElements();
+    // createSettingsElements();
     $("#pauseBtn").click(function () {
         pauseGame();
         // resetAll(selectedHouse);
@@ -231,14 +233,15 @@ $(document).ready(function () {
     $('#restartBtn').click(function () {
         $('#pauseMenu').hide();
         reset(gameLevel);
-        startGame(selectedHouse);
+        startGame(gameState.selectedHouse);
     });
 
     $('#settingsBtn').click(function () {
         console.log(`click settingBtn`);
         //게임화면에 있는 설정창
         $('#settingPause').show();
-        createSettingsElements();
+        vControlInGame();
+        // createSettingsElements();
     });
     $('#menuBtn').click(function () {
         reset(gameLevel);
@@ -329,12 +332,12 @@ function stage(n) {
     $("#myCanvas").show();
     $("#gameScreen").show();
 
-    if (!selectedHouse) {
+    if (!gameState.selectedHouse) {
         selectedHouse = "house1";
     }
-    applyHouseTheme(selectedHouse);
+    applyHouseTheme(gameState.selectedHouse);
 
-    startGame(selectedHouse);
+    startGame(gameState.selectedHouse);
 }
 
 function updateScore(score) {

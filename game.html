@@ -175,10 +175,55 @@
             <button class="pause-btn" id="settingsBtn">Settings</button>
             <button class="pause-btn" id="menuBtn">Menu</button>
         </div>
+
         <!-- 게임 중지 -> 설정 버튼 -->
+        <!-- js에서 추가하던거 html로 옮긴거 -->
         <div id="settingPause">
             <h2>Settings</h2>
+            <div class="choose" id="ingame-sound">
+                <label for="ingame-soundSwitch">Sound</label>
+                <input type="checkbox" id="ingame-soundSwitch">
+            </div>
+            <div class="choose" id="ingame-music">
+                <label for="ingame-musicSwitch"> Music</label>
+                <input type="checkbox" id="ingame-musicSwitch">
+            </div>
+            <div class="choose" id="ingame-fullScreen">
+                <label for="ingame-fullScreenSwitch">Full Screen</label>
+                <input type="checkbox" id="ingame-fullScreenSwitch">
+            </div>
+
+            <!-- 기숙사 select -->
+            <div class="choose">
+                <label for="houseSelectPause">Select House</label>
+                <select id="houseSelectPause">
+                    <option value="house1">Gryffindor</option>
+                    <option value="house2">Slytherin</option>
+                    <option value="house3">Hufflepuff</option>
+                    <option value="house4">Ravencelaw</option>
+                </select>
+            </div>
+            <!-- <div class="choose" id="changeTheme">
+                Change Theme
+                <button id="changeThemeButton">Click</button>
+            </div>-->
+            <div class="choose" id="ingame-changeBGM">
+                <label for="ingame-changeBGM-select">Change BGM</label>
+                <select id="ingame-changeBGM-select">
+                    <option value="0" selected>BGM 1</option>
+                    <option value="1">BGM 2</option>
+                    <option value="2">BGM 3</option>
+                    <option value="3">BGM 4</option>
+                </select>
+            </div>
+
+            <div class="choose">
+                <div class="back-container">
+                    <button id="backToPauseMenuBtn">Back</button>
+                </div>
+            </div>
         </div>
+
 
         <!-- 게임 종료화면 -->
         <div class="menu" id="win">
