@@ -472,6 +472,7 @@ function gameInit(gameLevel) {
     // 게임 객체 초기화
     resetBall();
     initBricks(gameLevel);
+    paddleWidth = originalPaddleWidth;
 
     // 게임 루프 시작
     // requestAnimationFrame(gameLoop);
