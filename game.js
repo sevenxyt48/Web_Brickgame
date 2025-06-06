@@ -583,24 +583,18 @@ function updateGame() {
             if (ball.x + ball.r >= paddleX - paddleWidth / 2 && ball.x - ball.r <= paddleX + paddleWidth / 2) {
                 const relativeIntersectX = ball.x - paddleX; // 중심 기준
 
-                // -1 ~ 1 사이로 값 강제 변환
                 let normalized = relativeIntersectX / (paddleWidth / 2); // -1 ~ 1 변환
                 normalized = Math.max(-1, Math.min(1, normalized)); // 강제 변환
 
                 const maxBounceAngle = Math.PI / 3; // 최대 60도
                 const bounceAngle = normalized * maxBounceAngle;
 
-                // 공이 패들 위에 붙어서 뚫고 가지 않도록 y 위치 보정
                 ball.y = paddleY - ball.r - 1;
 
-                // vY값의 제한(공 속도 느려짐 방지지)
-                ball.vX = currentSpeed * Math.sin(bounceAngle);
+                const speed = Math.sqrt(ball.vX ** 2 + ball.vY ** 2);
 
-                const minYRatio = 0.7;
-                ball.vY = -Math.max(
-                    Math.abs(currentSpeed * Math.cos(bounceAngle)),
-                    currentSpeed * minYRatio
-                );
+                ball.vX = speed * Math.sin(bounceAngle);
+                ball.vY = -speed * Math.cos(bounceAngle); 
             }
             else if (ball.y + ball.r > canvas.height) {
                 // 패들 범위도 아니고 바닥으로 떨어진 경우 → 목숨 차감 & 재생성
@@ -621,38 +615,6 @@ function updateGame() {
             }
         }
     });
-
-    //패들 충돌
-    balls.forEach(ball => {
-        if (ball.y + ball.r >= paddleY) {
-            const paddleLeft = paddleX - paddleWidth / 2; // 값 변경 (이미지 벗어난 영역 없앰앰) 
-            const paddleRight = paddleX + paddleWidth / 2;
-
-            if (ball.x + ball.r >= paddleLeft && ball.x - ball.r <= paddleRight) {
-                const relativeIntersectX = ball.x - paddleX; // 중심 기준
-
-                // -1 ~ 1 사이로 값 강제 변환
-                let normalized = relativeIntersectX / (paddleWidth / 2); // -1 ~ 1 변환
-                normalized = Math.max(-1, Math.min(1, normalized)); // 강제 변환
-
-                const maxBounceAngle = Math.PI / 3; // 최대 60도
-                const bounceAngle = normalized * maxBounceAngle;
-
-                // 공이 패들 위에 붙어서 뚫고 가지 않도록 y 위치 보정
-                ball.y = paddleY - ball.r - 1;
-
-                // vY값의 제한(공 속도 느려짐 방지지)
-                ball.vX = currentSpeed * Math.sin(bounceAngle);
-
-                const minYRatio = 0.7;
-                ball.vY = -Math.max(
-                    Math.abs(currentSpeed * Math.cos(bounceAngle)),
-                    currentSpeed * minYRatio
-                );
-            }
-        }
-    });
-
 
     //벽돌 충돌
     balls.forEach(ball => {
