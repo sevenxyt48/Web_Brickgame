@@ -57,6 +57,7 @@ function Ball(x, y, vX, vY) {
     this.vX = vX;
     this.vY = vY;
     this.r = ballR // 추가 
+    this.isClone = false;
 }
 var drawInterval; // 게임 화면 갱신 인터벌
 var countdownInterval // 카운트 인터벌
@@ -547,7 +548,7 @@ var ball;
 // 공 위치 초기화
 function resetBall() {
     balls = [];
-    ball = new Ball(canvas.width / 2, canvas.height - 50, 3, -3);
+    ball = new Ball(canvas.width / 2, canvas.height - 50, currentSpeed, -currentSpeed);
     balls.push(ball);
 
 }
@@ -603,14 +604,20 @@ function updateGame() {
             }
             else if (ball.y + ball.r > canvas.height) {
                 // 패들 범위도 아니고 바닥으로 떨어진 경우 → 목숨 차감 & 재생성
-                lives--;
-                resetBall();   // balls 배열을 재생성하거나, 공을 리셋하는 함수로 이동
-                updateLives(lives);
-                ballMoving = false; // 공 멈추고, 다음 클릭 때 재발사
+                
+                    if(ball.isClone){
+                        balls = balls.filter(b => b!==ball);
+                    }
+                    else{
+                        lives--;
+                        resetBall();   // balls 배열을 재생성하거나, 공을 리셋하는 함수로 이동
+                        updateLives(lives);
+                        ballMoving = false; // 공 멈추고, 다음 클릭 때 재발사
 
-                if (lives <= 0) {
-                    gameFail();//실패 처리
-                }
+                        if (lives <= 0) {
+                            gameFail();//실패 처리
+                        }
+                    }
             }
         }
     });
@@ -648,7 +655,8 @@ function updateGame() {
 
 
     //벽돌 충돌
-    for (let i = 0; i < brick.length; i++) {
+    balls.forEach(ball => {
+        for (let i = 0; i < brick.length; i++) {
         let b = brick[i];
         if (
             b.alive &&
@@ -666,6 +674,7 @@ function updateGame() {
             break;
         }
     }
+    })
 
     updateScore(totalScore);
     // updateLives(lives);
@@ -687,9 +696,9 @@ function setMagic(magic, brickX, brickY) {
             impedimenta();
             console.log('impedimenta');
             break;
-        // case "geminio":
-        //     geminio(brickX, brickY);
-        //     break;
+        case "geminio":
+            geminio(brickX, brickY);
+            break;
         case "bombarda":
             bombarda(brickX, brickY);
             console.log('bombarda');
@@ -799,7 +808,9 @@ function drawGame(ctx) {
 }
 
 function drawBall(ctx) {
-    ctx.drawImage(ballImg, ball.x - 20, ball.y - 20, 40, 40);
+    for(var i=0;i<balls.length;i++){
+        ctx.drawImage(ballImg, balls[i].x - 20, balls[i].y - 20, 40, 40);
+    }
 }
 
 function drawPaddle(ctx) {
@@ -871,9 +882,11 @@ function impedimenta() {
 //좋은 이벤트 - 공 복제 마법
 function geminio(brickX, brickY) {
     console.log('geminio called');
-    balls[ballNum] = new Ball(brickX, brickY, 0, 3); // 아래로 떨어짐.
-    //공이 패들에 닿았을 경우 속도 기본 값으로 변경. 패들에 닿는 위치마다 각도 다르게.
-    //패들에 닿지 않고 화면 아래쪽으로 사라지면 삭제.
+    const cloneBall = new Ball(brickX, brickY, 0, currentSpeed);
+    cloneBall.isClone = true;
+
+    balls.push(cloneBall);
+    drawBall(context);
 }
 
 //좋은 이벤트 - 상하좌우 폭발 마법
@@ -910,8 +923,8 @@ function ascendio() { //조금 마법 이름이 기능이랑 조금 다른데 �
     const originalSpeed = [];
     balls.forEach((ball, index) => {
         originalSpeed[index] = { vX: ball.vX, vY: ball.vY };
-        ball.vX *= 1.3;
-        ball.vY *= 1.3;
+        ball.vX *= 1.5;
+        ball.vY *= 1.5;
     })
     //1분 있으면 원래 속도로 복원
     setTimeout(() => {
