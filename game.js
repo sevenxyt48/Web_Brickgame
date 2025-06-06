@@ -8,6 +8,10 @@ var context;
 var totalScore = 0; // 전체 스코어
 let darkR; // 시야 반지름
 
+// 이펙트 출력용
+var magicEffectText = "";
+var magicEffectOpacity = 0;
+
 // 벽돌 정보
 var brick = [];
 var brickRow; // 벽돌 행 수
@@ -660,33 +664,42 @@ function setMagic(magic, brickX, brickY) {
         case "impedimenta":
             impedimenta();
             console.log('impedimenta');
+            showMagicEffect('impedimenta');
             break;
         case "geminio":
             geminio(brickX, brickY);
+            console.log('geminio');
+            showMagicEffect('geminio');
             break;
         case "bombarda":
             bombarda(brickX, brickY);
             console.log('bombarda');
+            showMagicEffect('bombarda');
             break;
         case "lumos":
             lumos(gameLevel);
             console.log('lumos');
+            showMagicEffect('lumos');
             break;
         case "ascendio":
             ascendio();
             console.log('ascendio');
+            showMagicEffect('ascendio');
             break;
         case "reparo":
             reparo();
             console.log('reparo');
+            showMagicEffect('reparo');
             break;
         case "disillusionment":
             disillusionment();
             console.log('disillusionment');
+            showMagicEffect('disillusionment');
             break;
         case "reducio":
             reducio();
             console.log('reducio');
+            showMagicEffect('reducio');
             break;
         default:
             break;
@@ -769,7 +782,7 @@ function drawGame(ctx) {
     drawPaddle(ctx);
     drawBricks(ctx);
     darkness(ctx);
-
+    drawwMagicEffect(ctx);
 }
 
 function drawBall(ctx) {
@@ -988,4 +1001,27 @@ function darkness(context) { // 매 프레임마다 호출하여 실시간으로
     context.arc(centerX, centerY, darkR, 0, Math.PI * 2, true);
     context.closePath();
     context.fill("evenodd");
+}
+
+function showMagicEffect(magic) {
+    magicEffectText = magic + "!";
+    magicEffectOpacity = 1.0;
+}
+
+function drawwMagicEffect(ctx) {
+    if (magicEffectOpacity <= 0) 
+        return;
+
+    ctx.save();
+    ctx.globalAlpha = magicEffectOpacity;
+    ctx.font = "bold 50px 'Garmond', serif";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.strokeStyle = "yellow";
+
+    ctx.strokeText(magicEffectText, canvas.width / 2, canvas.height / 2);
+    ctx.fillText(magicEffectText, canvas.width / 2, canvas.height / 2);
+    ctx.restore();
+
+    magicEffectOpacity -= 0.01;
 }
