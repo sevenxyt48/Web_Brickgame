@@ -591,10 +591,10 @@ function updateGame() {
 
                 ball.y = paddleY - ball.r - 1;
 
-                const speed = Math.sqrt(ball.vX ** 2 + ball.vY ** 2);
+                currentSpeed = Math.sqrt(ball.vX ** 2 + ball.vY ** 2);
 
-                ball.vX = speed * Math.sin(bounceAngle);
-                ball.vY = -speed * Math.cos(bounceAngle); 
+                ball.vX = currentSpeed * Math.sin(bounceAngle);
+                ball.vY = -currentSpeed * Math.cos(bounceAngle); 
             }
             else if (ball.y + ball.r > canvas.height) {
                 // 패들 범위도 아니고 바닥으로 떨어진 경우 → 목숨 차감 & 재생성
@@ -830,7 +830,7 @@ function impedimenta() {
         ball.vX *= 0.7;
         ball.vY *= 0.7;
     })
-    //1분 있으면 원래 속도로 복원
+    //원래 속도로 복원
     setTimeout(() => {
         balls.forEach((ball, index) => {
             if (originalSpeed[index]) {
@@ -838,13 +838,13 @@ function impedimenta() {
                 ball.vY = originalSpeed[index].vY;
             }
         });
-    }, 60000)
+    }, 5000)
 }
 
 //좋은 이벤트 - 공 복제 마법
 function geminio(brickX, brickY) {
     console.log('geminio called');
-    const cloneBall = new Ball(brickX, brickY, 0, currentSpeed);
+    const cloneBall = new Ball(brickX, brickY, 0, balls[0].vY);
     cloneBall.isClone = true;
 
     balls.push(cloneBall);
@@ -888,7 +888,7 @@ function ascendio() { //조금 마법 이름이 기능이랑 조금 다른데 �
         ball.vX *= 1.5;
         ball.vY *= 1.5;
     })
-    //1분 있으면 원래 속도로 복원
+    //원래 속도로 복원
     setTimeout(() => {
         balls.forEach((ball, index) => {
             if (originalSpeed[index]) {
@@ -896,7 +896,7 @@ function ascendio() { //조금 마법 이름이 기능이랑 조금 다른데 �
                 ball.vY = originalSpeed[index].vY;
             }
         });
-    }, 60000)
+    }, 5000)
 }
 
 //나쁜 이벤트 - 깨진 벽돌 중에 일부 회복(수리 마법)
