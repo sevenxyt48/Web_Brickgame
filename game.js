@@ -598,10 +598,11 @@ function updateGame() {
 
                 ball.y = paddleY - ball.r - 1;
 
-                currentSpeed = Math.sqrt(ball.vX ** 2 + ball.vY ** 2);
+                // currentSpeed = Math.sqrt(ball.vX ** 2 + ball.vY ** 2);
+                const speed = Math.sqrt(ball.vX ** 2 + ball.vY ** 2);
 
-                ball.vX = currentSpeed * Math.sin(bounceAngle);
-                ball.vY = -currentSpeed * Math.cos(bounceAngle); 
+                ball.vX = speed * Math.sin(bounceAngle);
+                ball.vY = -speed * Math.cos(bounceAngle); 
             }
             else if (ball.y + ball.r > canvas.height) {
                 // 패들 범위도 아니고 바닥으로 떨어진 경우 → 목숨 차감 & 재생성
@@ -850,8 +851,22 @@ function impedimenta() {
     setTimeout(() => {
         balls.forEach((ball, index) => {
             if (originalSpeed[index]) {
-                ball.vX = originalSpeed[index].vX;
-                ball.vY = originalSpeed[index].vY;
+                const original = originalSpeed[index];
+                const restoredSpeed = Math.sqrt(original.vX ** 2 + original.vY ** 2);
+
+                // 현재 방향의 단위 벡터 구하기
+                const currentMagnitude = Math.sqrt(ball.vX ** 2 + ball.vY ** 2);
+                const unitX = ball.vX / currentMagnitude;
+                const unitY = ball.vY / currentMagnitude;
+
+                // 방향은 유지하되, 원래 속도 크기로 복원
+                ball.vX = unitX * restoredSpeed;
+                ball.vY = unitY * restoredSpeed;
+                //const currentDirX = ball.vX >=0 ? 1:-1;
+                //const currentDirY = ball.vY >=0 ? 1:-1;
+
+                //ball.vX = currentDirX*Math.abs(originalSpeed[index].vX);
+                //ball.vY = currentDirY*Math.abs(originalSpeed[index].vY);
             }
         });
     }, 5000)
@@ -901,15 +916,29 @@ function ascendio() { //조금 마법 이름이 기능이랑 조금 다른데 �
     const originalSpeed = [];
     balls.forEach((ball, index) => {
         originalSpeed[index] = { vX: ball.vX, vY: ball.vY };
-        ball.vX *= 1.5;
-        ball.vY *= 1.5;
+        ball.vX *= 1.3;
+        ball.vY *= 1.3;
     })
     //원래 속도로 복원
     setTimeout(() => {
         balls.forEach((ball, index) => {
             if (originalSpeed[index]) {
-                ball.vX = originalSpeed[index].vX;
-                ball.vY = originalSpeed[index].vY;
+                const original = originalSpeed[index];
+                const restoredSpeed = Math.sqrt(original.vX ** 2 + original.vY ** 2);
+
+                // 현재 방향의 단위 벡터 구하기
+                const currentMagnitude = Math.sqrt(ball.vX ** 2 + ball.vY ** 2);
+                const unitX = ball.vX / currentMagnitude;
+                const unitY = ball.vY / currentMagnitude;
+
+                // 방향은 유지하되, 원래 속도 크기로 복원
+                ball.vX = unitX * restoredSpeed;
+                ball.vY = unitY * restoredSpeed;
+                //const currentDirX = ball.vX >=0 ? 1:-1;
+                //const currentDirY = ball.vY >=0 ? 1:-1;
+
+                //ball.vX = currentDirX*Math.abs(originalSpeed[index].vX);
+                //ball.vY = currentDirY*Math.abs(originalSpeed[index].vY);
             }
         });
     }, 5000)
