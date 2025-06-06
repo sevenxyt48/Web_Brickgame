@@ -961,7 +961,7 @@ function reparo() {
     }
     shuffle(nonAliveBricks);
     var repairNum = Math.min(
-        Math.floor(Math.random() * (nonAliveNum + 1)),
+        Math.floor(Math.random() * (nonAliveNum /2+1)),
         nonAliveBricks.length);
 
     for (var index = 0; index < repairNum; index++) {
