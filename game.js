@@ -560,7 +560,7 @@ function resetBall() {
     balls = [];
     ball = new Ball(canvas.width / 2, canvas.height - 50, currentSpeed, -currentSpeed);
     balls.push(ball);
-    
+
 }
 
 // 게임 상태 갱신
@@ -922,9 +922,9 @@ function bombarda(brickX, brickY) {
         brick[index - brickColumn].alive = false;
     if (brick[index + brickColumn] != null)
         brick[index + brickColumn].alive = false;
-    if (brick[index + 1] != null)
+    if (brick[index + 1] != null && !(index%5==4))
         brick[index + 1].alive = false;
-    if (brick[index - 1] != null)
+    if (brick[index - 1] != null && !(index%5==0))
         brick[index - 1].alive = false;
     drawBricks(context);
 
