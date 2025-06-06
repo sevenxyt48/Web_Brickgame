@@ -875,7 +875,11 @@ function impedimenta() {
 //좋은 이벤트 - 공 복제 마법
 function geminio(brickX, brickY) {
     console.log('geminio called');
-    const cloneBall = new Ball(brickX, brickY, 0, balls[0].vY);
+    // const cloneBall = new Ball(brickX, brickY, 0, balls[0].vY);
+    const original = balls[0];
+    const speed = Math.sqrt(original.vX ** 2 + original.vY ** 2);
+    const cloneBall = new Ball(brickX, brickY, 0, speed);
+
     cloneBall.isClone = true;
 
     balls.push(cloneBall);
