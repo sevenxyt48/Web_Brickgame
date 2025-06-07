@@ -1,7 +1,3 @@
-//!!!!!!수정 완료한 부분을 삭제해주세요:
-//특수 벽돌 이벤트
-//효과음 넣기 
-
 //게임 로직 js코드
 var canvas;
 var context;
@@ -22,6 +18,12 @@ var brickGapX = 5; // 벽돌 사이의 가로 간격
 var brickGapY = 5; // 벽돌 사이의 세로 간격
 var isBrickMoving = false; // 벽돌 하강 여부
 var brickVy = 0.1; // 벽돌이 내려오는 속도
+
+// sound
+const soundList = [
+    "bgm/collisionBrick.mp3",
+    "bgm/collisionSpecialBrick.mp3",
+];
 
 function Brick(x, y, width, height, type, magic) {
     this.x = x;
@@ -172,24 +174,20 @@ $(document).ready(function () {
             // 스토리 화면일 때 -> 난이도 화면으로 전환
             $('#story').hide(); ''
             $('#difficulty').show();
-            if (!selectedHouse) {
-                selectedHouse = 'house1'; // 기본 기숙사 선택
-            }
+             selectedHouse = gameState.selectedHouse;
         }//난이도 -> 게임화면
         else if ($('#difficulty').is(':visible')) {
-            if (!selectedHouse) {
-                selectedHouse = 'house1';
-            }
+             selectedHouse = gameState.selectedHouse;
             if (!gameLevel) gameLevel = 1;
-            // stage(gameLevel);
-            hideAll();
-            $("#myCanvas").show();
+            stage(gameLevel);
+            // hideAll();
+            // $("#myCanvas").show();
 
-            applyHouseTheme(selectedHouse);
-            $('#chooseHouse').hide();
-            $('#gameScreen').show();
-            gameInit(gameLevel);
-            startGame(selectedHouse);
+            // applyHouseTheme(selectedHouse);
+            // $('#chooseHouse').hide();
+            // $('#gameScreen').show();
+            // gameInit(gameLevel);
+            // startGame(selectedHouse);
         }
     });
     $("#houseSelect").click(function () {
@@ -210,12 +208,8 @@ $(document).ready(function () {
 
     // 학년 선택 버튼 클릭 시 -> 게임 화면
     $('#gradeSelect').click(function () {
-
         if (!gameLevel) gameLevel = 1;
-        if (!selectedHouse) {
-            selectedHouse = 'house1';
-        }
-        // stage(gameLevel);
+        selectedHouse = gameState.selectedHouse;
         hideAll();
         $("#myCanvas").show();
 
@@ -266,10 +260,17 @@ $(document).ready(function () {
         stage(gameLevel);
     });
     $(".nextGrade").on("click", function () {
-        console.log(`Start next stage`);
-        stage(++gameLevel);
+        if (gameLevel == 4)
+        {
+            console.log(`All stages cleared!`);
+            stage(1);
+        }
+        else{
+            console.log(`Start next stage`);
+            stage(++gameLevel);
+        }
     });
-    $('#backToMain').click(function () {
+    $('.backToMain').click(function () {
         goToMenu();
     });
     $('#gradeSelection .dif').click(function () {
@@ -277,7 +278,7 @@ $(document).ready(function () {
         $(this).addClass('selected');
 
         const selectedGradeId = $(this).attr('id');
-        if (selectedGradeId === 'grade1') {
+        if (selectedGradeId == 'grade1') {
             gameLevel = 1;
         } else if (selectedGradeId == 'grade2') {
             gameLevel = 2;
@@ -339,9 +340,9 @@ function stage(n) {
     $("#myCanvas").show();
     $("#gameScreen").show();
 
-    if (!gameState.selectedHouse) {
-        selectedHouse = "house1";
-    }
+    // if (!selectedHouse) {
+    //     gameState.selectedHouse = "house1";
+    // }
     applyHouseTheme(gameState.selectedHouse);
 
     startGame(gameState.selectedHouse);
@@ -532,8 +533,9 @@ function gameOver() {
     isGameAllClear = true;
     //score visible
     document.querySelector('#gameOver .score').textContent = 'Score: ' + totalScore;
-
+    $('#gradeSelection .dif').removeClass('selected');
     $('#gameOver').show();
+
 }
 //게임 클리어(승리) 다음학년으로 
 function gameClear() {
@@ -541,6 +543,7 @@ function gameClear() {
     isGameAllClear = false;
     //score visible
     document.querySelector('#win .score').textContent = 'Score: ' + totalScore;
+    $('#gradeSelection .dif').removeClass('selected');
     $('#win').show();
 }
 //게임 클리어(실패 Lives=0) 다음학년으로
@@ -549,7 +552,7 @@ function gameFail() {
     isGameAllClear = false;
     //score visible
     document.querySelector('#fail .score').textContent = 'Score: ' + totalScore;
-
+    $('#gradeSelection .dif').removeClass('selected');
     $('#fail').show();
 }
 
@@ -643,6 +646,17 @@ function updateGame() {
             ball.vY *= -1;
             b.alive = false;
             totalScore += 10;
+
+            // 벽돌 깨질 때마다 sound 재생
+            if (b.type == 1 || b.type == 2) 
+            {
+                playSoundEffect(soundList[1]);
+            }
+            else
+            {
+                playSoundEffect(soundList[0]);
+            }
+
             if (b.magic != null) {
                 setMagic(b.magic, b.x, b.y);
             }

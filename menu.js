@@ -1,3 +1,11 @@
+//수정사항:
+//-> sound 삽입
+//-> music 껐다 켰을 때 이전 노래 나오도록 수정
+//-> gameover 메뉴활성화
+//-> 4단계 fail skip하면 1단계로 초기화 (다른 기능이 나으려나? 일단 이렇게 해놓음)
+//-> start select 기본값 설정이슈 수정
+
+
 //화면 전환 js코드
 // BGM 리스트
 const bgmList = [
@@ -92,12 +100,14 @@ const musicObj = {
         effect.play();
     },
 };
-// 게임 상태 초기화: localStorage에서 music 상태 불러오기
-const savedIsMusicOn = localStorage.getItem('isMusicOn');
-if (savedIsMusicOn !== null) {
-    gameState.isMusicOn = (savedIsMusicOn === 'true');
-} else {
-    gameState.isMusicOn = false; // 기본값
+
+function playSoundEffect(soundName)
+{
+    if (!gameState.isSoundOn) return;
+    
+    const sound = new Audio(soundName);
+    sound.volume = 0.7;
+    sound.play();
 }
 
 // 페이지 로드 시 음악 상태 반영
@@ -248,7 +258,7 @@ function vControl() {
         console.log(`Music 상태: ${gameState.isMusicOn}`);
 
         if (this.checked) {
-            musicObj.playMusic('bgm/bgm1.mp3');
+            musicObj.playMusic(bgmList[gameState.currentBgmIndex]);
         } else {
             musicObj.stopMusic();
         }
@@ -380,3 +390,4 @@ function handleChangeTheme() {
     hideAll();
     $("#chooseHouse").show();
 }
+
