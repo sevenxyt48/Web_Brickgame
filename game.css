@@ -216,7 +216,7 @@ body:fullscreen #container #gameScreen {
     max-width: 200px;
 }
 
-.back-container{
+.back-container {
     width: 250px;
     margin: 10px auto 0;
     display: flex;
@@ -224,7 +224,7 @@ body:fullscreen #container #gameScreen {
     align-items: center;
 }
 
-#backToPauseMenuBtn{
+#backToPauseMenuBtn {
     width: 100px;
     height: 40px;
     font-size: 16px;
@@ -264,36 +264,12 @@ body:fullscreen #container #gameScreen {
     transform: scale(1.05);
 }
 
-/* #settingPause {
-    display: none;
-    position: absolute;
-    width: 430px;
-    height: 550px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    color: black;
-    font-size: 24px;
-    padding: 20px;
-    border-radius: 10px;
-    z-index: 1500;
-} */
-
-/* 이건 또 왜 2개야 */
-/* .choose {
-    width: 400px;
-    margin-bottom: 15px;
-} */
-
 .choose {
     width: 400px;
     margin: 15px auto;
-    /* margin-bottom: 15px; */
     text-align: left;
     display: flex;
     font-size: 28px;
-    /* line-height: 1.5em; */
     justify-content: space-between;
 }
 
@@ -394,7 +370,6 @@ body:fullscreen #container #gameScreen {
 #story h2 {
     font-size: 36px;
     color: white;
-    /* margin-top: 25%; */
 }
 
 #story p {
@@ -523,15 +498,6 @@ option {
     align-items: center;
 }
 
-/* .choose {
-    width: 400px;
-    text-align: left;
-    display: flex;
-    font-size: 28px;
-    line-height: 1.5em;
-    justify-content: space-between;
-} */
-
 .choose label {
     font-weight: bold;
 }
@@ -652,7 +618,6 @@ option {
 #gradeSelection .dif.selected h1 {
     color: darkgray;
     transform: scale(1.05);
-    /* 선택됐을 때 표시할 색상 */
 }
 
 .clearButton {
