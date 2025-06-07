@@ -2,6 +2,7 @@
 var canvas;
 var context;
 var totalScore = 0; // 전체 스코어
+var startScore = 0; // 시작 스코어
 let darkR; // 시야 반지름
 
 // 이펙트 출력용
@@ -135,6 +136,7 @@ const badMagicList = ['ascendio', 'reparo', 'disillusionment', 'reducio'];
 
 $(document).ready(function () {
     console.log("Document ready! Music object is safe to use.");
+    totalScore = gameState.score;
 
     $("#lives").hide();
     hideAll();
@@ -233,6 +235,7 @@ $(document).ready(function () {
 
     $('#restartBtn').click(function () {
         $('#pauseMenu').hide();
+        totalScore = startScore;
         reset(gameLevel);
         startGame(gameState.selectedHouse);
     });
@@ -245,6 +248,7 @@ $(document).ready(function () {
         // createSettingsElements();
     });
     $('#menuBtn').click(function () {
+        totalScore = 0;
         reset(gameLevel);
         updateLives(lives);
         $('#gradeSelection .dif').removeClass('selected');
@@ -257,6 +261,9 @@ $(document).ready(function () {
     // updateLives(lives);
 
     $(".reTry").on("click", function () {
+        totalScore = startScore;
+        updateScore(totalScore);
+
         stage(gameLevel);
     });
     $(".nextGrade").on("click", function () {
@@ -270,6 +277,7 @@ $(document).ready(function () {
         }
     });
     $('.backToMain').click(function () {
+        totalScore = 0;
         goToMenu();
     });
     $('#gradeSelection .dif').click(function () {
@@ -331,6 +339,7 @@ $(document).ready(function () {
 //난이도별 함수
 function stage(n) {
     console.log(`Current stage:${n}`);
+    startScore = totalScore;
     gameLevel = n;
     reset(gameLevel);
     $("#lives").show();
@@ -416,7 +425,7 @@ function applyHouseTheme(houseId) {
 }
 function reset(difficulty) {
     // 게임 상태 초기화
-    totalScore = 0;
+    // totalScore = 0;
     lives = 3;
     ballMoving = false;
     isGameRunning = false;
@@ -461,7 +470,7 @@ function gameLoop() {
 }
 
 function gameInit(gameLevel) {
-    totalScore = 0;
+    // totalScore = 0;
     lives = 3;
     // 캔버스 초기화 (한 번만 생성되도록 조건 넣어도 됨)
     canvas = document.getElementById('myCanvas');
@@ -542,6 +551,7 @@ function gameClear() {
     isGameAllClear = false;
     //score visible
     document.querySelector('#win .score').textContent = 'Score: ' + totalScore;
+    gameState.score = totalScore;
     $('#gradeSelection .dif').removeClass('selected');
     $('#win').show();
 }
@@ -551,6 +561,7 @@ function gameFail() {
     isGameAllClear = false;
     //score visible
     document.querySelector('#fail .score').textContent = 'Score: ' + totalScore;
+    gameState.score = 0;
     $('#gradeSelection .dif').removeClass('selected');
     $('#fail').show();
 }
@@ -845,6 +856,11 @@ function goToMenu() {
     document.getElementById('pauseMenu').style.display = 'none';
     isGameRunning = false;
     ballMoving = false;
+
+    totalScroe = 0;
+    startScore = 0;
+    updateScore(totalScore);
+    
     // 메인 메뉴 보여주기
     hideAll();
     $("#mainStart").show();
