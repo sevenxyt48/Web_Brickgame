@@ -1,8 +1,3 @@
-//수정사항:
-//-> change bgm 오류 해결
-//-> change theme 오류 해결
-
-
 //화면 전환 js코드
 // BGM 리스트
 const bgmList = [
@@ -22,7 +17,6 @@ $(document).ready(function () {
 
 // 게임 상태 관리 객체
 const gameState = {
-    level: 1,
     selectedHouse: "house1",
     score: 0,
     lives: 3,
@@ -33,38 +27,38 @@ const gameState = {
     currentBgmIndex: 0,
 };
 
-const audioManager = {
-    bgmList: ["bgm/bgm1.mp3", "bgm/bgm2.mp3", "bgm/bgm3.mp3", "bgm/bgm4.mp3"],
-    currentBgmIndex: 0,
-    isMusicOn: false,
-    isSoundOn: false, // 초기값 false
-    audio: document.getElementById("bgmAudio"),
+// const audioManager = {
+//     bgmList: ["bgm/bgm1.mp3", "bgm/bgm2.mp3", "bgm/bgm3.mp3", "bgm/bgm4.mp3"],
+//     currentBgmIndex: 0,
+//     isMusicOn: false,
+//     isSoundOn: false, // 초기값 false
+//     audio: document.getElementById("bgmAudio"),
 
-    playMusic(index = 0) {
-        if (!this.audio) return;
-        this.audio.src = this.bgmList[index];
-        this.audio.loop = true;
-        this.audio.volume = 0.5;
-        this.audio.play();
-        this.isMusicOn = true;
-    },
+//     playMusic(index = 0) {
+//         if (!this.audio) return;
+//         this.audio.src = this.bgmList[index];
+//         this.audio.loop = true;
+//         this.audio.volume = 0.5;
+//         this.audio.play();
+//         this.isMusicOn = true;
+//     },
 
-    stopMusic() {
-        if (!this.audio) return;
-        this.audio.pause();
-        this.audio.currentTime = 0;
-        this.isMusicOn = false;
-    },
+//     stopMusic() {
+//         if (!this.audio) return;
+//         this.audio.pause();
+//         this.audio.currentTime = 0;
+//         this.isMusicOn = false;
+//     },
 
-    changeMusic(index) {
-        this.currentBgmIndex = index;
-        if (this.isMusicOn) {
-            this.playMusic(index);
-        } else {
-            this.audio.src = this.bgmList[index];
-        }
-    }
-};
+//     changeMusic(index) {
+//         this.currentBgmIndex = index;
+//         if (this.isMusicOn) {
+//             this.playMusic(index);
+//         } else {
+//             this.audio.src = this.bgmList[index];
+//         }
+//     }
+// };
 
 // 음악 관리 객체
 const musicObj = {

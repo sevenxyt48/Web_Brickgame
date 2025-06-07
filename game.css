@@ -676,3 +676,9 @@ option {
     height: 840px;
     z-index: 2000;
 }
+
+#gameOver h2 {
+    font-size: 48px;
+    color: white;
+    text-shadow: 3px 3px 8px black;
+}
