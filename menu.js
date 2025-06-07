@@ -1,9 +1,5 @@
 //수정사항:
-//-> sound 삽입
-//-> music 껐다 켰을 때 이전 노래 나오도록 수정
-//-> gameover 메뉴활성화
-//-> 4단계 fail skip하면 1단계로 초기화 (다른 기능이 나으려나? 일단 이렇게 해놓음)
-//-> start select 기본값 설정이슈 수정
+//-> 중복 함수, 필요없는 함수 제거
 
 
 //화면 전환 js코드
@@ -60,11 +56,6 @@ const musicObj = {
         }
         audio.pause();
         audio.currentTime = 0;
-    },
-    playEffect(src, volume = 0.8) {
-        const effect = new Audio(src);
-        effect.volume = volume;
-        effect.play();
     }
 };
 
@@ -81,51 +72,12 @@ if (gameState.isMusicOn) {
 } else {
     musicObj.stopMusic();
 }
-//난이도 선택 페이지
-function difficultyPage() {
-    hideAll();
-    $("#difficulty").show();
-    $("#backButton").show();
-    $("#skipButton").show();
-}
-
-// music 버튼 토글 핸들러
-function handleMusicToggle(checkbox, bgmList) {
-    if (checkbox.checked) {
-        musicObj.playMusic(bgmList[0]);
-    }
-    else if (!checkbox.checked) {
-        musicObj.stopMusic();
-    }
-}
-
-// 전체화면 토글 핸들러
-function handleFullScreenToggle(checkbox) {
-    var gameScreen = document.body;
-    if (checkbox.checked) {
-        gameScreen.requestFullscreen();
-    }
-    else {
-        document.exitFullscreen();
-    }
-}
 
 // 설정 메뉴
 function settingPage() {
     hideAll();
     $("#settings").show();
     $("#backButton").show();
-
-    // 상태 초기화
-    // soundSwitch.checked = true;
-    // musicSwitch.checked = false;
-    fullScreenSwitch.checked = !!document.fullscreenElement;
-
-    // 기존 드롭다운 제거
-    const existingDropdown = document.getElementById('themeDropdown');
-    if (existingDropdown) {
-        existingDropdown.remove();
-    }
 }
 
 function creditPage() {
@@ -133,57 +85,7 @@ function creditPage() {
     $("#credit").show();
     $("#backButton").show();
 }
-function storyPage() {
-    $('#story').show();
-    $("#backButton").show();
-}
 
-//인게임 화면
-function playPage() {
-    hideAll();
-    $("#pauseBtn").show();
-    $("canvas").show();
-    $("#lives").show();
-    $("#score").show();
-    // 음악 상태에 따라 BGM 재생 또는 정지 처리
-    if (gameState.isMusicOn) {
-        musicObj.playMusic(bgmList[currentBgmIndex]);
-    } else {
-        musicObj.stopMusic();
-    }
-}
-
-//게임 오버 화면
-function gameOverPage() {
-
-    musicObj.stopMusic();
-    hideAll();
-    $("#gameOver").fadeIn(1500).css({ display: "flex" });
-    $(".backToMain").show();
-    $("#backButton").hide();
-    $("#stopButton").hide();
-
-}
-
-//게임 클리어 화면
-function gameClearPage() {
-    musicObj.stopMusic();
-    $(".backToMain").show();
-    $("#backButton").hide();
-    $("#stopButton").hide();
-}
-
-function backToMainMenu() {
-    $('#story').hide();
-    $('#settings').hide();
-    $('#credit').hide();
-    $('#chooseHouse').hide();
-    $('#gameScreen').hide();
-    $('#victoryScreen').hide();
-    $('#gameOverScreen').hide();
-    $('#mainStart').show();
-    $("#backButton").hide();
-}
 //페이지 모두 숨기기
 function hideAll() {
     //클래스에 속하는 것들은 클래스 단위로 처리
@@ -273,7 +175,6 @@ function vControlInGame() {
     // 인게임 muscic 컨트롤
     $('#ingame-musicSwitch').off('change').on('change', function () {
         gameState.isMusicOn = this.checked;
-        localStorage.setItem('isMusicOn', this.checked);
         console.log(`Music 상태: ${gameState.isMusicOn}`);
 
         if (gameState.isMusicOn) {
@@ -298,9 +199,7 @@ function vControlInGame() {
         if (this.checked) {
             document.body.requestFullscreen().catch(err => console.error(err));
         } else {
-            if (document.fullscreenElement) {
-                document.exitFullscreen();
-            }
+            document.exitFullscreen();
         }
         updateSettingsUI();
     });
