@@ -174,10 +174,10 @@ $(document).ready(function () {
             // 스토리 화면일 때 -> 난이도 화면으로 전환
             $('#story').hide(); ''
             $('#difficulty').show();
-             selectedHouse = gameState.selectedHouse;
+            selectedHouse = gameState.selectedHouse;
         }//난이도 -> 게임화면
         else if ($('#difficulty').is(':visible')) {
-             selectedHouse = gameState.selectedHouse;
+            selectedHouse = gameState.selectedHouse;
             if (!gameLevel) gameLevel = 1;
             stage(gameLevel);
             // hideAll();
@@ -260,12 +260,11 @@ $(document).ready(function () {
         stage(gameLevel);
     });
     $(".nextGrade").on("click", function () {
-        if (gameLevel == 4)
-        {
+        if (gameLevel == 4) {
             console.log(`All stages cleared!`);
             stage(1);
         }
-        else{
+        else {
             console.log(`Start next stage`);
             stage(++gameLevel);
         }
@@ -609,25 +608,25 @@ function updateGame() {
                 const speed = Math.sqrt(ball.vX ** 2 + ball.vY ** 2);
 
                 ball.vX = speed * Math.sin(bounceAngle);
-                ball.vY = -speed * Math.cos(bounceAngle); 
+                ball.vY = -speed * Math.cos(bounceAngle);
 
             }
             else if (ball.y + ball.r > canvas.height) {
                 // 패들 범위도 아니고 바닥으로 떨어진 경우 → 목숨 차감 & 재생성
-                
-                    if(ball.isClone){
-                        balls = balls.filter(b => b!==ball);
-                    }
-                    else{
-                        lives--;
-                        resetBall();   // balls 배열을 재생성하거나, 공을 리셋하는 함수로 이동
-                        updateLives(lives);
-                        ballMoving = false; // 공 멈추고, 다음 클릭 때 재발사
 
-                        if (lives <= 0) {
-                            gameFail();//실패 처리
-                        }
+                if (ball.isClone) {
+                    balls = balls.filter(b => b !== ball);
+                }
+                else {
+                    lives--;
+                    resetBall();   // balls 배열을 재생성하거나, 공을 리셋하는 함수로 이동
+                    updateLives(lives);
+                    ballMoving = false; // 공 멈추고, 다음 클릭 때 재발사
+
+                    if (lives <= 0) {
+                        gameFail();//실패 처리
                     }
+                }
             }
         }
     });
@@ -635,34 +634,32 @@ function updateGame() {
     //벽돌 충돌
     balls.forEach(ball => {
         for (let i = 0; i < brick.length; i++) {
-        let b = brick[i];
-        if (
-            b.alive &&
-            ball.x + ball.r >= b.x &&
-            ball.x - ball.r <= b.x + brickWidth &&
-            ball.y + ball.r >= b.y &&
-            ball.y - ball.r <= b.y + brickHeight
-        ) {
-            ball.vY *= -1;
-            b.alive = false;
-            totalScore += 10;
+            let b = brick[i];
+            if (
+                b.alive &&
+                ball.x + ball.r >= b.x &&
+                ball.x - ball.r <= b.x + brickWidth &&
+                ball.y + ball.r >= b.y &&
+                ball.y - ball.r <= b.y + brickHeight
+            ) {
+                ball.vY *= -1;
+                b.alive = false;
+                totalScore += 10;
 
-            // 벽돌 깨질 때마다 sound 재생
-            if (b.type == 1 || b.type == 2) 
-            {
-                playSoundEffect(soundList[1]);
-            }
-            else
-            {
-                playSoundEffect(soundList[0]);
-            }
+                // 벽돌 깨질 때마다 sound 재생
+                if (b.type == 1 || b.type == 2) {
+                    playSoundEffect(soundList[1]);
+                }
+                else {
+                    playSoundEffect(soundList[0]);
+                }
 
-            if (b.magic != null) {
-                setMagic(b.magic, b.x, b.y);
+                if (b.magic != null) {
+                    setMagic(b.magic, b.x, b.y);
+                }
+                break;
             }
-            break;
         }
-    }
     })
 
     updateScore(totalScore);
@@ -806,7 +803,7 @@ function drawGame(ctx) {
 }
 
 function drawBall(ctx) {
-    for(var i=0;i<balls.length;i++){
+    for (var i = 0; i < balls.length; i++) {
         ctx.drawImage(ballImg, balls[i].x - 20, balls[i].y - 20, 40, 40);
     }
 }
@@ -937,9 +934,9 @@ function bombarda(brickX, brickY) {
         brick[index - brickColumn].alive = false;
     if (brick[index + brickColumn] != null)
         brick[index + brickColumn].alive = false;
-    if (brick[index + 1] != null && !(index%5==4))
+    if (brick[index + 1] != null && !(index % 5 == 4))
         brick[index + 1].alive = false;
-    if (brick[index - 1] != null && !(index%5==0))
+    if (brick[index - 1] != null && !(index % 5 == 0))
         brick[index - 1].alive = false;
     drawBricks(context);
 
@@ -1035,7 +1032,7 @@ function reparo() {
     }
     shuffle(nonAliveBricks);
     var repairNum = Math.min(
-        Math.floor(Math.random() * (nonAliveNum /2+1)),
+        Math.floor(Math.random() * (nonAliveNum / 2 + 1)),
         nonAliveBricks.length);
 
     for (var index = 0; index < repairNum; index++) {
@@ -1112,7 +1109,7 @@ function showMagicEffect(magic) {
 }
 
 function drawwMagicEffect(ctx) {
-    if (magicEffectOpacity <= 0) 
+    if (magicEffectOpacity <= 0)
         return;
 
     ctx.save();

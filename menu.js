@@ -35,39 +35,6 @@ const gameState = {
     currentBgmIndex: 0,
 };
 
-// const audioManager = {
-//     bgmList: ["bgm/bgm1.mp3", "bgm/bgm2.mp3", "bgm/bgm3.mp3", "bgm/bgm4.mp3"],
-//     currentBgmIndex: 0,
-//     isMusicOn: false,
-//     isSoundOn: false, // 초기값 false
-//     audio: document.getElementById("bgmAudio"),
-
-//     playMusic(index = 0) {
-//         if (!this.audio) return;
-//         this.audio.src = this.bgmList[index];
-//         this.audio.loop = true;
-//         this.audio.volume = 0.5;
-//         this.audio.play();
-//         this.isMusicOn = true;
-//     },
-
-//     stopMusic() {
-//         if (!this.audio) return;
-//         this.audio.pause();
-//         this.audio.currentTime = 0;
-//         this.isMusicOn = false;
-//     },
-
-//     changeMusic(index) {
-//         this.currentBgmIndex = index;
-//         if (this.isMusicOn) {
-//             this.playMusic(index);
-//         } else {
-//             this.audio.src = this.bgmList[index];
-//         }
-//     }
-// };
-
 // 음악 관리 객체
 const musicObj = {
     get audio() {
@@ -98,13 +65,11 @@ const musicObj = {
         const effect = new Audio(src);
         effect.volume = volume;
         effect.play();
-    },
+    }
 };
 
-function playSoundEffect(soundName)
-{
+function playSoundEffect(soundName) {
     if (!gameState.isSoundOn) return;
-    
     const sound = new Audio(soundName);
     sound.volume = 0.7;
     sound.play();
@@ -192,7 +157,6 @@ function playPage() {
 function gameOverPage() {
 
     musicObj.stopMusic();
-    musicObj.playDeath();
     hideAll();
     $("#gameOver").fadeIn(1500).css({ display: "flex" });
     $(".backToMain").show();
@@ -204,7 +168,6 @@ function gameOverPage() {
 //게임 클리어 화면
 function gameClearPage() {
     musicObj.stopMusic();
-    musicObj.playClear();
     $(".backToMain").show();
     $("#backButton").hide();
     $("#stopButton").hide();
