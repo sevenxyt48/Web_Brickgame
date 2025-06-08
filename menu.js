@@ -1,8 +1,8 @@
 //수정사항:
 //-> 중복 함수, 필요없는 함수 제거
+//-> 풀스크린 기능 수정
 
 
-//화면 전환 js코드
 // BGM 리스트
 const bgmList = [
     "bgm/bgm1.mp3",
@@ -16,6 +16,15 @@ $(document).ready(function () {
     $('#changeThemeButton').on('click', function () {
         handleChangeTheme();
     });
+
+    // 풀스크린 상태가 변경될 때마다 UI와 스케일 업데이트
+    document.addEventListener('fullscreenchange', () => {
+        gameState.isFullScreen = !!document.fullscreenElement;
+        updateSettingsUI();
+        updateGameScale();  
+    });
+    window.addEventListener('resize', updateGameScale);
+    updateGameScale();
 });
 
 
@@ -58,6 +67,37 @@ const musicObj = {
         audio.currentTime = 0;
     }
 };
+
+// 풀스크린 스케일 조절
+function updateGameScale() {
+    const container = document.getElementById('container');
+    if (!container) return;
+
+    if (!document.fullscreenElement) {
+        container.style.transform = ''; 
+        return;
+    }
+
+    const gameWidth = 1280;
+    const gameHeight = 840;
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    const scale = Math.min(screenWidth / gameWidth, screenHeight / gameHeight);
+
+    container.style.transform = `scale(${scale})`;
+}
+
+
+function toggleFullScreen() {
+    if (!document.fullscreenElement) {
+
+        document.body.requestFullscreen().catch(err => console.log(err));
+    } else {
+        document.exitFullscreen();
+    }
+}
+
 
 function playSoundEffect(soundName) {
     if (!gameState.isSoundOn) return;
@@ -141,18 +181,7 @@ function vControl() {
 
     // FullScreen 컨트롤
     const fullScreenSwitch = document.getElementById('fullScreenSwitch');
-    fullScreenSwitch.addEventListener('change', function () {
-        gameState.isFullScreen = this.checked;
-        console.log(`FullScreen 상태: ${gameState.isFullScreen}`);
-
-        if (this.checked) {
-            document.body.requestFullscreen();
-        } else {
-            document.exitFullscreen();
-        }
-
-        updateSettingsUI();
-    });
+    fullScreenSwitch.addEventListener('change', toggleFullScreen); // 간단하게 토글 함수만 호출
 
     // Change BGM select
     const bgmSelect = document.getElementById('changeBGM-select');
@@ -193,16 +222,8 @@ function vControlInGame() {
     });
 
     // 인게임 FullScreen 컨트롤
-    $('#ingame-fullScreenSwitch').off('change').on('change', function () {
-        gameState.isFullScreen = this.checked;
-        console.log(`FullScreen 상태: ${gameState.isFullScreen}`);
-        if (this.checked) {
-            document.body.requestFullscreen().catch(err => console.error(err));
-        } else {
-            document.exitFullscreen();
-        }
-        updateSettingsUI();
-    });
+    $('#ingame-fullScreenSwitch').off('change').on('change', toggleFullScreen); // 간단하게 토글 함수만 호출
+
 
     // 인게임 BGM 컨트롤
     $('#ingame-changeBGM-select').off('change').on('change', function () {
@@ -252,4 +273,3 @@ function handleChangeTheme() {
     hideAll();
     $("#chooseHouse").show();
 }
-
