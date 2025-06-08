@@ -27,14 +27,6 @@ img {
     overflow: hidden;
     align-items: center;
     justify-content: center;
-    /* 풀스크린 시 부드러운 전환 효과 추가
-    transition: transform 0.3s ease-in-out;
-    transform-origin: center center;
-    /* 기본적으로 body의 중앙에 위치하도록 설정 */
-    /* top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(1);
-    position: absolute;  */
 } 
 
 

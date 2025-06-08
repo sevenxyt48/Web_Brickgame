@@ -18,7 +18,6 @@ var brickHeight;
 var brickGapX = 5; // 벽돌 사이의 가로 간격
 var brickGapY = 5; // 벽돌 사이의 세로 간격
 var isBrickMoving = false; // 벽돌 하강 여부
-var brickVy = 0.1; // 벽돌이 내려오는 속도
 
 // sound
 const soundList = [
@@ -34,7 +33,7 @@ function Brick(x, y, width, height, type, magic) {
     this.type = type; // 벽돌 종류. 기본:0, 좋은벽돌:1, 나쁜벽돌:2
     this.magic = magic;
     this.alive = true; // 벽돌의 깨짐 유무 표시. true:존재 false:깨짐
-    this.opacity = 1.0 // 벽돌 투명해지기 마법을 위한 요소. 처음엔 전부 불투명명
+    this.opacity = 1.0 // 벽돌 투명해지기 마법을 위한 요소. 처음엔 전부 불투명
 };
 
 var startX = 0; // 벽돌 시작 X 위치 조정 가능
@@ -51,10 +50,6 @@ var paddleY = 790; // 초기 y 좌표 (캔버스 바닥에서 약간 위)
 var balls = []; // 공의 초기 위치와 속도
 var ballNum = 0; // 공 개수
 const ballR = 10;
-var ballTop;
-var ballBottom;
-var ballLeft;
-var ballRight;
 var ballMoving = false;
 var currentSpeed = 10;
 // 공
@@ -92,16 +87,11 @@ var paddleImg = new Image();
 paddleImg.src = 'img/paddle.png';
 //좋은 이벤트 벽돌
 var goodImg = new Image();
-var goodImg1 = new Image();
 goodImg.src = "img/stone/stone_gold.png";
-goodImg1.src = "img/stone/stone_light.png";
 
 var badImg = new Image();
-var badImg1 = new Image();
 badImg.src = "img/stone/stone_gray.png";
-badImg1.src = "img/stone/stone_green.png";
 
-var isCountdownRunning = false; // 카운트다운 상태 변수 추가
 
 const levelSettings = {
     1: {
@@ -182,14 +172,6 @@ $(document).ready(function () {
             selectedHouse = gameState.selectedHouse;
             if (!gameLevel) gameLevel = 1;
             stage(gameLevel);
-            // hideAll();
-            // $("#myCanvas").show();
-
-            // applyHouseTheme(selectedHouse);
-            // $('#chooseHouse').hide();
-            // $('#gameScreen').show();
-            // gameInit(gameLevel);
-            // startGame(selectedHouse);
         }
     });
     $("#houseSelect").click(function () {
@@ -221,10 +203,9 @@ $(document).ready(function () {
         gameInit(gameLevel);
         startGame(selectedHouse);
     });
-    // createSettingsElements();
+    
     $("#pauseBtn").click(function () {
         pauseGame();
-        // resetAll(selectedHouse);
         $('#pauseMenu').show();
     });
 
@@ -245,7 +226,6 @@ $(document).ready(function () {
         //게임화면에 있는 설정창
         $('#settingPause').show();
         vControlInGame();
-        // createSettingsElements();
     });
     $('#menuBtn').click(function () {
         totalScore = 0;
@@ -258,7 +238,6 @@ $(document).ready(function () {
     canvas = document.getElementById("myCanvas");
     context = canvas.getContext("2d");
     darkR = canvas.width;
-    // updateLives(lives);
 
     $(".reTry").on("click", function () {
         totalScore = startScore;
@@ -325,8 +304,6 @@ $(document).ready(function () {
             );
         }
         paddleX = mX; // 마우스 위치에 따라 패들 이동
-        // 새로운 패들 위치 그리기
-        // drawPaddle();
     });
     canvas.addEventListener("click", function () {
         if (!ballMoving && isGameRunning) {
@@ -348,9 +325,6 @@ function stage(n) {
     $("#myCanvas").show();
     $("#gameScreen").show();
 
-    // if (!selectedHouse) {
-    //     gameState.selectedHouse = "house1";
-    // }
     applyHouseTheme(gameState.selectedHouse);
 
     startGame(gameState.selectedHouse);
@@ -425,7 +399,6 @@ function applyHouseTheme(houseId) {
 }
 function reset(difficulty) {
     // 게임 상태 초기화
-    // totalScore = 0;
     lives = 3;
     ballMoving = false;
     isGameRunning = false;
@@ -444,24 +417,6 @@ function reset(difficulty) {
 
 }
 
-function resetAll() {
-    clearInterval(drawInterval);
-    // document.getElementById('pauseMenu').style.display = 'none';
-    totalScore = 0;
-    isBrickMoving = false;
-    isGameRunning = false;
-    isGameAllClear = false;
-    lives = 3;
-    // balls = [];
-    brick = [];
-    $("#lives").hide();
-    context.clearRect(0, 0, canvas.width, canvas.height);
-}
-
-// isGameOver
-function isGameOver() {
-    return lives <= 0;
-}
 function gameLoop() {
     if (!isGameRunning) return;
     updateGame();
@@ -470,7 +425,6 @@ function gameLoop() {
 }
 
 function gameInit(gameLevel) {
-    // totalScore = 0;
     lives = 3;
     // 캔버스 초기화 (한 번만 생성되도록 조건 넣어도 됨)
     canvas = document.getElementById('myCanvas');
@@ -482,9 +436,6 @@ function gameInit(gameLevel) {
     resetBall();
     initBricks(gameLevel);
     paddleWidth = originalPaddleWidth;
-
-    // 게임 루프 시작
-    // requestAnimationFrame(gameLoop);
 }
 
 //실제 게임 시작 함수
@@ -519,8 +470,6 @@ function pauseGame() {
         cancelAnimationFrame(animationFrameId);
         animationFrameId = null;
     }
-    // clearInterval(drawInterval);
-    // context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 //pause에서 continue 게임 함수
@@ -529,7 +478,6 @@ function continueGame() {
     isGameRunning = true;
     isBrickMoving = true;
     ballMoving = true;
-    // drawBricks(context);
     if (!animationFrameId) {
         animationFrameId = requestAnimationFrame(gameLoop);
     }
@@ -615,7 +563,6 @@ function updateGame() {
 
                 ball.y = paddleY - ball.r - 1;
 
-                // currentSpeed = Math.sqrt(ball.vX ** 2 + ball.vY ** 2);
                 const speed = Math.sqrt(ball.vX ** 2 + ball.vY ** 2);
 
                 ball.vX = speed * Math.sin(bounceAngle);
@@ -674,7 +621,6 @@ function updateGame() {
     })
 
     updateScore(totalScore);
-    // updateLives(lives);
 
     const remainingBricks = brick.filter(b => b.alive);
     if (remainingBricks.length === 0) {
@@ -801,10 +747,6 @@ function getRandomFrom(list) {
 
 // 게임 그리기 함수
 function drawGame(ctx) {
-    // if (!isGameRunning) {
-    //     console.log(`그리기 거부`);
-    //     return; // 게임이 중지되면 그리지 않음
-    // }
     ctx.clearRect(0, 0, 1280, 840);
     drawBall(ctx);
     drawPaddle(ctx);
@@ -820,7 +762,6 @@ function drawBall(ctx) {
 }
 
 function drawPaddle(ctx) {
-    // ctx.drawImage(paddleImg, paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
     ctx.drawImage(paddleImg, paddleX - paddleWidth / 2, paddleY, paddleWidth, paddleHeight);
 }
 
@@ -871,32 +812,7 @@ function goToMenu() {
 //좋은 이벤트 - 공의 속도를 느리게 하는 마법
 function impedimenta() {
     console.log('impedimenta called');
-    // if (balls.length == 0) return;
-
-    // const originalSpeed = [];
-    // balls.forEach((ball, index) => {
-    //     originalSpeed[index] = { vX: ball.vX, vY: ball.vY };
-    //     ball.vX *= 0.7;
-    //     ball.vY *= 0.7;
-    // })
-    // //원래 속도로 복원
-    // setTimeout(() => {
-    //     balls.forEach((ball, index) => {
-    //         if (originalSpeed[index]) {
-    //             const original = originalSpeed[index];
-    //             const restoredSpeed = Math.sqrt(original.vX ** 2 + original.vY ** 2);
-
-    //             // 현재 방향의 단위 벡터 구하기
-    //             const currentMagnitude = Math.sqrt(ball.vX ** 2 + ball.vY ** 2);
-    //             const unitX = ball.vX / currentMagnitude;
-    //             const unitY = ball.vY / currentMagnitude;
-
-    //             // 방향은 유지하되, 원래 속도 크기로 복원
-    //             ball.vX = unitX * restoredSpeed;
-    //             ball.vY = unitY * restoredSpeed;
-    //         }
-    //     });
-    // }, 5000)
+    
     const reduction = 0.7;
 
     balls.forEach(ball => {
@@ -930,7 +846,6 @@ function impedimenta() {
 //좋은 이벤트 - 공 복제 마법
 function geminio(brickX, brickY) {
     console.log('geminio called');
-    // const cloneBall = new Ball(brickX, brickY, 0, balls[0].vY);
     const original = balls[0];
     const speed = Math.sqrt(original.vX ** 2 + original.vY ** 2);
     const cloneBall = new Ball(brickX, brickY, 0, speed);
@@ -968,39 +883,9 @@ function lumos(gameLevel) {
 }
 
 //나쁜 이벤트 - 공의 속도를 빠르게 하는 마법
-function ascendio() { //조금 마법 이름이 기능이랑 조금 다른데 속도 빠르게가 없어서 그나마 비슷한걸루 일단 해놨습니다.
+function ascendio() { 
     console.log('ascendio called');
-    // if (balls.length == 0) return;
-
-    // const originalSpeed = [];
-    // balls.forEach((ball, index) => {
-    //     originalSpeed[index] = { vX: ball.vX, vY: ball.vY };
-    //     ball.vX *= 1.3;
-    //     ball.vY *= 1.3;
-    // })
-    // //원래 속도로 복원
-    // setTimeout(() => {
-    //     balls.forEach((ball, index) => {
-    //         if (originalSpeed[index]) {
-    //             const original = originalSpeed[index];
-    //             const restoredSpeed = Math.sqrt(original.vX ** 2 + original.vY ** 2);
-
-    //             // 현재 방향의 단위 벡터 구하기
-    //             const currentMagnitude = Math.sqrt(ball.vX ** 2 + ball.vY ** 2);
-    //             const unitX = ball.vX / currentMagnitude;
-    //             const unitY = ball.vY / currentMagnitude;
-
-    //             // 방향은 유지하되, 원래 속도 크기로 복원
-    //             ball.vX = unitX * restoredSpeed;
-    //             ball.vY = unitY * restoredSpeed;
-    //             //const currentDirX = ball.vX >=0 ? 1:-1;
-    //             //const currentDirY = ball.vY >=0 ? 1:-1;
-
-    //             //ball.vX = currentDirX*Math.abs(originalSpeed[index].vX);
-    //             //ball.vY = currentDirY*Math.abs(originalSpeed[index].vY);
-    //         }
-    //     });
-    // }, 5000)
+    
     const reduction = 1.3;
 
     balls.forEach(ball => {
@@ -1034,7 +919,6 @@ function ascendio() { //조금 마법 이름이 기능이랑 조금 다른데 �
 //나쁜 이벤트 - 깨진 벽돌 중에 일부 회복(수리 마법)
 function reparo() {
     console.log('reparo called');
-    // 필요한 것
     // 깨진 블럭의 개수
     var nonAliveNum = 0;
     var nonAliveBricks = [];
@@ -1107,7 +991,7 @@ function nox(gameLevel) { // level을 시작할 때 각 level을 받아 2~4 사�
 function darkness(context) { // 매 프레임마다 호출하여 실시간으로 어두워질 수 있도록.
     if (gameLevel < 2) return;
 
-    const centerX = paddleX; // paddleX에 (canvas.width-paddleWidth)/2 들어있다 가정. 영웅이 push하면 그 변수 따라 바꿀게요
+    const centerX = paddleX;
     const centerY = paddleY;
 
     context.save();
